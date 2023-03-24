@@ -1,11 +1,15 @@
 package br.com.fleetcontrol.fleetcontrol.Entity;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Veiculo extends AbstractEntity{
     @Getter
     @Setter
+    @ManyToOne
+    @JoinColumn(name = "modelo")
     private Modelo modelo;
     @Getter
     @Setter
