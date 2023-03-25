@@ -1,8 +1,15 @@
 package br.com.fleetcontrol.fleetcontrol.Entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
+@Entity
+@Table(name = "tb_usuario")
 public class Usuario extends AbstractEntity{
     @Getter
     @Setter
@@ -36,7 +43,8 @@ public class Usuario extends AbstractEntity{
     @Getter
     @Setter
     private String endereco;
+
     @Getter
-    @Setter
-    private Eventos eventos;
+    @OneToMany(mappedBy = "usuario")
+    private List<Eventos> eventos;
 }
