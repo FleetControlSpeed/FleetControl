@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 @Entity
-@Table(name = "tb_Usuario", schema = "public")
+@Table(name = "tb_usuario", schema = "public")
 public class Usuario extends AbstractEntity{
     @Getter
     @Setter
-    @Column(name = "Email",nullable = false,unique = true)
+    @Column(name = "email",nullable = false,unique = true)
     private String email;
     @Getter
     @Setter
-    @Column(name = "Usuario",nullable = false,unique = true)
+    @Column(name = "usuario",nullable = false,unique = true)
     private String usuario;
     @Getter
     @Setter

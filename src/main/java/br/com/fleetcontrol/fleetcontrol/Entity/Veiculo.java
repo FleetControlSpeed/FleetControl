@@ -13,7 +13,7 @@ public class Veiculo extends AbstractEntity{
     private Modelo modelo;
     @Getter
     @Setter
-    @Column(name = "Placa",nullable = false,unique = true)
+    @Column(name = "placa",nullable = false,unique = true)
     private String placa;
     @Getter
     @Setter

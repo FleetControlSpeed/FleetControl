@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 @Entity
-@Table(name = "tb_eventos", schema = "public")
+@Table(name = "tb_evento", schema = "public")
 public class Eventos extends AbstractEntity{
     @Getter
     @Setter
@@ -24,11 +24,11 @@ public class Eventos extends AbstractEntity{
     private LocalDateTime dataEvento;
     @Getter
     @Setter
-    @Column(name = "LocalPartida",nullable = false)
+    @Column(name = "local_partida",nullable = false)
     private String localPartida;
     @Getter
     @Setter
-    @Column(name = "LocalDestino",nullable = false)
+    @Column(name = "local_destino",nullable = false)
     private String localDestino;
     @Getter
     @Setter
@@ -37,10 +37,10 @@ public class Eventos extends AbstractEntity{
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "Veiculo_id",nullable = false)
+    @JoinColumn(name = "veiculo_id",nullable = false)
     private Veiculo veiculo;
     @Getter
     @Setter
-    @Column(name = "Retorno")
+    @Column(name = "retorno")
     private String retorno;
 }

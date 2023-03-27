@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Cache;
 
 @Entity
-@Table(name = "tb_tipoDeEventos", schema = "public")
+@Table(name = "tb_tipo_eventos", schema = "public")
 public class TipoDeEventos extends AbstractEntity{
     @Getter
     @Setter
