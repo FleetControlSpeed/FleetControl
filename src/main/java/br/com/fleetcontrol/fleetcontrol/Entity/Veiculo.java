@@ -1,10 +1,10 @@
 package br.com.fleetcontrol.fleetcontrol.Entity;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+@Entity
+@Table(name = "tb_veiculo", schema = "public")
 public class Veiculo extends AbstractEntity{
     @Getter
     @Setter
@@ -13,17 +13,22 @@ public class Veiculo extends AbstractEntity{
     private Modelo modelo;
     @Getter
     @Setter
+    @Column(name = "Placa",nullable = false,unique = true)
     private String placa;
     @Getter
     @Setter
+    @Column(name = "ano",nullable = false)
     private int ano;
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     private Cor cor;
     @Getter
     @Setter
+    @Column(name = "km",nullable = false)
     private Long km;
     @Getter
     @Setter
+    @Enumerated(EnumType.STRING)
     private Tipo tipo;
 }
