@@ -30,5 +30,5 @@ public class Veiculo extends AbstractEntity{
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    private Tipo tipo_oi;
+    private Tipo tipo;
 }
