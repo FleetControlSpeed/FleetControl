@@ -1,10 +1,14 @@
 package br.com.fleetcontrol.fleetcontrol.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+@NoArgsConstructor
 @MappedSuperclass
 public abstract class AbstractEntity {
 
@@ -15,7 +19,9 @@ public abstract class AbstractEntity {
     private Long id;
     @Getter
     @Setter
-    @Column(name = "cadastro")
+    @Column(name = "cadastro",nullable = false)
+    @NotNull
+    @NotEmpty
     private LocalDateTime cadastro;
     @Getter
     @Setter
@@ -23,7 +29,9 @@ public abstract class AbstractEntity {
     private LocalDateTime edicao;
     @Getter
     @Setter
-    @Column(name = "ativo")
+    @Column(name = "ativo",nullable = false)
+    @NotNull
+    @NotEmpty
     private boolean ativo;
 
 }
