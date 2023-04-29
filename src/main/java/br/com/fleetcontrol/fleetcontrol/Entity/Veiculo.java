@@ -1,5 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.Entity;
 
+import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Cor;
+import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Tipo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

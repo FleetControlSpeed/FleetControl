@@ -1,4 +1,4 @@
-package br.com.fleetcontrol.fleetcontrol.Entity;
+package br.com.fleetcontrol.fleetcontrol.Entity.Enums;
 
 public enum Cor {
     Amarelo,

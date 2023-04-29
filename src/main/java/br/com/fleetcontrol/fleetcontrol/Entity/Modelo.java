@@ -1,5 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.Entity;
 
+import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Marca;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

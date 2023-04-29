@@ -1,5 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.Entity;
 
+import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Cargo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,12 +19,10 @@ public class Usuario extends AbstractEntity{
     @Setter
     @Column(name = "senha",nullable = false)
     private String senha;
-
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
-
     @Getter
     @Setter
     @Column(name = "primeiroNome",nullable = false,length = 50)
@@ -36,20 +35,25 @@ public class Usuario extends AbstractEntity{
     @Setter
     @Column(name = "cpf",nullable = false,unique = true,length = 15)
     private String cpf;
+
     @Getter
     @Setter
     @Column(name = "telefone",nullable = false,length = 30)
     private String telefone;
+
     @Getter
     @Setter
     @Column(name = "DataNascimento",nullable = false)
     private String dataNascimento;
+
     @Getter
     @Setter
     @Column(name = "endereco",nullable = false)
     private String endereco;
+
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne()
     private Eventos eventos;
+
 }
