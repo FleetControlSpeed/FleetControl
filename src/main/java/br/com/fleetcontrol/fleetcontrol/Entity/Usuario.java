@@ -14,6 +14,7 @@ import org.hibernate.envers.Audited;
 
     @Author: Cristovão Martins
     Date: 06/05/2023
+
  */
 @NoArgsConstructor
 @Audited
