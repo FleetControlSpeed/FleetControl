@@ -4,6 +4,7 @@ import br.com.fleetcontrol.fleetcontrol.Entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.Repository.UsuarioRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,8 +47,7 @@ public class UsuarioService {
         }
     }
 
-    public List<Usuario> listaVeiculosAtivos(){
-
-        return this.usuarioRepository.UsuariosAtivos();
+    public List<Usuario> listaUsuariosAtivos(){
+            return this.usuarioRepository.UsuariosAtivos();
     }
 }
