@@ -10,6 +10,11 @@ import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+/*
+
+    @Author: Cristovão Martins
+    Date: 06/05/2023
+ */
 @NoArgsConstructor
 @Audited
 @Entity
