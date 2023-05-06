@@ -5,8 +5,11 @@ import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Tipo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+
 @Entity
 @Table(name = "tb_veiculo", schema = "public")
+@Audited
 public class Veiculo extends AbstractEntity{
     @Getter
     @Setter
