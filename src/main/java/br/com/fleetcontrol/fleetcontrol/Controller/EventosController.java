@@ -1,11 +1,8 @@
 package br.com.fleetcontrol.fleetcontrol.Controller;
 
 import br.com.fleetcontrol.fleetcontrol.Entity.Eventos;
-import br.com.fleetcontrol.fleetcontrol.Entity.Modelo;
-import br.com.fleetcontrol.fleetcontrol.Repository.EventosRepository;
-import br.com.fleetcontrol.fleetcontrol.Repository.ModeloRepository;
+import br.com.fleetcontrol.fleetcontrol.Service.EventosService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,56 +12,80 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/eventos")
 public class EventosController {
     @Autowired
-    private EventosRepository eventosRepository;
+    private EventosService service;
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
+        try {
+            final Eventos eventos = service.buscarPorId(id);
+            return ResponseEntity.ok(eventos);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/listar")
+    public ResponseEntity<?> listar(){
+        try{
+            return ResponseEntity.ok(service.listar());
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/listarPorAtivo")
+    public ResponseEntity<?> listarPorAtivo(){
+        try{
+            return ResponseEntity.ok(service.listarPorAtivo());
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+        }
+    }
 
     @PostMapping
-    public ResponseEntity<?> CadastroEventos(@RequestParam("id") final Eventos eventos) {
+    public ResponseEntity<?> cadastrar(@RequestParam("id") final Eventos eventos) {
         try {
-            this.eventosRepository.save(eventos);
-            return ResponseEntity.ok("Evento salvo com sucesso");
+            this.service.salvar(eventos);
+            return ResponseEntity.ok("Evento cadastrado com sucesso!");
+
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("erro de inserção de evento");
-
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> FindByIdRequest(@PathVariable("id") final Long id) {
-        final Eventos eventos = this.eventosRepository.findById(id).orElse(null);
-        return eventos == null
-                ? ResponseEntity.badRequest().body("Nenhum evento cadastrado")
-                : ResponseEntity.ok(eventos);
-
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> EditarEventos(@RequestParam("id") final Long id, @RequestBody final Modelo modelo) {
+    @PutMapping(value = "/editar")
+    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Eventos eventosNovo) {
         try {
-            final Eventos eventosBanco = this.eventosRepository.findById(id).orElse(null);
-            if (eventosBanco == null || !eventosBanco.getId().equals(eventosBanco.getId())) {
-                throw new RuntimeException("Evento inserido erroneamente");
-            }
-            this.eventosRepository.save(eventosBanco);
-            return ResponseEntity.ok("Evento editado com sucesso");
+            service.editar(id, eventosNovo);
+            return ResponseEntity.ok("Evento atualizado com sucesso!");
 
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.internalServerError().body("Error" + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
-
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletarEventos(@RequestParam("id") final Long id) {
+    @PutMapping(value = "/desativar")
+    public ResponseEntity<?> desativar(@RequestParam("id") final Long id){
+        try {
+            service.desativar(id);
+            return ResponseEntity.ok("Evento desativado com sucesso!");
 
-        final Eventos eventosBanco = this.eventosRepository.findById(id).orElse(null);
-        this.eventosRepository.delete(eventosBanco);
-        if (eventosBanco == null) {
-            eventosBanco.setAtivo(false);
-            this.eventosRepository.save(eventosBanco);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
-        return ResponseEntity.ok("evento deletado com sucesso");
+    }
 
+    @PutMapping(value = "/ativar")
+    public ResponseEntity<?> ativar(@RequestParam("id") final Long id){
+        try {
+            service.ativar(id);
+            return ResponseEntity.ok("Evento ativado com sucesso!");
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+        }
     }
 }

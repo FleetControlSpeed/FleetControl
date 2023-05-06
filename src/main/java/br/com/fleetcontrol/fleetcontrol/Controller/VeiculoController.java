@@ -16,7 +16,7 @@ public class VeiculoController {
     @Autowired
     private VeiculoRepository veiculoRepository;
 
-    @PostMapping 
+    @PostMapping
     public ResponseEntity<?> CadastroVeiculo(@RequestParam("id") final Veiculo veiculo ){
         try{
             this.veiculoRepository.save(veiculo);
