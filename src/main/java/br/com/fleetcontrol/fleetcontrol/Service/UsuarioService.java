@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+/*
+    @Author: Cristovão Martins
+ */
 @NoArgsConstructor
 @Service
 public class UsuarioService {
