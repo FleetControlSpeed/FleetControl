@@ -36,6 +36,8 @@ public class UsuarioService {
     public void atualizar(Long id, Usuario usuario) {
         if(id == usuario.getId()) {
             this.usuarioRepository.save(usuario);
+        }else{
+            throw new RuntimeException("Erro id não existe para ser atualizado!");
         }
     }
 
@@ -44,6 +46,8 @@ public class UsuarioService {
         var usuario = this.usuarioRepository.findById(id);
         if (id == usuario.get().getId()) {
             this.usuarioRepository.desativar(id);
+        }else{
+            throw new RuntimeException("Erro id não existe!");
         }
     }
 
