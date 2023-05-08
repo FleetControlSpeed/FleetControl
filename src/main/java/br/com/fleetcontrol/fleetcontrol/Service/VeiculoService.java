@@ -1,8 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.Service;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.Entity.Veiculo;
-import br.com.fleetcontrol.fleetcontrol.Repository.VeiculoController;
 import br.com.fleetcontrol.fleetcontrol.Repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +10,7 @@ import java.util.List;
 @Service
 public class VeiculoService {
     @Autowired
-    private VeiculoController repository;
+    private VeiculoRepository repository;
     public Veiculo buscarPorId(Long id) {
 
         if (id == 0) {
@@ -28,7 +26,7 @@ public class VeiculoService {
 
     public List<Veiculo> listar() {
         if (repository.findAll().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui eventos cadastrados!");
+            throw new RuntimeException(", banco de dados não possui veiculos cadastrados!");
 
         } else {
             return repository.findAll();
@@ -37,7 +35,7 @@ public class VeiculoService {
 
     public List<Veiculo> listarPorAtivo() {
         if (repository.buscarPorAtivo().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui eventos ativos!");
+            throw new RuntimeException(", banco de dados não possui Veiculos ativos!");
 
         } else {
             return repository.buscarPorAtivo();
