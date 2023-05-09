@@ -7,6 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    @Author: Pedro Henrique Vieira
+    Date: 07/05/2023
+ */
+
 @Controller
 @ResponseBody
 @RequestMapping(value = "/api/eventos")

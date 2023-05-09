@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/*
+    @Author: Pedro Henrique Vieira
+    Date: 07/05/2023
+ */
+
 @Service
 public class eventosService {
 
@@ -69,9 +74,8 @@ public class eventosService {
 
         } else {
             return this.repository.save(eventos);
-        }
     }
-
+    }
     public void editar(Long id, eventos eventosNovo){
         final eventos eventosBanco = this.buscarPorId(id);
 
