@@ -1,7 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
-import br.com.fleetcontrol.fleetcontrol.entity.modelo;
-import br.com.fleetcontrol.fleetcontrol.service.modeloService;
+import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
+import br.com.fleetcontrol.fleetcontrol.service.ModeloService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/api/modelo")
-public class modeloController {
+public class ModeloController {
     @Autowired
-    private modeloService modeloservice;
+    private ModeloService modeloservice;
 
 
     //put para cadastro de modelo no banco
     @PostMapping
-    public ResponseEntity<?> CadastroModelo(@Valid @RequestParam("id") final modelo modelo){
+    public ResponseEntity<?> CadastroModelo(@Valid @RequestParam("id") final Modelo modelo){
         try{
             this.modeloservice.salvar(modelo);
             return ResponseEntity.ok("Modelo salvo com sucesso");
@@ -32,7 +32,7 @@ public class modeloController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
         try {
-            final modelo modelo = modeloservice.buscarPorId(id);
+            final Modelo modelo = modeloservice.buscarPorId(id);
             return ResponseEntity.ok(modelo);
 
         } catch (Exception e) {
@@ -54,7 +54,7 @@ public class modeloController {
 
     //put para edit de modelo
     @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final modelo modelonovo) {
+    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Modelo modelonovo) {
         try {
             modeloservice.editar(id, modelonovo);
             return ResponseEntity.ok("Modelo atualizado com sucesso!");

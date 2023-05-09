@@ -1,6 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.entity.enums;
 
-public enum marca {
+public enum Marca {
     Fiat,
     Chevrolet,
     Volkswagen,

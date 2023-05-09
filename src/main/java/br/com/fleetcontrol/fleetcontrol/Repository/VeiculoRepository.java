@@ -1,7 +1,7 @@
-package br.com.fleetcontrol.fleetcontrol.Repository;
+package br.com.fleetcontrol.fleetcontrol.repository;
 
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Veiculo;
+import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

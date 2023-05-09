@@ -1,7 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.entity.enums;
 
-
-public enum cargo {
-    Administrador,
-    Motorista;
+public enum Tipo {
+    Carro,
+    Van,
+    Caminhao;
 }

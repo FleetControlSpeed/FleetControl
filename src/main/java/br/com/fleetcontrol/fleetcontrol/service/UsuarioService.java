@@ -1,7 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
-import br.com.fleetcontrol.fleetcontrol.entity.usuario;
-import br.com.fleetcontrol.fleetcontrol.repository.usuarioRepository;
+import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
+import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,28 +13,28 @@ import java.util.List;
  */
 @NoArgsConstructor
 @Service
-public class usuarioService {
+public class UsuarioService {
 
     @Autowired
-    private usuarioRepository usuariorepository;
+    private UsuarioRepository usuariorepository;
 
     @Transactional
-    public usuario cadastrar(usuario usuario) {
+    public Usuario cadastrar(Usuario usuario) {
         if(usuario.getUsuario().trim().isEmpty()){
             throw  new RuntimeException("Erro usuario Nulo!");
         }else{
             return this.usuariorepository.save(usuario);
         }
     }
-    public List<usuario> listaCompleta() {
+    public List<Usuario> listaCompleta() {
         return this.usuariorepository.findAll();
     }
 
-    public usuario findById(Long id) {
-        return this.usuariorepository.findById(id).orElse(new usuario());
+    public Usuario findById(Long id) {
+        return this.usuariorepository.findById(id).orElse(new Usuario());
     }
     @Transactional
-    public void atualizar(Long id, usuario usuario) {
+    public void atualizar(Long id, Usuario usuario) {
         if(id == usuario.getId()) {
             this.usuariorepository.save(usuario);
         }else{
@@ -52,7 +52,7 @@ public class usuarioService {
         }
     }
 
-    public List<usuario> listaUsuariosAtivos(){
+    public List<Usuario> listaUsuariosAtivos(){
             return this.usuariorepository.UsuariosAtivos();
     }
 }

@@ -1,21 +1,21 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
-import br.com.fleetcontrol.fleetcontrol.entity.modelo;
-import br.com.fleetcontrol.fleetcontrol.repository.modeloRepository;
+import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
+import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class modeloService {
+public class ModeloService {
 
     @Autowired
-    public modeloRepository modelorepository;
+    public ModeloRepository modelorepository;
 
 
     //verifica por id
-    public modelo buscarPorId(Long id) {
+    public Modelo buscarPorId(Long id) {
         if (id == 0) {
             throw new RuntimeException("insira um id valido");
 
@@ -30,7 +30,7 @@ public class modeloService {
 
 
     //verifica se existem modelos cadastrados na listagem
-    public List<modelo> listar() {
+    public List<Modelo> listar() {
         if (modelorepository.findAll().isEmpty()) {
             throw new RuntimeException(",não existem modelos cadastrados!");
 
@@ -40,8 +40,8 @@ public class modeloService {
     }
 
     //verifica se é possível editar o modelo informado
-    public void editar(Long id, modelo modeloNovo){
-        final modelo modeloBanco = this.buscarPorId(id);
+    public void editar(Long id, Modelo modeloNovo){
+        final Modelo modeloBanco = this.buscarPorId(id);
 
         if(modeloBanco == null || !modeloBanco.getId().equals(modeloBanco.getId())){
             throw new RuntimeException(", não foi possivel identificar o modelo informado!");
@@ -52,7 +52,7 @@ public class modeloService {
     }
 
     //verifica se é possivel salvar modelos ao banco
-    public modelo salvar(modelo modelo) {
+    public Modelo salvar(Modelo modelo) {
 
         if (modelo.getMarca() == null) {
             throw new RuntimeException("marca nao inserida, insira uma marca");
@@ -67,7 +67,7 @@ public class modeloService {
     }
 
     public void desativar(Long id) {
-        modelo modelo  = buscarPorId(id);
+        Modelo modelo  = buscarPorId(id);
 
         if (!modelo.isAtivo()) {
             throw new RuntimeException(", modelo informado já esta desativado!");

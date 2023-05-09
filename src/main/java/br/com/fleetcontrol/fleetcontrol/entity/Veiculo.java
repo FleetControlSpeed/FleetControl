@@ -1,5 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.entity;
 
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Cor;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Tipo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,14 +14,14 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 @Table(name = "tb_veiculo", schema = "public")
 @Audited
-public class veiculo extends abstractEntity {
+public class Veiculo extends abstractEntity {
     @Getter
     @Setter
     @NotNull
     @NotEmpty
     @ManyToOne
     @JoinColumn(name = "modelo",nullable = false)
-    private br.com.fleetcontrol.fleetcontrol.entity.modelo modelo;
+    private Modelo modelo;
     @Getter
     @Setter
     @NotNull
@@ -35,7 +37,7 @@ public class veiculo extends abstractEntity {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    private br.com.fleetcontrol.fleetcontrol.entity.enums.cor cor;
+    private Cor cor;
     @Getter
     @Setter
     @NotNull
@@ -48,5 +50,5 @@ public class veiculo extends abstractEntity {
     @NotEmpty
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo",nullable = false)
-    private br.com.fleetcontrol.fleetcontrol.entity.enums.tipo tipo;
+    private Tipo tipo;
 }

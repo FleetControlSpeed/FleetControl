@@ -1,6 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.repository;
 
-import br.com.fleetcontrol.fleetcontrol.entity.usuario;
+import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,12 +15,12 @@ import java.util.List;
 
  */
 @Repository
-public interface usuarioRepository extends JpaRepository<usuario,Long> {
+public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
     @Modifying
     @Query("UPDATE Usuario usuario SET usuario.ativo = false WHERE usuario.id = :idUsuario")
     public void desativar(@Param("idUsuario") Long id);
 
     @Query("SELECT usuario FROM Usuario usuario WHERE usuario.ativo = true")
-    public List<usuario> UsuariosAtivos();
+    public List<Usuario> UsuariosAtivos();
 }

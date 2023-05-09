@@ -1,20 +1,20 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
-import br.com.fleetcontrol.fleetcontrol.entity.usuario;
-import br.com.fleetcontrol.fleetcontrol.service.usuarioService;
+import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
+import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/condutores")
-public class usuarioController {
+public class UsuarioController {
     @Autowired
-    private usuarioService usuarioservice;
+    private UsuarioService usuarioservice;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") final Long id){
-        final usuario usuario = this.usuarioservice.findById(id);
+        final Usuario usuario = this.usuarioservice.findById(id);
         return usuario == null
                 ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
                 : ResponseEntity.ok(usuario);
@@ -31,7 +31,7 @@ public class usuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final usuario usuario){
+    public ResponseEntity<?> cadastrar(@RequestBody final Usuario usuario){
         try{
             this.usuarioservice.cadastrar(usuario);
             return ResponseEntity.ok().body("Sucesso!, Usuario Cadastrado!");
@@ -43,7 +43,7 @@ public class usuarioController {
     @PutMapping("/{idUsuario}")
     public ResponseEntity<?> atualizar(
             @PathVariable Long idUsuario,
-            @RequestBody usuario usuario
+            @RequestBody Usuario usuario
     ) {
         this.usuarioservice.atualizar(idUsuario, usuario);
         return ResponseEntity.ok().body("Usuario atualizado com sucesso!");

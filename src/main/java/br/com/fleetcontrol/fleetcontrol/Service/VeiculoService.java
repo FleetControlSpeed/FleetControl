@@ -1,6 +1,7 @@
-package br.com.fleetcontrol.fleetcontrol.Service;
+package br.com.fleetcontrol.fleetcontrol.service;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Veiculo;
+import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
+import br.com.fleetcontrol.fleetcontrol.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 @Service
 public class VeiculoService {
     @Autowired
-    private br.com.fleetcontrol.fleetcontrol.Repository.VeiculoRepository repository;
+    private VeiculoRepository repository;
     public Veiculo buscarPorId(Long id) {
 
         if (id == 0) {

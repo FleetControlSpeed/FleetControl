@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "tb_evento", schema = "public")
 @Audited
 @AuditTable(value = "tb_evento_audit", schema = "audit")
-public class eventos extends abstractEntity {
+public class Eventos extends abstractEntity {
 
     @Getter @Setter
     @NotNull(message = ", usuario é um campo obrigatorio!")
