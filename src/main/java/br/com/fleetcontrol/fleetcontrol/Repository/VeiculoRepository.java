@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VeiculoRepository_New extends JpaRepository<Veiculo,Long> {
+public interface VeiculoRepository extends JpaRepository<Veiculo,Long> {
 
     @Query("SELECT eventos FROM Eventos eventos WHERE eventos.ativo = true")
     public List<Veiculo> buscarPorAtivo();

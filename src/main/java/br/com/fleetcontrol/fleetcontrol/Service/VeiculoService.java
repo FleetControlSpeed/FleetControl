@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VeiculoService_New {
+public class VeiculoService {
     @Autowired
-    private br.com.fleetcontrol.fleetcontrol.Repository.VeiculoRepository_New repository;
+    private br.com.fleetcontrol.fleetcontrol.Repository.VeiculoRepository repository;
     public Veiculo buscarPorId(Long id) {
 
         if (id == 0) {
