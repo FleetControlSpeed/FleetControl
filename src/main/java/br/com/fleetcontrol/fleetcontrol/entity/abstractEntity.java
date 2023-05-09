@@ -1,4 +1,4 @@
-package br.com.fleetcontrol.fleetcontrol.Entity;
+package br.com.fleetcontrol.fleetcontrol.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class AbstractEntity {
+public abstract class abstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,5 +33,16 @@ public abstract class AbstractEntity {
     @NotNull
     @NotEmpty
     private boolean ativo;
+
+
+    @PrePersist
+    private void prePersist() {
+        this.cadastro = LocalDateTime.now();
+        this.ativo = true;
+    }
+
+    private void preUpdate() {
+        this.edicao = LocalDateTime.now();
+    }
 
 }

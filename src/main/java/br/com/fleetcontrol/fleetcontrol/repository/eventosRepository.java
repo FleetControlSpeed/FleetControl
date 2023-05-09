@@ -1,6 +1,6 @@
-package br.com.fleetcontrol.fleetcontrol.Repository;
+package br.com.fleetcontrol.fleetcontrol.repository;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Eventos;
+import br.com.fleetcontrol.fleetcontrol.entity.eventos;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EventosRepository extends JpaRepository<Eventos,Long> {
+public interface eventosRepository extends JpaRepository<eventos,Long> {
 
     @Query("SELECT eventos FROM Eventos eventos WHERE eventos.ativo = true")
-    public List<Eventos> buscarPorAtivo();
+    public List<eventos> buscarPorAtivo();
 
     @Transactional
     @Modifying

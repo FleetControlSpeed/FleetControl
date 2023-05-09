@@ -1,21 +1,20 @@
-package br.com.fleetcontrol.fleetcontrol.Controller;
+package br.com.fleetcontrol.fleetcontrol.controller;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Usuario;
-import br.com.fleetcontrol.fleetcontrol.Service.UsuarioService;
+import br.com.fleetcontrol.fleetcontrol.entity.usuario;
+import br.com.fleetcontrol.fleetcontrol.service.usuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/condutores")
-public class UsuarioController {
+public class usuarioController {
     @Autowired
-    private UsuarioService usuarioService;
+    private usuarioService usuarioservice;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") final Long id){
-        final Usuario usuario = this.usuarioService.findById(id);
+        final usuario usuario = this.usuarioservice.findById(id);
         return usuario == null
                 ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
                 : ResponseEntity.ok(usuario);
@@ -23,18 +22,18 @@ public class UsuarioController {
 
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){
-        return ResponseEntity.ok(this.usuarioService.listaCompleta());
+        return ResponseEntity.ok(this.usuarioservice.listaCompleta());
     }
 
     @GetMapping("/lista/ativos")
     public ResponseEntity<?> listaAtivos(){
-        return ResponseEntity.ok(this.usuarioService.listaUsuariosAtivos());
+        return ResponseEntity.ok(this.usuarioservice.listaUsuariosAtivos());
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Usuario usuario){
+    public ResponseEntity<?> cadastrar(@RequestBody final usuario usuario){
         try{
-            this.usuarioService.cadastrar(usuario);
+            this.usuarioservice.cadastrar(usuario);
             return ResponseEntity.ok().body("Sucesso!, Usuario Cadastrado!");
         }catch(RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -44,9 +43,9 @@ public class UsuarioController {
     @PutMapping("/{idUsuario}")
     public ResponseEntity<?> atualizar(
             @PathVariable Long idUsuario,
-            @RequestBody Usuario usuario
+            @RequestBody usuario usuario
     ) {
-        this.usuarioService.atualizar(idUsuario, usuario);
+        this.usuarioservice.atualizar(idUsuario, usuario);
         return ResponseEntity.ok().body("Usuario atualizado com sucesso!");
     }
 
@@ -55,7 +54,7 @@ public class UsuarioController {
     public ResponseEntity<?> desativar(
             @PathVariable Long idUsuario
     ){
-        this.usuarioService.desativar(idUsuario);
+        this.usuarioservice.desativar(idUsuario);
         return ResponseEntity.ok().body("Usuario desativado com sucesso!");
     }
 

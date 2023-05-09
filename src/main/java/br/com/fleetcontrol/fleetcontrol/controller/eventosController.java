@@ -1,7 +1,7 @@
-package br.com.fleetcontrol.fleetcontrol.Controller;
+package br.com.fleetcontrol.fleetcontrol.controller;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Eventos;
-import br.com.fleetcontrol.fleetcontrol.Service.EventosService;
+import br.com.fleetcontrol.fleetcontrol.entity.eventos;
+import br.com.fleetcontrol.fleetcontrol.service.eventosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/api/eventos")
-public class EventosController {
+public class eventosController {
     @Autowired
-    private EventosService service;
+    private eventosService service;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
         try {
-            final Eventos eventos = service.buscarPorId(id);
+            final eventos eventos = service.buscarPorId(id);
             return ResponseEntity.ok(eventos);
 
         } catch (Exception e) {
@@ -46,7 +46,7 @@ public class EventosController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestParam("id") final Eventos eventos) {
+    public ResponseEntity<?> cadastrar(@RequestParam("id") final eventos eventos) {
         try {
             this.service.salvar(eventos);
             return ResponseEntity.ok("Evento cadastrado com sucesso!");
@@ -57,7 +57,7 @@ public class EventosController {
     }
 
     @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Eventos eventosNovo) {
+    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final eventos eventosNovo) {
         try {
             service.editar(id, eventosNovo);
             return ResponseEntity.ok("Evento atualizado com sucesso!");

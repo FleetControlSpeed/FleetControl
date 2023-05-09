@@ -1,4 +1,4 @@
-package br.com.fleetcontrol.fleetcontrol.Entity;
+package br.com.fleetcontrol.fleetcontrol.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 @Table(name = "tb_evento", schema = "public")
 @Audited
 @AuditTable(value = "tb_evento_audit", schema = "audit")
-public class Eventos extends AbstractEntity{
+public class eventos extends abstractEntity {
 
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "usuario_id",nullable = false)
-    private Usuario usuario;
+    private br.com.fleetcontrol.fleetcontrol.entity.usuario usuario;
     @Getter
     @Setter
     @Column(name = "data_evento",nullable = false)
@@ -38,7 +38,7 @@ public class Eventos extends AbstractEntity{
     @Setter
     @ManyToOne
     @JoinColumn(name = "veiculo_id",nullable = false)
-    private Veiculo veiculo;
+    private br.com.fleetcontrol.fleetcontrol.entity.veiculo veiculo;
     @Getter
     @Setter
     @Column(name = "retorno")

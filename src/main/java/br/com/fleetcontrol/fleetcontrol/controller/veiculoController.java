@@ -1,25 +1,24 @@
-package br.com.fleetcontrol.fleetcontrol.Controller;
+package br.com.fleetcontrol.fleetcontrol.controller;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Veiculo;
-import br.com.fleetcontrol.fleetcontrol.Repository.VeiculoRepository;
+import br.com.fleetcontrol.fleetcontrol.entity.veiculo;
+import br.com.fleetcontrol.fleetcontrol.repository.veiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @ResponseBody
 @RequestMapping(value = "/api/veiculo")
-public class VeiculoController {
+public class veiculoController {
     @Autowired
-    private VeiculoRepository veiculoRepository;
+    private veiculoRepository veiculorepository;
 
     @PostMapping
-    public ResponseEntity<?> CadastroVeiculo(@RequestParam("id") final Veiculo veiculo ){
+    public ResponseEntity<?> CadastroVeiculo(@RequestParam("id") final veiculo veiculo ){
         try{
-            this.veiculoRepository.save(veiculo);
+            this.veiculorepository.save(veiculo);
             return ResponseEntity.ok("Veiculo salvo com sucesso");
         }catch(Exception e ){
             return ResponseEntity.badRequest().body("erro de inserção de veiculo");
@@ -29,7 +28,7 @@ public class VeiculoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> FindByIdRequest(@PathVariable("id") final Long id){
-        final Veiculo veiculo = this.veiculoRepository.findById(id).orElse(null);
+        final veiculo veiculo = this.veiculorepository.findById(id).orElse(null);
         return veiculo == null
                 ? ResponseEntity.badRequest().body("Nenhum veiculo cadastrado")
                 : ResponseEntity.ok(veiculo);
@@ -37,13 +36,13 @@ public class VeiculoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> EditarVeiculo(@RequestParam ("id") final Long id, @RequestBody final Veiculo veiculo){
+    public ResponseEntity<?> EditarVeiculo(@RequestParam ("id") final Long id, @RequestBody final veiculo veiculo){
         try{
-            final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
+            final br.com.fleetcontrol.fleetcontrol.entity.veiculo veiculoBanco = this.veiculorepository.findById(id).orElse(null);
             if(veiculoBanco == null  || !veiculoBanco.getId().equals(veiculoBanco.getId())){
                 throw new RuntimeException("Erro de inserção de veiculo ");
             }
-            this.veiculoRepository.save(veiculo);
+            this.veiculorepository.save(veiculo);
             return ResponseEntity.ok("Veiculo editado");
 
         }catch(DataIntegrityViolationException e){
@@ -56,11 +55,11 @@ public class VeiculoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletarVeiculo(@RequestParam("id") final Long id) {
 
-        final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
-        this.veiculoRepository.delete(veiculoBanco);
+        final veiculo veiculoBanco = this.veiculorepository.findById(id).orElse(null);
+        this.veiculorepository.delete(veiculoBanco);
         if(veiculoBanco == null){
             veiculoBanco.setAtivo(false);
-            this.veiculoRepository.save(veiculoBanco);
+            this.veiculorepository.save(veiculoBanco);
         }
         return ResponseEntity.ok("veiculo deletado com sucesso");
 

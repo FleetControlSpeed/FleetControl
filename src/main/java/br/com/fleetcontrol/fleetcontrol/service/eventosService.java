@@ -1,19 +1,19 @@
-package br.com.fleetcontrol.fleetcontrol.Service;
+package br.com.fleetcontrol.fleetcontrol.service;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Eventos;
-import br.com.fleetcontrol.fleetcontrol.Repository.EventosRepository;
+import br.com.fleetcontrol.fleetcontrol.entity.eventos;
+import br.com.fleetcontrol.fleetcontrol.repository.eventosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class EventosService {
+public class eventosService {
 
     @Autowired
-    private EventosRepository repository;
+    private eventosRepository repository;
 
-    public Eventos buscarPorId(Long id) {
+    public eventos buscarPorId(Long id) {
 
         if (id == 0) {
             throw new RuntimeException(", por favor, informe um valor valido!");
@@ -26,7 +26,7 @@ public class EventosService {
         }
     }
 
-    public List<Eventos> listar() {
+    public List<eventos> listar() {
         if (repository.findAll().isEmpty()) {
             throw new RuntimeException(", banco de dados não possui eventos cadastrados!");
 
@@ -35,7 +35,7 @@ public class EventosService {
         }
     }
 
-    public List<Eventos> listarPorAtivo() {
+    public List<eventos> listarPorAtivo() {
         if (repository.buscarPorAtivo().isEmpty()) {
             throw new RuntimeException(", banco de dados não possui eventos ativos!");
 
@@ -44,7 +44,7 @@ public class EventosService {
         }
     }
 
-    public Eventos salvar(Eventos eventos) {
+    public eventos salvar(eventos eventos) {
 
         if (eventos.getUsuario() == null) {
             throw new RuntimeException(", usuario é um campo obrigatorio!");
@@ -72,8 +72,8 @@ public class EventosService {
         }
     }
 
-    public void editar(Long id, Eventos eventosNovo){
-        final Eventos eventosBanco = this.buscarPorId(id);
+    public void editar(Long id, eventos eventosNovo){
+        final eventos eventosBanco = this.buscarPorId(id);
 
         if(eventosBanco == null || !eventosBanco.getId().equals(eventosNovo.getId())){
             throw new RuntimeException(", não foi possivel identificar o evento informado!");
@@ -84,7 +84,7 @@ public class EventosService {
     }
 
     public void desativar(Long id) {
-        Eventos eventos = buscarPorId(id);
+        eventos eventos = buscarPorId(id);
 
         if (!eventos.isAtivo()) {
             throw new RuntimeException(", evento informado já esta desativado!");
@@ -95,7 +95,7 @@ public class EventosService {
     }
 
     public void ativar(Long id) {
-        Eventos eventos = buscarPorId(id);
+        eventos eventos = buscarPorId(id);
 
         if (eventos.isAtivo()) {
             throw new RuntimeException(", evento informado já esta ativado!");
