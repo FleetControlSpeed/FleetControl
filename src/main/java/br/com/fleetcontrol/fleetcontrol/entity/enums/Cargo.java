@@ -1,4 +1,5 @@
-package br.com.fleetcontrol.fleetcontrol.Entity.Enums;
+package br.com.fleetcontrol.fleetcontrol.entity.enums;
+
 
 public enum Cargo {
     Administrador,
