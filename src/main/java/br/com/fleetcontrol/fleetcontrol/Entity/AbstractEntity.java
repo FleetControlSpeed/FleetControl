@@ -34,4 +34,21 @@ public abstract class AbstractEntity {
     @NotEmpty
     private boolean ativo;
 
+    /**
+     * Método automatico, executado no pré-cadastro dos dados
+     */
+    @PrePersist
+    public void prePersist() {
+        this.cadastro = LocalDateTime.now();
+        this.ativo = true;
+    }
+
+    /**
+     * Método automatico, executado no pré-edição dos dadosd
+     */
+    @PreUpdate
+    public void preUpdate() {
+        this.edicao = LocalDateTime.now();
+    }
+
 }
