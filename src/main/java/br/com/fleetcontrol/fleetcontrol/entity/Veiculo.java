@@ -1,7 +1,7 @@
-package br.com.fleetcontrol.fleetcontrol.Entity;
+package br.com.fleetcontrol.fleetcontrol.entity;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Cor;
-import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Tipo;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Cor;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Tipo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 @Table(name = "tb_veiculo", schema = "public")
 @Audited
-public class Veiculo extends AbstractEntity{
+public class Veiculo extends abstractEntity {
     @Getter
     @Setter
     @NotNull

@@ -1,6 +1,6 @@
-package br.com.fleetcontrol.fleetcontrol.Entity;
+package br.com.fleetcontrol.fleetcontrol.entity;
 
-import br.com.fleetcontrol.fleetcontrol.Entity.Enums.Cargo;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,9 +17,9 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 @Audited
 @Entity
-@AuditTable(value = "marcas_audit",schema = "audit")
+@AuditTable(value = "tb_usuario_audit",schema = "audit")
 @Table(name = "tb_usuario", schema = "public")
-public class Usuario extends AbstractEntity{
+public class Usuario extends abstractEntity {
     @Getter
     @Setter
     @NotNull
