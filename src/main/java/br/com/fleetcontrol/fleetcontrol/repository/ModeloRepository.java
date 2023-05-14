@@ -12,10 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface ModeloRepository extends JpaRepository<Modelo,Long> {
 
 
-    @Transactional
-    @Modifying
-    @Query("UPDATE Modelo modelo SET modelo.ativo = false WHERE modelo.id = :id")
-    public void desativar(@Param("id")Long id);
 
 
 }
