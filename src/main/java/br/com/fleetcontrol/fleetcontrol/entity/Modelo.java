@@ -12,10 +12,10 @@ import org.hibernate.envers.Audited;
 @Table(name = "tb_Modelo", schema = "public")
 @Audited
 @AuditTable(value = "tb_modelo_audit",schema = "audit")
-public class Modelo extends abstractEntity {
+public class Modelo extends AbstractEntity {
     @Getter
     @Setter
-    @NotNull(message = "insira um nome valido")
+    @NotNull(message = "Nome do modelo não pode ser nulo!")
     @Column(name = "nome",nullable = false)
     private String nome;
 

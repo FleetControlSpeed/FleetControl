@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 @Table(name = "tb_evento", schema = "public")
 @Audited
 @AuditTable(value = "tb_evento_audit", schema = "audit")
-public class Eventos extends abstractEntity {
+public class Eventos extends AbstractEntity {
 
     @Getter @Setter
-    @NotNull(message = ", usuario é um campo obrigatorio!")
+    @NotNull(message = "Usuario é um campo obrigatorio!")
     @ManyToOne
     @JoinColumn(name = "usuario_id",nullable = false)
     private Usuario usuario;

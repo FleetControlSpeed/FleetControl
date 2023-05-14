@@ -12,7 +12,6 @@ import java.util.List;
 /*
     @Author: Cristovão Martins
     Date: 06/05/2023
-
  */
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {

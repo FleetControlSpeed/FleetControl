@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class abstractEntity {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +20,7 @@ public abstract class abstractEntity {
     @Getter
     @Setter
     @Column(name = "cadastro",nullable = false)
-    @NotNull
+    @NotNull(message = "Data de Cadastro não pode ser nula!")
     @NotEmpty
     private LocalDateTime cadastro;
     @Getter
@@ -30,16 +30,22 @@ public abstract class abstractEntity {
     @Getter
     @Setter
     @Column(name = "ativo",nullable = false)
-    @NotNull
+    @NotNull(message = "Ativo tem que ser true or false!")
     @NotEmpty
     private boolean ativo;
 
 
+    /**
+     * Método automatico, executado no pré-cadastro dos dados
+     */
     @PrePersist
     private void prePersist() {
         this.cadastro = LocalDateTime.now();
         this.ativo = true;
     }
+    /**
+     * Método automatico, executado no pré-edição dos dadosd
+     */
 
     private void preUpdate() {
         this.edicao = LocalDateTime.now();

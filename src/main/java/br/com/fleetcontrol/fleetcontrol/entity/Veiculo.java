@@ -14,24 +14,24 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 @Table(name = "tb_veiculo", schema = "public")
 @Audited
-public class Veiculo extends abstractEntity {
+public class Veiculo extends AbstractEntity {
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = "Modelo não pode ser nulo nem em branco!")
     @NotEmpty
     @ManyToOne
     @JoinColumn(name = "modelo",nullable = false)
     private Modelo modelo;
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = "Placa não pode ser nula nem em branco!")
     @NotEmpty
     @Column(name = "placa",nullable = false,unique = true)
     private String placa;
     @Getter
     @Setter
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Ano nao pode ser nulo nem em branco!")
     @Column(name = "ano",nullable = false)
     private int ano;
     @Getter
@@ -40,13 +40,13 @@ public class Veiculo extends abstractEntity {
     private Cor cor;
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = "Km não pode ser nula nem em branca!")
     @NotEmpty
     @Column(name = "km",nullable = false)
     private Long km;
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = "Tipo não pode ser nula nem em branca!")
     @NotEmpty
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo",nullable = false)
