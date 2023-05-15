@@ -12,26 +12,26 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Audited
-@Table(name = "empresas", schema = "public")
+@Table(name = "tb_empresas", schema = "public")
 @AuditTable(value = "empresas_audit", schema = "audit")
-public class Empresas extends abstractEntity {
+public class Empresas extends AbstractEntity {
 
     @Getter @Setter
-    @NotNull
+    @NotNull(message = "nome não pode ser nullo ")
     @Size(min = 5, max = 100)
-    @Column(name = "nome", nullable = false, length = 100)
+    @Column(name = "nome")
     private String nome;
 
     @Getter @Setter
-    @NotNull
+    @NotNull(message = "CEP não pode ser nullo ")
     @Size(min = 5, max = 15)
-    @Column(name = "CEP",nullable = false,unique = true,length = 10)
+    @Column(name = "CEP", unique = true)
     private String CEP;
 
     @Getter @Setter
-    @NotNull
+    @NotNull(message = "endereco não pode ser nullo ")
     @Size(min = 5, max = 100)
-    @Column(name = "endereco",nullable = false,unique = true,length = 100)
+    @Column(name = "endereco",unique = true)
     private String endereco;
 
 

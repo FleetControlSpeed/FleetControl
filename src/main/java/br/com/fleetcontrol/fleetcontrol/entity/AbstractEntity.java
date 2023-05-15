@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class abstractEntity {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -14,7 +14,7 @@ import org.hibernate.envers.Audited;
 @NoArgsConstructor
 @Table(name = "tb_veiculo", schema = "public")
 @Audited
-public class Veiculo extends abstractEntity {
+public class Veiculo extends AbstractEntity {
     @Getter
     @Setter
     @NotNull
