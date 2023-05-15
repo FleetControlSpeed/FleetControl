@@ -15,7 +15,7 @@ import org.hibernate.envers.Audited;
 public class Modelo extends AbstractEntity {
     @Getter
     @Setter
-    @NotNull(message = "insira um nome valido")
+    @NotNull(message = "Nome do modelo não pode ser nulo!")
     @Column(name = "nome",nullable = false)
     private String nome;
 

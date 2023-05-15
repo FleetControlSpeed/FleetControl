@@ -49,5 +49,4 @@ public abstract class AbstractEntity {
     private void preUpdate() {
         this.edicao = LocalDateTime.now();
     }
-
 }

@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class Eventos extends AbstractEntity {
 
     @Getter @Setter
-    @NotNull(message = ", usuario é um campo obrigatorio!")
+    @NotNull(message = "Usuario é um campo obrigatorio!")
     @ManyToOne
     @JoinColumn(name = "usuario_id",nullable = false)
     private Usuario usuario;
