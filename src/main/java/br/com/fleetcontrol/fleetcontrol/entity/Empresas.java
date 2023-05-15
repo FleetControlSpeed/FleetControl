@@ -17,19 +17,19 @@ import org.hibernate.envers.Audited;
 public class Empresas extends AbstractEntity {
 
     @Getter @Setter
-    @NotNull(message = "nome não pode ser nullo ")
+    @NotNull(message = "Nome não pode ser nulo!")
     @Size(min = 5, max = 100)
     @Column(name = "nome")
     private String nome;
 
     @Getter @Setter
-    @NotNull(message = "CEP não pode ser nullo ")
+    @NotNull(message = "CEP não pode ser nulo!")
     @Size(min = 5, max = 15)
     @Column(name = "CEP", unique = true)
     private String CEP;
 
     @Getter @Setter
-    @NotNull(message = "endereco não pode ser nullo ")
+    @NotNull(message = "Endereco não pode ser nulo!")
     @Size(min = 5, max = 100)
     @Column(name = "endereco",unique = true)
     private String endereco;
