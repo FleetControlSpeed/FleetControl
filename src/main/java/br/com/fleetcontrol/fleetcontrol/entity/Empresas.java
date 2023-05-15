@@ -19,19 +19,19 @@ public class Empresas extends AbstractEntity {
     @Getter @Setter
     @NotNull(message = "Nome não pode ser nulo!")
     @Size(min = 5, max = 100)
-    @Column(name = "nome", nullable = false, length = 100)
+    @Column(name = "nome")
     private String nome;
 
     @Getter @Setter
     @NotNull(message = "CEP não pode ser nulo!")
     @Size(min = 5, max = 15)
-    @Column(name = "CEP",nullable = false,unique = true,length = 10)
+    @Column(name = "CEP", unique = true)
     private String CEP;
 
     @Getter @Setter
     @NotNull(message = "Endereco não pode ser nulo!")
     @Size(min = 5, max = 100)
-    @Column(name = "endereco",nullable = false,unique = true,length = 100)
+    @Column(name = "endereco",unique = true)
     private String endereco;
 
 
