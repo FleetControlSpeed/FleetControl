@@ -33,6 +33,7 @@ public abstract class AbstractEntity {
     @NotEmpty
     private boolean ativo;
 
+
     /**
      * Método automatico, executado no pré-cadastro dos dados
      */
@@ -44,6 +45,7 @@ public abstract class AbstractEntity {
     /**
      * Método automatico, executado no pré-edição dos dadosd
      */
+
     private void preUpdate() {
         this.edicao = LocalDateTime.now();
     }
