@@ -53,6 +53,6 @@ public class UsuarioService {
     }
 
     public List<Usuario> listaUsuariosAtivos(){
-            return this.usuariorepository.UsuariosAtivos();
+        return this.usuariorepository.UsuariosAtivos();
     }
 }

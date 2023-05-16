@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class AbstractEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
@@ -49,4 +50,5 @@ public abstract class AbstractEntity {
     private void preUpdate() {
         this.edicao = LocalDateTime.now();
     }
+
 }
