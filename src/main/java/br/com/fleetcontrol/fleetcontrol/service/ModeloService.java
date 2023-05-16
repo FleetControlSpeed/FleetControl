@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+/*
+ Ademar Ramalho
+ */
 
 @Service
 public class ModeloService {
@@ -20,7 +23,7 @@ public class ModeloService {
             throw new RuntimeException("insira um id valido");
 
         } else if (modelorepository.findById(id).isEmpty()) {
-            throw new RuntimeException("nao aceitamos id's em branco");
+            throw new RuntimeException("nao aceitamos id's em branco ou repitido");
 
         } else {
             return modelorepository.findById(id).orElse(null);

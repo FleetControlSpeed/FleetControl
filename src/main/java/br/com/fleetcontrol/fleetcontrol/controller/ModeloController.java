@@ -18,7 +18,7 @@ public class ModeloController {
 
     //put para cadastro de modelo no banco
     @PostMapping
-    public ResponseEntity<?> CadastroModelo(@Valid @RequestParam("id") final Modelo modelo){
+    public ResponseEntity<?> CadastroModelo(@RequestParam("id") final Modelo modelo){
         try{
             this.modeloservice.salvar(modelo);
             return ResponseEntity.ok("Modelo salvo com sucesso");
