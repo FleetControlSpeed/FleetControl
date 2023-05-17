@@ -8,12 +8,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 @Entity
 @NoArgsConstructor
 @Table(name = "tb_veiculo", schema = "public")
 @Audited
+@AuditTable(value = "tb_veiculo_audit", schema = "audit")
 public class Veiculo extends AbstractEntity {
     @Getter
     @Setter

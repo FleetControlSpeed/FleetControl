@@ -11,9 +11,9 @@ import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Audited
 @Table(name = "tb_empresas", schema = "public")
-@AuditTable(value = "empresas_audit", schema = "audit")
+@Audited
+@AuditTable(value = "tb_empresas_audit", schema = "audit")
 public class Empresas extends AbstractEntity {
 
     @Getter @Setter
