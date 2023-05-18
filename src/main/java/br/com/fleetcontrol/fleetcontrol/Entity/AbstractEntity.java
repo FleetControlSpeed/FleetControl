@@ -11,6 +11,7 @@ public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
+    @Setter
     @Column(name = "id",nullable = false,unique = true)
     private Long id;
     @Getter
@@ -25,5 +26,10 @@ public abstract class AbstractEntity {
     @Setter
     @Column(name = "ativo")
     private boolean ativo;
+
+    @PrePersist
+    public void prePersist(){
+        this.cadastro = LocalDateTime.now();
+    }
 
 }
