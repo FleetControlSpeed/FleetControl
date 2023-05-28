@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
@@ -13,6 +14,7 @@ import org.hibernate.envers.Audited;
 @Table(name = "tb_Modelo", schema = "public")
 @Audited
 @AuditTable(value = "tb_modelo_audit",schema = "audit")
+@NoArgsConstructor
 public class Modelo extends AbstractEntity {
     @Getter @Setter
     @NotNull(message = "Nome é um campo obrigatorio!")

@@ -6,11 +6,9 @@ import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@ResponseBody
+@RestController
 @RequestMapping(value = "/api/empresas")
 public class EmpresasController {
 
@@ -63,7 +61,7 @@ public class EmpresasController {
     @PutMapping(value = "/desativar")
     public ResponseEntity<?> deletar(@Valid @RequestParam("id") final Long id){
         try {
-            empresasService.deletar(id);
+            empresasService.desativar(id);
             return ResponseEntity.ok("Empresa deletada com sucesso!");
 
         } catch (Exception e){

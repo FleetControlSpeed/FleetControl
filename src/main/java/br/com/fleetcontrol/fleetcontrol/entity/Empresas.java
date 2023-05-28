@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
@@ -17,6 +18,7 @@ import org.hibernate.envers.Audited;
 @Table(name = "tb_empresas", schema = "public")
 @Audited
 @AuditTable(value = "tb_empresas_audit", schema = "audit")
+@NoArgsConstructor
 public class Empresas extends AbstractEntity {
 
     @Getter @Setter
@@ -28,7 +30,7 @@ public class Empresas extends AbstractEntity {
 
     @Getter @Setter
     @NotNull(message = "CEP é um campo obrigatorio!")
-    @CEP(message = "CEP nulo ou invalido!d")
+    @CEP(message = "CEP nulo ou invalido!")
     @Size(min = 5, max = 15)
     @Column(name = "CEP", unique = true)
     private String CEP;

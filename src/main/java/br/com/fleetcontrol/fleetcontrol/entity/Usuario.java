@@ -80,9 +80,4 @@ public class Usuario extends AbstractEntity {
     @Column(name = "endereco",nullable = false)
     private String endereco;
 
-    @Getter @Setter
-    @ManyToOne
-    @JoinColumn(name = "eventos_id")
-    private Eventos eventos;
-
 }

@@ -28,6 +28,6 @@ public interface VeiculoRepository extends JpaRepository<Veiculo,Long> {
     @Query("UPDATE Eventos eventos SET eventos.ativo = true WHERE eventos.id = : id")
     public void ativar(@Param("id")Long id);
 
-    @Query("SELECT evento FROM Evento evento WHERE evento.veiculo.id = :id")
+    @Query("SELECT eventos FROM Eventos eventos WHERE eventos.veiculo.id = :id")
     public List<Eventos> buscaVeiculoPorEvento(@Param("id") final Long id);
 }
