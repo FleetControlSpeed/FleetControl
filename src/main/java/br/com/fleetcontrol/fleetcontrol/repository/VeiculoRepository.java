@@ -1,6 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.repository;
 
 
+import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,7 @@ public interface VeiculoRepository extends JpaRepository<Veiculo,Long> {
     @Modifying
     @Query("UPDATE Eventos eventos SET eventos.ativo = true WHERE eventos.id = : id")
     public void ativar(@Param("id")Long id);
+
+    @Query("SELECT evento FROM Evento evento WHERE evento.veiculo.id = :id")
+    public List<Eventos> buscaVeiculoPorEvento(@Param("id") final Long id);
 }

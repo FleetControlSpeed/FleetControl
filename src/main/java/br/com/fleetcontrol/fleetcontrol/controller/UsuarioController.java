@@ -44,7 +44,7 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/lista")
+    @GetMapping("/listar")
     public ResponseEntity<?> listar() {
         try {
             return ResponseEntity.ok(this.usuarioservice.listaCompleta());
@@ -54,7 +54,7 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/lista/ativos")
+    @GetMapping("/listar/ativos")
     public ResponseEntity<?> listarPorAtivo() {
         try {
             return ResponseEntity.ok(this.usuarioservice.listaUsuariosAtivos());
@@ -106,6 +106,17 @@ public class UsuarioController {
 
         } catch (Exception e) {
             throw new RuntimeException("Error" + e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/deletar")
+    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+        try {
+            usuarioservice.deletar(id);
+            return ResponseEntity.ok("Registro deletado com sucesso!");
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 }

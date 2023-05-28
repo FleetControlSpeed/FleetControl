@@ -1,6 +1,8 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
+import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +85,21 @@ public class UsuarioService {
 
         } else {
             usuariorepository.ativar(id);
+        }
+    }
+
+    @Transactional
+    public void deletar(Long id){
+        Usuario usuario = buscarPorId(id);
+
+        List<Eventos> usuarios = usuariorepository.buscaUsuarioPorEvento(id);
+
+        if(usuarios.isEmpty()){
+            this.usuariorepository.deleteById(id);
+
+        } else {
+            usuariorepository.desativar(usuario.getId());
+            throw new RuntimeException(", usuario possui eventos cadastrados ativos, usuario desativado!");
         }
     }
 }

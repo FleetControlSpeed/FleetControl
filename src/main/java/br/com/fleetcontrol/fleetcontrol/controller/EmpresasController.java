@@ -69,4 +69,15 @@ public class EmpresasController {
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
+
+    @DeleteMapping(value = "/deletar")
+    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+        try {
+            empresasService.deletar(id);
+            return ResponseEntity.ok("Registro deletado com sucesso!");
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
 }

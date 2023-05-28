@@ -1,7 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.repository;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
-import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
+import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -26,4 +26,7 @@ public interface ModeloRepository extends JpaRepository<Modelo,Long> {
 
     @Query("SELECT modelo FROM Modelo modelo WHERE modelo.ativo = true")
     public List<Modelo> modelosAtivos();
+
+    @Query("SELECT veiculo FROM Veiculo veiculo WHERE veiculo.modelo.id = :id")
+    public List<Veiculo> buscaModeloPorVeiculo (@Param("id") final Long id);
 }

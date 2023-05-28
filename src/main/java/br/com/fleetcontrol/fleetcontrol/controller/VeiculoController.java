@@ -111,6 +111,17 @@ public class VeiculoController {
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
+
+    @DeleteMapping(value = "/deletar")
+    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+        try {
+            veiculoService.deletar(id);
+            return ResponseEntity.ok("Registro deletado com sucesso!");
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
 }
 
 

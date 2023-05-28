@@ -48,6 +48,16 @@ public class ModeloController {
         }
     }
 
+    @GetMapping(value = "/listarPorAtivo")
+    public ResponseEntity<?> listarPorAtivo(){
+        try {
+            return ResponseEntity.ok(modeloservice.listarPorAtivo());
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> cadastrar(@Valid @RequestBody final Modelo modelo){
         try{
@@ -88,6 +98,17 @@ public class ModeloController {
             return ResponseEntity.ok("Modelo ativado com sucesso!");
 
         } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/deletar")
+    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+        try {
+            modeloservice.deletar(id);
+            return ResponseEntity.ok("Registro deletado com sucesso!");
+
+        }catch (Exception e){
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }

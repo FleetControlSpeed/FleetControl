@@ -1,9 +1,11 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
+import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -77,6 +79,21 @@ public class ModeloService {
 
         } else {
             modelorepository.ativar(id);
+        }
+    }
+
+    @Transactional
+    public void deletar(Long id){
+        Modelo modelo = buscarPorId(id);
+
+        List<Veiculo> veiculos = modelorepository.buscaModeloPorVeiculo(id);
+
+        if(veiculos.isEmpty()){
+            this.modelorepository.deleteById(id);
+
+        } else {
+            modelorepository.desativar(modelo.getId());
+            throw new RuntimeException(", modelo possui veiculos cadastrados ativos, modelo desativado!");
         }
     }
 }
