@@ -48,12 +48,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        if(usuario.getUsuario().trim().isEmpty()){
-            throw new RuntimeException(", usuario Nulo!");
-
-        } else {
             return usuariorepository.save(usuario);
-        }
     }
 
     @Transactional

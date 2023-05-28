@@ -5,10 +5,9 @@ import br.com.fleetcontrol.fleetcontrol.service.VeiculoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @ResponseBody
 @RequestMapping(value = "/api/veiculo")
 public class VeiculoController {
@@ -49,7 +48,7 @@ public class VeiculoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<?> listarVeiculos(){
+    public ResponseEntity<?> listar(){
         try {
             return ResponseEntity.ok(veiculoService.listar());
 
@@ -69,7 +68,7 @@ public class VeiculoController {
     }
 
     @PutMapping("/editar")
-    public ResponseEntity<?> editarVeiculo(@RequestParam("id") final Long id, @RequestBody final Veiculo veiculoNovo) {
+    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Veiculo veiculoNovo) {
         try{
             veiculoService.editar(id,veiculoNovo);
             return ResponseEntity.ok("Veiculo alterado com sucesso!");
@@ -80,7 +79,7 @@ public class VeiculoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrarVeiculo(@Valid @RequestBody final Veiculo veiculo) {
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Veiculo veiculo) {
         try {
             veiculoService.salvar(veiculo);
             return ResponseEntity.ok("Veiculo cadastrado com sucesso!");
