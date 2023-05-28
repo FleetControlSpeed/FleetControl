@@ -1,4 +1,4 @@
-package br.com.fleetcontrol.fleetcontrol.Service;
+package br.com.fleetcontrol.fleetcontrol.service;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
