@@ -68,7 +68,7 @@ public class VeiculoController {
     }
 
     @PutMapping("/editar")
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Veiculo veiculoNovo) {
+    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Veiculo veiculoNovo) {
         try{
             veiculoService.editar(id,veiculoNovo);
             return ResponseEntity.ok("Veiculo alterado com sucesso!");
@@ -91,7 +91,7 @@ public class VeiculoController {
     }
 
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@RequestParam("id") final Long id) {
+    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id) {
         try {
             veiculoService.desativar(id);
             return ResponseEntity.ok("Evento desativado com sucesso!");
@@ -102,7 +102,7 @@ public class VeiculoController {
     }
 
     @PutMapping(value = "/ativar")
-    public ResponseEntity<?> ativar(@RequestParam("id") final Long id){
+    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id){
         try {
             veiculoService.ativar(id);
             return ResponseEntity.ok("Veiculo ativado com sucesso!");
@@ -113,7 +113,7 @@ public class VeiculoController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
         try {
             veiculoService.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");

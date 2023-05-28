@@ -45,6 +45,12 @@ public class ModeloService {
         }
     }
 
+    @Transactional
+    public Modelo salvar(Modelo modelo) {
+        return modelorepository.save(modelo);
+    }
+
+    @Transactional
     public void editar(Long id, Modelo modeloNovo){
         final Modelo modeloBanco = this.buscarPorId(id);
 
@@ -56,10 +62,7 @@ public class ModeloService {
         }
     }
 
-    public Modelo salvar(Modelo modelo) {
-            return modelorepository.save(modelo);
-    }
-
+    @Transactional
     public void desativar(Long id) {
         Modelo modelo  = buscarPorId(id);
 
@@ -71,6 +74,7 @@ public class ModeloService {
         }
     }
 
+    @Transactional
     public void ativar(Long id) {
         Modelo modelo  = buscarPorId(id);
 

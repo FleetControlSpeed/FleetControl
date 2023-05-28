@@ -28,7 +28,8 @@ public class Eventos extends AbstractEntity {
     private Usuario usuario;
 
     @Getter @Setter
-    @NotBlank(message = "Data do evento é um campo obrigatorio!")
+    @NotNull(message = "Data do evento é um campo obrigatorio!")
+    @NotBlank(message = "Data do evento nula ou invalida!")
     @Column(name = "data_evento",nullable = false)
     private LocalDateTime dataEvento;
 

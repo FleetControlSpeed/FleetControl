@@ -2,6 +2,7 @@ package br.com.fleetcontrol.fleetcontrol.entity;
 
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Marca;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,16 +14,15 @@ import org.hibernate.envers.Audited;
 @Audited
 @AuditTable(value = "tb_modelo_audit",schema = "audit")
 public class Modelo extends AbstractEntity {
-    @Getter
-    @Setter
-    @NotNull(message = "Nome do modelo não pode ser nulo!")
+    @Getter @Setter
+    @NotNull(message = "Nome é um campo obrigatorio!")
+    @NotBlank(message = "Nome nulo ou invalido!")
     @Column(name = "nome",nullable = false)
     private String nome;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Marca é um campo obrigatorio!")
     private Marca marca;
-
 
 }

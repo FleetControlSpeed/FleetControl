@@ -3,6 +3,7 @@ package br.com.fleetcontrol.fleetcontrol.controller;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
 import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -40,7 +41,7 @@ public class EmpresasController {
 
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Empresas empresas) {
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Empresas empresas) {
         try {
             this.empresasRepository.save(empresas);
             return ResponseEntity.ok("Empresa cadastrado com sucesso!");
@@ -50,7 +51,7 @@ public class EmpresasController {
         }
     }
     @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Empresas empresasNovo) {
+    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Empresas empresasNovo) {
         try {
             empresasService.editar(id, empresasNovo);
             return ResponseEntity.ok("Evento atualizado com sucesso!");
@@ -60,7 +61,7 @@ public class EmpresasController {
         }
     }
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
+    public ResponseEntity<?> deletar(@Valid @RequestParam("id") final Long id){
         try {
             empresasService.deletar(id);
             return ResponseEntity.ok("Empresa deletada com sucesso!");
@@ -71,7 +72,7 @@ public class EmpresasController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
         try {
             empresasService.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");

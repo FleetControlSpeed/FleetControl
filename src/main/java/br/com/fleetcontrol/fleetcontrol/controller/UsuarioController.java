@@ -76,7 +76,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/editar")
-    public ResponseEntity<?> atualizar(@RequestParam Long idUsuario, @RequestBody Usuario usuarioNovo) {
+    public ResponseEntity<?> atualizar(@Valid @RequestParam Long idUsuario, @RequestBody Usuario usuarioNovo) {
         try{
             usuarioservice.atualizar(idUsuario,usuarioNovo);
             return ResponseEntity.ok("Usuario alterado com sucesso!");
@@ -88,7 +88,7 @@ public class UsuarioController {
 
 
     @PutMapping("/desativar")
-    public ResponseEntity<?> desativar(@RequestParam Long idUsuario) {
+    public ResponseEntity<?> desativar(@Valid @RequestParam Long idUsuario) {
         try {
             usuarioservice.desativar(idUsuario);
             return ResponseEntity.ok().body("Usuario desativado com sucesso!");
@@ -99,7 +99,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/ativar")
-    public ResponseEntity<?> ativar(@RequestParam Long idUsuario) {
+    public ResponseEntity<?> ativar(@Valid @RequestParam Long idUsuario) {
         try {
             usuarioservice.ativar(idUsuario);
             return ResponseEntity.ok().body("Usuario ativado com sucesso!");
@@ -110,7 +110,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
         try {
             usuarioservice.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");

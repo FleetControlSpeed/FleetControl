@@ -4,6 +4,7 @@ import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.repository.EventosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,10 +51,12 @@ public class EventosService {
         }
     }
 
+    @Transactional
     public Eventos salvar(Eventos eventos) {
             return this.repository.save(eventos);
     }
 
+    @Transactional
     public void editar(Long id, Eventos eventosNovo){
         final Eventos eventosBanco = this.buscarPorId(id);
 
@@ -65,6 +68,7 @@ public class EventosService {
         }
     }
 
+    @Transactional
     public void desativar(Long id) {
         Eventos eventos = buscarPorId(id);
 
@@ -76,6 +80,7 @@ public class EventosService {
         }
     }
 
+    @Transactional
     public void ativar(Long id) {
         Eventos eventos = buscarPorId(id);
 

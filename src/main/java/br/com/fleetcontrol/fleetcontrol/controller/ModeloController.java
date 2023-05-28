@@ -70,7 +70,7 @@ public class ModeloController {
     }
 
     @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Modelo modelonovo) {
+    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Modelo modelonovo) {
         try {
             modeloservice.editar(id, modelonovo);
             return ResponseEntity.ok("Modelo atualizado com sucesso!");
@@ -81,7 +81,7 @@ public class ModeloController {
     }
 
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@RequestParam("id") final Long id){
+    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id){
         try {
             modeloservice.desativar(id);
             return ResponseEntity.ok("Modelo desativado com sucesso!");
@@ -92,7 +92,7 @@ public class ModeloController {
     }
 
     @PutMapping(value = "/ativar")
-    public ResponseEntity<?> ativar(@RequestParam("id") final Long id){
+    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id){
         try {
             modeloservice.ativar(id);
             return ResponseEntity.ok("Modelo ativado com sucesso!");
@@ -103,7 +103,7 @@ public class ModeloController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@RequestParam("id") final long id){
+    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
         try {
             modeloservice.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");
