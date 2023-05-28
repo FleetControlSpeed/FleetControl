@@ -1,8 +1,8 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
-import br.com.fleetcontrol.fleetcontrol.Service.EmpresasService;
 import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
+import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +12,19 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RequestMapping(value = "/api/empresas")
 public class EmpresasController {
+
+    /*
+    {
+    "id": 1,
+    "cadastro": "2023-05-27T22:48:58.594611",
+    "edicao": null,
+    "ativo": true,
+    "nome": "Casa do Pedro",
+    "endereco": "Rua Belmiro numero 2",
+    "cep": "85859340"
+    }
+     */
+
     @Autowired
     private EmpresasService empresasService;
     @Autowired
@@ -27,7 +40,7 @@ public class EmpresasController {
 
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestParam("id") final Empresas empresas) {
+    public ResponseEntity<?> cadastrar(@RequestBody final Empresas empresas) {
         try {
             this.empresasRepository.save(empresas);
             return ResponseEntity.ok("Empresa cadastrado com sucesso!");

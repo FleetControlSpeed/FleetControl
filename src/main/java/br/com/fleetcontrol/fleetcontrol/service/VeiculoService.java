@@ -17,7 +17,7 @@ public class VeiculoService {
             throw new RuntimeException(", por favor, informe um valor valido!");
 
         } else if (repository.findById(id).isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar o condutor informado!");
+            throw new RuntimeException(", não foi possivel localizar o veiculo informado!");
 
         } else {
             return repository.findById(id).orElse(null);
@@ -26,7 +26,7 @@ public class VeiculoService {
 
     public List<Veiculo> listar() {
         if (repository.findAll().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui veiculos cadastrados!");
+            throw new RuntimeException(", não foi possivel localizar nenhum veiculo cadastrado!");
 
         } else {
             return repository.findAll();
@@ -35,7 +35,7 @@ public class VeiculoService {
 
     public List<Veiculo> listarPorAtivo() {
         if (repository.buscarPorAtivo().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui Veiculos ativos!");
+            throw new RuntimeException(", banco de dados não possui veiculos ativos!");
 
         } else {
             return repository.buscarPorAtivo();
@@ -50,7 +50,7 @@ public class VeiculoService {
         final Veiculo veiculoBanco= this.buscarPorId(id);
 
         if(veiculoBanco == null || !veiculoBanco.getId().equals(veiculoNovo.getId())){
-            throw new RuntimeException(", não foi possivel identificar o evento informado!");
+            throw new RuntimeException(", não foi possivel identificar o veiculo informado!");
 
         } else {
             this.salvar(veiculoNovo);
@@ -61,7 +61,7 @@ public class VeiculoService {
         Veiculo veiculo = buscarPorId(id);
 
         if (!veiculo.isAtivo()) {
-            throw new RuntimeException(", evento informado já esta desativado!");
+            throw new RuntimeException(", veiculo informado já esta desativado!");
 
         } else {
             repository.desativar(id);
@@ -72,7 +72,8 @@ public class VeiculoService {
         Veiculo veiculo = buscarPorId(id);
 
         if (veiculo.isAtivo()) {
-            throw new RuntimeException(", evento informado já esta ativado!");
+            throw new RuntimeException(", veiculo informado já esta ativado!");
+
         } else {
             repository.ativar(id);
         }

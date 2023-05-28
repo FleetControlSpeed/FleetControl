@@ -12,13 +12,25 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RequestMapping(value = "/api/modelo")
 public class ModeloController {
+
+    /*
+    {
+    "id": 1,
+    "cadastro": "2023-05-27T22:44:35.287413",
+    "edicao": null,
+    "ativo": true,
+    "nome": "HRV",
+    "marca": "HONDA"
+    }
+     */
+
     @Autowired
     private ModeloService modeloservice;
 
 
     //put para cadastro de modelo no banco
     @PostMapping
-    public ResponseEntity<?> CadastroModelo(@Valid @RequestParam("id") final Modelo modelo){
+    public ResponseEntity<?> CadastroModelo(@Valid @RequestBody final Modelo modelo){
         try{
             this.modeloservice.salvar(modelo);
             return ResponseEntity.ok("Modelo salvo com sucesso");

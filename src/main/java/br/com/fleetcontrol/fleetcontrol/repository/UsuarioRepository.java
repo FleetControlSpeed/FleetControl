@@ -20,6 +20,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     @Query("UPDATE Usuario usuario SET usuario.ativo = false WHERE usuario.id = :idUsuario")
     public void desativar(@Param("idUsuario") Long id);
 
+    @Modifying
+    @Query("UPDATE Usuario usuario SET usuario.ativo = true WHERE usuario.id = : id")
+    public void ativar(@Param("id") Long id);
+
     @Query("SELECT usuario FROM Usuario usuario WHERE usuario.ativo = true")
-    public List<Usuario> UsuariosAtivos();
+    public List<Usuario> usuariosAtivos();
 }

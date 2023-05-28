@@ -10,6 +10,7 @@ import java.util.List;
 /*
     @Author: Pedro Henrique Vieira
     Date: 07/05/2023
+    Last att: 27/05/2023
  */
 
 @Service
@@ -50,7 +51,6 @@ public class EventosService {
     }
 
     public Eventos salvar(Eventos eventos) {
-
         if (eventos.getUsuario() == null) {
             throw new RuntimeException(", usuario é um campo obrigatorio!");
 
@@ -60,22 +60,18 @@ public class EventosService {
         } else if (eventos.getLocalPartida() == null) {
             throw new RuntimeException(", local de partida é um campo obrigatorio!");
 
-        } else if (eventos.getLocalPartida().isBlank()) {
-            throw new RuntimeException(", local de partida nulo ou invalido!");
 
         } else if (eventos.getLocalDestino() == null) {
             throw new RuntimeException(", local de destino é um campo obrigatorio!");
-
-        } else if (eventos.getLocalDestino().isBlank()) {
-            throw new RuntimeException(", local de destino nulo ou invalido!");
 
         } else if (eventos.getVeiculo() == null) {
             throw new RuntimeException(", veiculo é um campo obrigatorio!");
 
         } else {
             return this.repository.save(eventos);
+        }
     }
-    }
+
     public void editar(Long id, Eventos eventosNovo){
         final Eventos eventosBanco = this.buscarPorId(id);
 

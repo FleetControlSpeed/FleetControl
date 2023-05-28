@@ -2,9 +2,9 @@ package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.service.EventosService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /*
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
     Date: 07/05/2023
  */
 
-@Controller
+@RestController
 @ResponseBody
 @RequestMapping(value = "/api/eventos")
 public class EventosController {
@@ -51,7 +51,7 @@ public class EventosController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestParam("id") final Eventos eventos) {
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Eventos eventos) {
         try {
             this.service.salvar(eventos);
             return ResponseEntity.ok("Evento cadastrado com sucesso!");
@@ -62,7 +62,7 @@ public class EventosController {
     }
 
     @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Eventos eventosNovo) {
+    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Eventos eventosNovo) {
         try {
             service.editar(id, eventosNovo);
             return ResponseEntity.ok("Evento atualizado com sucesso!");
@@ -73,7 +73,7 @@ public class EventosController {
     }
 
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@RequestParam("id") final Long id){
+    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id){
         try {
             service.desativar(id);
             return ResponseEntity.ok("Evento desativado com sucesso!");
@@ -84,7 +84,7 @@ public class EventosController {
     }
 
     @PutMapping(value = "/ativar")
-    public ResponseEntity<?> ativar(@RequestParam("id") final Long id){
+    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id){
         try {
             service.ativar(id);
             return ResponseEntity.ok("Evento ativado com sucesso!");

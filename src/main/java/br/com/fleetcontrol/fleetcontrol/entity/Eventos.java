@@ -28,28 +28,30 @@ public class Eventos extends AbstractEntity {
     private Usuario usuario;
 
     @Getter @Setter
-    @NotBlank(message = ", data do evento é um campo obrigatorio!")
+    @NotBlank(message = "Data do evento é um campo obrigatorio!")
     @Column(name = "data_evento",nullable = false)
     private LocalDateTime dataEvento;
 
     @Getter @Setter
-    @NotNull(message = ", local de partida é um campo obrigatorio!")
-    @NotBlank(message = ", local de partida nulo ou invalido!")
-    @Column(name = "local_partida",nullable = false)
-    private String localPartida;
+    @NotNull(message = "Local de partida é um campo obrigatorio!")
+    @NotBlank(message = "Local de partida nulo ou invalido!")
+    @OneToOne
+    @JoinColumn(name = "local_partida",nullable = false)
+    private Empresas localPartida;
 
     @Getter @Setter
-    @NotNull(message = ", local de destino é um campo obrigatorio!")
-    @NotBlank(message = ", local de destino nulo ou invalido!")
-    @Column(name = "local_destino",nullable = false)
-    private String localDestino;
+    @NotNull(message = "Local de destino é um campo obrigatorio!")
+    @NotBlank(message = "Local de destino nulo ou invalido!")
+    @OneToOne
+    @JoinColumn(name = "local_destino",nullable = false)
+    private Empresas localDestino;
 
     @Getter @Setter
     @Column(name = "observacao")
     private String observacao;
 
     @Getter @Setter
-    @NotNull(message = ", veiculo é um campo obrigatorio!")
+    @NotNull(message = "Veiculo é um campo obrigatorio!")
     @ManyToOne
     @JoinColumn(name = "veiculo_id",nullable = false)
     private Veiculo veiculo;

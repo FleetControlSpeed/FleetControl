@@ -2,6 +2,7 @@ package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,27 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "api/condutores")
 public class UsuarioController {
+
+    /*
+    {
+    "id": 1,
+    "cadastro": "2023-05-27T22:37:03.119999",
+    "edicao": null,
+    "ativo": true,
+    "email": "pedrohenri1606@gmail.com",
+    "usuario": "pedro",
+    "senha": "123",
+    "cargo": "ADMINISTRADOR",
+    "primeiroNome": "Pedro",
+    "sobrenome": "Henrique",
+    "cpf": "10250870975",
+    "telefone": "45 998265476",
+    "dataNascimento": "29/07/2003",
+    "endereco": "Rua Belmiro numero 2",
+    "eventos": null
+    }
+     */
+
     @Autowired
     private UsuarioService usuarioservice;
 
@@ -31,10 +53,11 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Usuario usuario){
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Usuario usuario){
         try{
-            this.usuarioservice.cadastrar(usuario);
+            usuarioservice.cadastrar(usuario);
             return ResponseEntity.ok().body("Sucesso!, Usuario Cadastrado!");
+
         }catch(RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
