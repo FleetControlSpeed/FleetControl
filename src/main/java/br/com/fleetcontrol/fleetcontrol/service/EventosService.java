@@ -64,7 +64,7 @@ public class EventosService {
             throw new RuntimeException(", não foi possivel identificar o evento informado!");
 
         } else {
-            this.salvar(eventosNovo);
+            salvar(eventosNovo);
         }
     }
 

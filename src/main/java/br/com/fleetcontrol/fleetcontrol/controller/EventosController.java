@@ -16,6 +16,72 @@ import org.springframework.web.bind.annotation.*;
 @ResponseBody
 @RequestMapping(value = "/api/eventos")
 public class EventosController {
+
+    /*
+    {
+    "id": 1,
+    "cadastro": "2023-05-28T19:40:32.380161",
+    "edicao": null,
+    "ativo": true,
+    "usuario": {
+        "id": 1,
+        "cadastro": "2023-05-28T19:33:44.514023",
+        "edicao": null,
+        "ativo": true,
+        "email": "pedrohenri1606@gmail.com",
+        "usuario": "pedro",
+        "senha": "123",
+        "cargo": "ADMINISTRADOR",
+        "primeiroNome": "Pedro",
+        "sobrenome": "Henrique",
+        "cpf": "10250870975",
+        "telefone": "45998265476",
+        "dataNascimento": "29/07/2003",
+        "endereco": "Rua Belmiro numero 2"
+    },
+    "veiculo": {
+        "id": 1,
+        "cadastro": "2023-05-27T22:46:03.14222",
+        "edicao": null,
+        "ativo": true,
+        "modelo": {
+            "id": 1,
+            "cadastro": "2023-05-28T19:34:12.724773",
+            "edicao": null,
+            "ativo": true,
+            "nome": "HRV",
+            "marca": "HONDA"
+        },
+        "placa": "RHT-5F18",
+        "ano": 2022,
+        "cor": "VERMELHO",
+        "km": 10000,
+        "tipo": "CARRO"
+    },
+    "dataEvento": "2023-05-28T19:40:32.380161",
+    "localPartida": {
+        "id": 1,
+        "cadastro": "2023-05-28T19:39:43.137577",
+        "edicao": null,
+        "ativo": true,
+        "nome": "Casa do Pedro",
+        "endereco": "Rua Belmiro numero 2",
+        "cep": "85859-340"
+    },
+    "localDestino": {
+        "id": 1,
+        "cadastro": "2023-05-28T19:39:43.137577",
+        "edicao": null,
+        "ativo": true,
+        "nome": "Casa do Pedro",
+        "endereco": "Rua Belmiro numero 2",
+        "cep": "85859-340"
+    },
+    "observacao": null,
+    "retorno": null
+}
+     */
+
     @Autowired
     private EventosService service;
 

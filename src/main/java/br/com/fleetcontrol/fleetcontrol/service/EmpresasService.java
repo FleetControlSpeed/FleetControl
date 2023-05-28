@@ -6,7 +6,6 @@ import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -29,28 +28,40 @@ public class EmpresasService {
         }
     }
 
+    public List<Empresas> listar(){
+        if(empresasRepository.findAll().isEmpty()){
+            throw new RuntimeException(", não foi possivel localizar nenhuma empresa cadastrada!");
+
+        } else {
+            return empresasRepository.findAll();
+        }
+    }
+
+    public List<Empresas> listarPorAtivo(){
+        if(empresasRepository.empresasAtivas().isEmpty()){
+            throw new RuntimeException(", não foi possivel localizar nenhuma empresa ativa cadastrada!");
+
+        } else {
+            return empresasRepository.empresasAtivas();
+        }
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void cadastrar(final Empresas empresas){
-        Assert.isTrue(empresas.getNome() == null,"Error campo nome vazio");
-        Assert.isTrue(empresas.getCEP() == null, "Error  campo CEP vazio");
-        Assert.isTrue(empresas.getEndereco().isBlank(), "Campo ENDERECO vazio");
-        this.empresasRepository.save(empresas);
+        empresasRepository.save(empresas);
     }
 
 
     @Transactional(rollbackFor = Exception.class)
-    public void editar(final Long id, final Empresas empresas){
-        final Empresas empresasBanco = this.empresasRepository.findById(id).orElse(null);
+    public void editar(Long id, Empresas empresasNovo){
+        final Empresas empresasBanco = buscarPorId(id);
 
-        Assert.isTrue(empresasBanco != null || empresasBanco.getId().equals(empresas.getId()), "Error registro nao encontrado");
-        Assert.isTrue(empresas.getId().equals(id), "id da URL e diferente do body");
-        Assert.isTrue(empresas.getNome() == null,"Error campo nome vazio");
-        Assert.isTrue(empresas.getCEP() == null, "Error  campo CEP vazio");
-        Assert.isTrue(empresas.getEndereco().isBlank(), "Campo endereço vazio");
+        if(empresasBanco == null || !empresasBanco.getId().equals(empresasNovo.getId())){
+            throw new RuntimeException(", não foi possivel localizar a empresa informada!");
 
-
-        this.empresasRepository.save(empresas);
-
+        } else {
+            cadastrar(empresasNovo);
+        }
     }
 
     @Transactional
@@ -84,7 +95,7 @@ public class EmpresasService {
         List<Eventos> empresas = empresasRepository.buscaEmpresaPorEvento(id);
 
         if(empresas.isEmpty()){
-            this.empresasRepository.deleteById(id);
+            empresasRepository.deleteById(id);
 
         } else {
             empresasRepository.desativar(empresa.getId());

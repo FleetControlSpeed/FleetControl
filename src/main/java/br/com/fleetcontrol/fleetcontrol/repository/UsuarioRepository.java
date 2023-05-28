@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,12 +18,14 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
+    @Transactional
     @Modifying
-    @Query("UPDATE Usuario usuario SET usuario.ativo = false WHERE usuario.id = :idUsuario")
-    public void desativar(@Param("idUsuario") Long id);
+    @Query("UPDATE Usuario usuario SET usuario.ativo = false WHERE usuario.id = :id")
+    public void desativar(@Param("id") Long id);
 
+    @Transactional
     @Modifying
-    @Query("UPDATE Usuario usuario SET usuario.ativo = true WHERE usuario.id = : id")
+    @Query("UPDATE Usuario usuario SET usuario.ativo = true WHERE usuario.id = :id")
     public void ativar(@Param("id") Long id);
 
     @Query("SELECT usuario FROM Usuario usuario WHERE usuario.ativo = true")

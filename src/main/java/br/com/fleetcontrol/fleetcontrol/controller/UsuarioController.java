@@ -76,7 +76,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/editar")
-    public ResponseEntity<?> atualizar(@Valid @RequestParam Long idUsuario, @RequestBody Usuario usuarioNovo) {
+    public ResponseEntity<?> atualizar(@Valid @RequestParam("id") Long idUsuario, @RequestBody Usuario usuarioNovo) {
         try{
             usuarioservice.atualizar(idUsuario,usuarioNovo);
             return ResponseEntity.ok("Usuario alterado com sucesso!");
@@ -88,24 +88,24 @@ public class UsuarioController {
 
 
     @PutMapping("/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam Long idUsuario) {
-        try {
+    public ResponseEntity<?> desativar(@Valid @RequestParam("id") Long idUsuario) {
+        try{
             usuarioservice.desativar(idUsuario);
-            return ResponseEntity.ok().body("Usuario desativado com sucesso!");
+            return ResponseEntity.ok("Usuario desativado com sucesso!");
 
-        } catch (Exception e) {
-            throw new RuntimeException("Error" + e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
     @PutMapping("/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestParam Long idUsuario) {
-        try {
+    public ResponseEntity<?> ativar(@Valid @RequestParam("id") Long idUsuario){
+        try{
             usuarioservice.ativar(idUsuario);
-            return ResponseEntity.ok().body("Usuario ativado com sucesso!");
+            return ResponseEntity.ok("Usuario ativado com sucesso!");
 
-        } catch (Exception e) {
-            throw new RuntimeException("Error" + e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 

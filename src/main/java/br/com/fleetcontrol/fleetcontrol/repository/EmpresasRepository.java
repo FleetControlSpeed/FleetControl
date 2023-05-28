@@ -2,6 +2,7 @@ package br.com.fleetcontrol.fleetcontrol.repository;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
+import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,6 +17,9 @@ public interface EmpresasRepository extends JpaRepository <Empresas, Long> {
 
     @Query("SELECT eventos FROM Eventos eventos WHERE eventos.localDestino.id = :id")
     public List<Eventos> buscaEmpresaPorEvento (@Param("id") final Long id);
+
+    @Query("SELECT empresas FROM Empresas empresas WHERE empresas.ativo = true")
+    public List<Empresas> empresasAtivas();
 
     @Transactional
     @Modifying

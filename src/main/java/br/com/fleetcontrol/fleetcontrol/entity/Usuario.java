@@ -39,7 +39,7 @@ public class Usuario extends AbstractEntity {
     private String senha;
 
     @Getter @Setter
-    @NotEmpty(message = "Cargo é um campo obrigatorio!")
+    @NotNull(message = "Cargo é um campo obrigatorio!")
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
 

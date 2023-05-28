@@ -23,6 +23,6 @@ public interface EventosRepository extends JpaRepository<Eventos,Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE Eventos eventos SET eventos.ativo = true WHERE eventos.id = : id")
+    @Query("UPDATE Eventos eventos SET eventos.ativo = true WHERE eventos.id = :id")
     public void ativar(@Param("id")Long id);
 }

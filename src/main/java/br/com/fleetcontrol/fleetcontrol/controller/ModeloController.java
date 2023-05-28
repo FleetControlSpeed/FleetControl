@@ -5,10 +5,9 @@ import br.com.fleetcontrol.fleetcontrol.service.ModeloService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @ResponseBody
 @RequestMapping(value = "/api/modelo")
 public class ModeloController {

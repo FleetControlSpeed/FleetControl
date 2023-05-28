@@ -58,7 +58,7 @@ public class ModeloService {
             throw new RuntimeException(", não foi possivel identificar o modelo informado!");
 
         } else {
-            this.salvar(modeloNovo);
+            salvar(modeloNovo);
         }
     }
 
@@ -93,7 +93,7 @@ public class ModeloService {
         List<Veiculo> veiculos = modelorepository.buscaModeloPorVeiculo(id);
 
         if(veiculos.isEmpty()){
-            this.modelorepository.deleteById(id);
+            modelorepository.deleteById(id);
 
         } else {
             modelorepository.desativar(modelo.getId());

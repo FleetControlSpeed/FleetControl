@@ -1,7 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
-import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
 import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +25,41 @@ public class EmpresasController {
 
     @Autowired
     private EmpresasService empresasService;
-    @Autowired
-    private EmpresasRepository empresasRepository;
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
-            final Empresas empresas = this.empresasRepository.findById(id).orElse(null);
-            return ResponseEntity.ok(empresas);
+        try{
+            return ResponseEntity.ok(empresasService.buscarPorId(id));
 
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
     }
 
+    @GetMapping(value = "/listar")
+    public ResponseEntity<?> listar(){
+        try {
+            return ResponseEntity.ok(empresasService.listar());
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/listarPorAtivo")
+    public ResponseEntity<?> listarPorAtivo(){
+        try {
+            return ResponseEntity.ok(empresasService.listarPorAtivo());
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@Valid @RequestBody final Empresas empresas) {
         try {
-            this.empresasRepository.save(empresas);
+            empresasService.cadastrar(empresas);
             return ResponseEntity.ok("Empresa cadastrado com sucesso!");
 
         } catch (Exception e) {
@@ -59,10 +77,21 @@ public class EmpresasController {
         }
     }
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> deletar(@Valid @RequestParam("id") final Long id){
+    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id){
         try {
             empresasService.desativar(id);
-            return ResponseEntity.ok("Empresa deletada com sucesso!");
+            return ResponseEntity.ok("Empresa desativada com sucesso!");
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/ativar")
+    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id){
+        try {
+            empresasService.ativar(id);
+            return ResponseEntity.ok("Empresa ativada com sucesso!");
 
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
