@@ -1,8 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,8 +18,7 @@ public abstract class AbstractEntity {
     @Getter
     @Setter
     @Column(name = "cadastro",nullable = false)
-    @NotNull(message = "Data de Cadastro não pode ser nula!")
-    @NotEmpty
+  //  @NotNull(message = "Data de Cadastro não pode ser nula!")
     private LocalDateTime cadastro;
     @Getter
     @Setter
@@ -30,8 +27,7 @@ public abstract class AbstractEntity {
     @Getter
     @Setter
     @Column(name = "ativo",nullable = false)
-    @NotNull(message = "Ativo tem que ser true or false!")
-    @NotEmpty
+   // @NotEmpty(message = "Ativo tem que ser true or false!")
     private boolean ativo;
 
 

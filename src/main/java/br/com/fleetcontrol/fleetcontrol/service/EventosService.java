@@ -4,12 +4,14 @@ import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.repository.EventosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /*
     @Author: Pedro Henrique Vieira
     Date: 07/05/2023
+    Last att: 27/05/2023
  */
 
 @Service
@@ -24,7 +26,7 @@ public class EventosService {
             throw new RuntimeException(", por favor, informe um valor valido!");
 
         } else if (repository.findById(id).isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar o condutor informado!");
+            throw new RuntimeException(", não foi possivel localizar o evento informado!");
 
         } else {
             return repository.findById(id).orElse(null);
@@ -33,7 +35,7 @@ public class EventosService {
 
     public List<Eventos> listar() {
         if (repository.findAll().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui eventos cadastrados!");
+            throw new RuntimeException(", não foi possivel localizar nenhum evento cadastrado!");
 
         } else {
             return repository.findAll();
@@ -42,40 +44,19 @@ public class EventosService {
 
     public List<Eventos> listarPorAtivo() {
         if (repository.buscarPorAtivo().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui eventos ativos!");
+            throw new RuntimeException(", não foi possivel localizar nenhum evento ativo cadastrado!");
 
         } else {
             return repository.buscarPorAtivo();
         }
     }
 
+    @Transactional
     public Eventos salvar(Eventos eventos) {
-
-        if (eventos.getUsuario() == null) {
-            throw new RuntimeException(", usuario é um campo obrigatorio!");
-
-        } else if (eventos.getDataEvento() == null) {
-            throw new RuntimeException(", data do evento é um campo obrigatorio!");
-
-        } else if (eventos.getLocalPartida() == null) {
-            throw new RuntimeException(", local de partida é um campo obrigatorio!");
-
-        } else if (eventos.getLocalPartida().isBlank()) {
-            throw new RuntimeException(", local de partida nulo ou invalido!");
-
-        } else if (eventos.getLocalDestino() == null) {
-            throw new RuntimeException(", local de destino é um campo obrigatorio!");
-
-        } else if (eventos.getLocalDestino().isBlank()) {
-            throw new RuntimeException(", local de destino nulo ou invalido!");
-
-        } else if (eventos.getVeiculo() == null) {
-            throw new RuntimeException(", veiculo é um campo obrigatorio!");
-
-        } else {
             return this.repository.save(eventos);
     }
-    }
+
+    @Transactional
     public void editar(Long id, Eventos eventosNovo){
         final Eventos eventosBanco = this.buscarPorId(id);
 
@@ -83,10 +64,11 @@ public class EventosService {
             throw new RuntimeException(", não foi possivel identificar o evento informado!");
 
         } else {
-            this.salvar(eventosNovo);
+            salvar(eventosNovo);
         }
     }
 
+    @Transactional
     public void desativar(Long id) {
         Eventos eventos = buscarPorId(id);
 
@@ -98,6 +80,7 @@ public class EventosService {
         }
     }
 
+    @Transactional
     public void ativar(Long id) {
         Eventos eventos = buscarPorId(id);
 

@@ -3,7 +3,7 @@ package br.com.fleetcontrol.fleetcontrol.entity.enums;
 public enum Cor {
     AMARELO,
     BEGE,
-    BrANCA,
+    BRANCA,
     CINZA,
     MARROM,
     AZUL,

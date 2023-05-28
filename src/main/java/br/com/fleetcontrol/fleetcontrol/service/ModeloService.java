@@ -1,9 +1,11 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
+import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,33 +15,42 @@ public class ModeloService {
     @Autowired
     public ModeloRepository modelorepository;
 
-
-    //verifica por id
     public Modelo buscarPorId(Long id) {
         if (id == 0) {
-            throw new RuntimeException("insira um id valido");
+            throw new RuntimeException(", por favor, informe um valor valido!");
 
         } else if (modelorepository.findById(id).isEmpty()) {
-            throw new RuntimeException("nao aceitamos id's em branco");
+            throw new RuntimeException(", não foi possivel localizar o modelo informado");
 
         } else {
             return modelorepository.findById(id).orElse(null);
         }
     }
 
-
-
-    //verifica se existem modelos cadastrados na listagem
     public List<Modelo> listar() {
         if (modelorepository.findAll().isEmpty()) {
-            throw new RuntimeException(",não existem modelos cadastrados!");
+            throw new RuntimeException(", não foi possivel localizar nenhum modelo cadastrado!");
 
         } else {
             return modelorepository.findAll();
         }
     }
 
-    //verifica se é possível editar o modelo informado
+    public List<Modelo> listarPorAtivo(){
+        if(modelorepository.modelosAtivos().isEmpty()){
+            throw new RuntimeException(", não foi possivel localizar nenhum modelo ativo cadastrado!");
+
+        } else {
+            return modelorepository.modelosAtivos();
+        }
+    }
+
+    @Transactional
+    public Modelo salvar(Modelo modelo) {
+        return modelorepository.save(modelo);
+    }
+
+    @Transactional
     public void editar(Long id, Modelo modeloNovo){
         final Modelo modeloBanco = this.buscarPorId(id);
 
@@ -47,25 +58,11 @@ public class ModeloService {
             throw new RuntimeException(", não foi possivel identificar o modelo informado!");
 
         } else {
-            this.salvar(modeloNovo);
+            salvar(modeloNovo);
         }
     }
 
-    //verifica se é possivel salvar modelos ao banco
-    public Modelo salvar(Modelo modelo) {
-
-        if (modelo.getMarca() == null) {
-            throw new RuntimeException("marca nao inserida, insira uma marca");
-
-        } else if (modelo.getNome() == null) {
-            throw new RuntimeException("nome nao identificado");
-
-        } else {
-            return modelorepository.save(modelo);
-        }
-
-    }
-
+    @Transactional
     public void desativar(Long id) {
         Modelo modelo  = buscarPorId(id);
 
@@ -74,6 +71,33 @@ public class ModeloService {
 
         } else {
             modelorepository.desativar(id);
+        }
+    }
+
+    @Transactional
+    public void ativar(Long id) {
+        Modelo modelo  = buscarPorId(id);
+
+        if (modelo.isAtivo()) {
+            throw new RuntimeException(", modelo informado já esta ativado!");
+
+        } else {
+            modelorepository.ativar(id);
+        }
+    }
+
+    @Transactional
+    public void deletar(Long id){
+        Modelo modelo = buscarPorId(id);
+
+        List<Veiculo> veiculos = modelorepository.buscaModeloPorVeiculo(id);
+
+        if(veiculos.isEmpty()){
+            modelorepository.deleteById(id);
+
+        } else {
+            modelorepository.desativar(modelo.getId());
+            throw new RuntimeException(", modelo possui veiculos cadastrados ativos, modelo desativado!");
         }
     }
 }
