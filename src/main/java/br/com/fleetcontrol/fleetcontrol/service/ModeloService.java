@@ -12,7 +12,7 @@ public class ModeloService {
 
     @Autowired
     public ModeloRepository modelorepository;
-    
+
     public Modelo buscarPorId(Long id) {
         if (id == 0) {
             throw new RuntimeException(", por favor, informe um valor valido!");
@@ -31,6 +31,15 @@ public class ModeloService {
 
         } else {
             return modelorepository.findAll();
+        }
+    }
+
+    public List<Modelo> listarPorAtivo(){
+        if(modelorepository.modelosAtivos().isEmpty()){
+            throw new RuntimeException(", não foi possivel localizar nenhum modelo ativo cadastrado!");
+
+        } else {
+            return modelorepository.modelosAtivos();
         }
     }
 

@@ -26,7 +26,7 @@ public class EventosController {
             return ResponseEntity.ok(eventos);
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
@@ -36,7 +36,7 @@ public class EventosController {
             return ResponseEntity.ok(service.listar());
 
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class EventosController {
             return ResponseEntity.ok(service.listarPorAtivo());
 
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
@@ -90,7 +90,7 @@ public class EventosController {
             return ResponseEntity.ok("Evento ativado com sucesso!");
 
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 }

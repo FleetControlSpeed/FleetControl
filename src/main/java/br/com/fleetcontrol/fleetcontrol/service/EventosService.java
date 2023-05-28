@@ -25,7 +25,7 @@ public class EventosService {
             throw new RuntimeException(", por favor, informe um valor valido!");
 
         } else if (repository.findById(id).isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar o condutor informado!");
+            throw new RuntimeException(", não foi possivel localizar o evento informado!");
 
         } else {
             return repository.findById(id).orElse(null);
@@ -34,7 +34,7 @@ public class EventosService {
 
     public List<Eventos> listar() {
         if (repository.findAll().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui eventos cadastrados!");
+            throw new RuntimeException(", não foi possivel localizar nenhum evento cadastrado!");
 
         } else {
             return repository.findAll();
@@ -43,7 +43,7 @@ public class EventosService {
 
     public List<Eventos> listarPorAtivo() {
         if (repository.buscarPorAtivo().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui eventos ativos!");
+            throw new RuntimeException(", não foi possivel localizar nenhum evento ativo cadastrado!");
 
         } else {
             return repository.buscarPorAtivo();
@@ -51,25 +51,7 @@ public class EventosService {
     }
 
     public Eventos salvar(Eventos eventos) {
-        if (eventos.getUsuario() == null) {
-            throw new RuntimeException(", usuario é um campo obrigatorio!");
-
-        } else if (eventos.getDataEvento() == null) {
-            throw new RuntimeException(", data do evento é um campo obrigatorio!");
-
-        } else if (eventos.getLocalPartida() == null) {
-            throw new RuntimeException(", local de partida é um campo obrigatorio!");
-
-
-        } else if (eventos.getLocalDestino() == null) {
-            throw new RuntimeException(", local de destino é um campo obrigatorio!");
-
-        } else if (eventos.getVeiculo() == null) {
-            throw new RuntimeException(", veiculo é um campo obrigatorio!");
-
-        } else {
             return this.repository.save(eventos);
-        }
     }
 
     public void editar(Long id, Eventos eventosNovo){
