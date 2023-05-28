@@ -12,34 +12,28 @@ public class ModeloService {
 
     @Autowired
     public ModeloRepository modelorepository;
-
-
-    //verifica por id
+    
     public Modelo buscarPorId(Long id) {
         if (id == 0) {
-            throw new RuntimeException("insira um id valido");
+            throw new RuntimeException(", por favor, informe um valor valido!");
 
         } else if (modelorepository.findById(id).isEmpty()) {
-            throw new RuntimeException("nao aceitamos id's em branco");
+            throw new RuntimeException(", não foi possivel localizar o modelo informado");
 
         } else {
             return modelorepository.findById(id).orElse(null);
         }
     }
 
-
-
-    //verifica se existem modelos cadastrados na listagem
     public List<Modelo> listar() {
         if (modelorepository.findAll().isEmpty()) {
-            throw new RuntimeException(",não existem modelos cadastrados!");
+            throw new RuntimeException(", não foi possivel localizar nenhum modelo cadastrado!");
 
         } else {
             return modelorepository.findAll();
         }
     }
 
-    //verifica se é possível editar o modelo informado
     public void editar(Long id, Modelo modeloNovo){
         final Modelo modeloBanco = this.buscarPorId(id);
 
@@ -51,19 +45,8 @@ public class ModeloService {
         }
     }
 
-    //verifica se é possivel salvar modelos ao banco
     public Modelo salvar(Modelo modelo) {
-
-        if (modelo.getMarca() == null) {
-            throw new RuntimeException("marca nao inserida, insira uma marca");
-
-        } else if (modelo.getNome() == null) {
-            throw new RuntimeException("nome nao identificado");
-
-        } else {
             return modelorepository.save(modelo);
-        }
-
     }
 
     public void desativar(Long id) {
@@ -74,6 +57,17 @@ public class ModeloService {
 
         } else {
             modelorepository.desativar(id);
+        }
+    }
+
+    public void ativar(Long id) {
+        Modelo modelo  = buscarPorId(id);
+
+        if (modelo.isAtivo()) {
+            throw new RuntimeException(", modelo informado já esta ativado!");
+
+        } else {
+            modelorepository.ativar(id);
         }
     }
 }

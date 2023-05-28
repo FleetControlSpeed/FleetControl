@@ -11,7 +11,6 @@ import java.util.List;
 /*
     @Author: Cristovão Martins
  */
-@NoArgsConstructor
 @Service
 public class UsuarioService {
 

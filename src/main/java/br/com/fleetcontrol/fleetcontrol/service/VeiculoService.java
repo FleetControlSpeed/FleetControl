@@ -35,7 +35,7 @@ public class VeiculoService {
 
     public List<Veiculo> listarPorAtivo() {
         if (repository.buscarPorAtivo().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui veiculos ativos!");
+            throw new RuntimeException(", não foi possui localizar veiculos ativos cadastrados!");
 
         } else {
             return repository.buscarPorAtivo();

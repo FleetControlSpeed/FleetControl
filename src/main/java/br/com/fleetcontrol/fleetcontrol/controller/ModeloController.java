@@ -27,20 +27,6 @@ public class ModeloController {
     @Autowired
     private ModeloService modeloservice;
 
-
-    //put para cadastro de modelo no banco
-    @PostMapping
-    public ResponseEntity<?> CadastroModelo(@Valid @RequestBody final Modelo modelo){
-        try{
-            this.modeloservice.salvar(modelo);
-            return ResponseEntity.ok("Modelo salvo com sucesso");
-        }catch(Exception e ){
-            return ResponseEntity.badRequest().body("erro de inserção de modelo");
-
-        }
-    }
-
-    //get para id de modelo
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
         try {
@@ -52,7 +38,6 @@ public class ModeloController {
         }
     }
 
-    //get para listagem de todos os modelos
     @GetMapping(value = "/listar")
     public ResponseEntity<?> listar(){
         try{
@@ -63,8 +48,17 @@ public class ModeloController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Modelo modelo){
+        try{
+            this.modeloservice.salvar(modelo);
+            return ResponseEntity.ok("Modelo salvo com sucesso");
+        }catch(Exception e ){
+            return ResponseEntity.badRequest().body("erro de inserção de modelo");
 
-    //put para edit de modelo
+        }
+    }
+
     @PutMapping(value = "/editar")
     public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Modelo modelonovo) {
         try {
@@ -76,13 +70,22 @@ public class ModeloController {
         }
     }
 
-
-    // desativa o modelo caso nao esteja sendo utilizado em nenhuma marca
     @PutMapping(value = "/desativar")
     public ResponseEntity<?> desativar(@RequestParam("id") final Long id){
         try {
             modeloservice.desativar(id);
             return ResponseEntity.ok("Modelo desativado com sucesso!");
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/ativar")
+    public ResponseEntity<?> ativar(@RequestParam("id") final Long id){
+        try {
+            modeloservice.ativar(id);
+            return ResponseEntity.ok("Modelo ativado com sucesso!");
 
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
