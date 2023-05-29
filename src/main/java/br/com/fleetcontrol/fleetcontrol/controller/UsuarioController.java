@@ -108,12 +108,7 @@ public class UsuarioController {
 
     @DeleteMapping(value = "/deletar")
     private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
-        try {
-            usuarioservice.deletar(id);
-            return ResponseEntity.ok("Registro deletado com sucesso!");
-
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-        }
+        usuarioservice.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
