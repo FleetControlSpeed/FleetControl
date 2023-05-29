@@ -4,8 +4,14 @@ import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "api/condutores")
@@ -36,21 +42,16 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id){
-        try {
             return ResponseEntity.ok(usuarioservice.buscarPorId(id));
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-        }
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<?> listar() {
-        try {
-            return ResponseEntity.ok(this.usuarioservice.listaCompleta());
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+    public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {
+        try{
+            Page<Usuario> usuarios =  usuarioservice.listaCompleta(pageable);
+            return ResponseEntity.ok(usuarios);
+        }catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -65,14 +66,10 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Usuario usuario) {
-        try {
-            usuarioservice.salvar(usuario);
-            return ResponseEntity.ok().body("Usuario cadastrado com sucesso!");
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-        }
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody Usuario usuario) {
+        usuario = usuarioservice.salvar(usuario);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId()).toUri();
+        return ResponseEntity.created(uri).body(usuario);
     }
 
     @PutMapping("/editar")
@@ -111,12 +108,7 @@ public class UsuarioController {
 
     @DeleteMapping(value = "/deletar")
     private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
-        try {
-            usuarioservice.deletar(id);
-            return ResponseEntity.ok("Registro deletado com sucesso!");
-
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-        }
+        usuarioservice.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
