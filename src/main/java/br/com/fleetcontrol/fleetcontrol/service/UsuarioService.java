@@ -3,9 +3,14 @@ package br.com.fleetcontrol.fleetcontrol.service;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
+import br.com.fleetcontrol.fleetcontrol.service.exceptions.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 /*
@@ -17,23 +22,16 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuariorepository;
 
+    @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
-        if (id == 0) {
-            throw new RuntimeException(", por favor, informe um valor valido!");
-
-        } else if (usuariorepository.findById(id).isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar o usuario informado!");
-
-        } else {
-            return usuariorepository.findById(id).orElse(null);
-        }
+        Usuario usuario = usuariorepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Recurso não encontrado!"));
+        return usuario;
     }
 
-    public List<Usuario> listaCompleta() {
-        if(usuariorepository.findAll().isEmpty()){
-            throw new RuntimeException(", não foi possivel localizar nenhum usuario cadastrado!");
-        }
-        return usuariorepository.findAll();
+    @Transactional(readOnly = true)
+    public Page<Usuario> listaCompleta(Pageable pageable) {
+        Page<Usuario> resultado = usuariorepository.findAll(pageable);
+        return resultado.map(x -> new Usuario());
     }
 
     public List<Usuario> listaUsuariosAtivos() {
@@ -46,7 +44,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario salvar(Usuario usuario) {
+    public Usuario salvar(@Valid Usuario usuario) {
             return usuariorepository.save(usuario);
     }
 
