@@ -18,12 +18,10 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
-    @Transactional
     @Modifying
     @Query("UPDATE Usuario usuario SET usuario.ativo = false WHERE usuario.id = :id")
     public void desativar(@Param("id") Long id);
 
-    @Transactional
     @Modifying
     @Query("UPDATE Usuario usuario SET usuario.ativo = true WHERE usuario.id = :id")
     public void ativar(@Param("id") Long id);

@@ -35,6 +35,7 @@ public class Usuario extends AbstractEntity {
     @Getter @Setter
     @NotNull(message = "Senha é um campo obrigatorio!")
     @NotBlank(message = "Senha nula ou invalida!")
+    @Pattern(regexp = "^(?:(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))(?!.*(.)\\1{2,})[A-Za-z0-9!~<>,;:_=?*+#.”&§%°()\\|\\[\\]\\-\\$\\^\\@\\/]{8,32}$",message = "A senha deve atender a pelo menos 3 das 4 condições (letras maiúsculas e minúsculas, números e caracteres especiais) e não deve ter mais de 2 caracteres iguais em uma linha.")
     @Column(name = "senha",nullable = false)
     private String senha;
 
@@ -72,12 +73,14 @@ public class Usuario extends AbstractEntity {
     @NotNull(message = "Data de nascimento é um campo obrigatorio!")
     @NotBlank(message = "Data de nascimento nula ou invalida!")
     @Column(name = "DataNascimento",nullable = false)
+    @PastOrPresent(message = "Data de nascimento tem que ser passada ou futura!")
     private String dataNascimento;
 
     @Getter @Setter
     @NotNull(message = "Endereço é um campo obrigatorio!")
     @NotBlank(message = "Endereco nulo ou invalido!")
+    @Min(value = 10, message = "Digite um endereco Valido! ")
+    @Max(value = 250, message = "Digite um endereco menor!")
     @Column(name = "endereco",nullable = false)
     private String endereco;
-
 }

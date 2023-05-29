@@ -24,7 +24,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
-        Usuario usuario = usuariorepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Recurso não encontrado!"));
+        Usuario usuario = usuariorepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Id não encontrado!"));
         return usuario;
     }
 
@@ -34,6 +34,7 @@ public class UsuarioService {
         return resultado.map(x -> new Usuario());
     }
 
+    @Transactional(readOnly = true)
     public List<Usuario> listaUsuariosAtivos() {
         if (usuariorepository.usuariosAtivos().isEmpty()) {
             throw new RuntimeException(", não foi possivel localizar usuarios ativos!");

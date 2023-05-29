@@ -60,7 +60,7 @@ public class UsuarioController {
         try {
             return ResponseEntity.ok(this.usuarioservice.listaUsuariosAtivos());
 
-        } catch (Exception e){
+        }catch (Exception e){
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
