@@ -2,6 +2,7 @@ package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -62,6 +63,15 @@ public class UsuarioController {
 
         }catch (Exception e){
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/listar/{nome}")
+    public ResponseEntity<?> findByNomes(@Valid @PathVariable String nome){
+        try{
+            return ResponseEntity.ok().body(usuarioservice.listaUsuariosPorNome(nome));
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

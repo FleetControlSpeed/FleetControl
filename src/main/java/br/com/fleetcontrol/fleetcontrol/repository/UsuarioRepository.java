@@ -31,4 +31,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
     @Query("SELECT eventos FROM Eventos eventos WHERE eventos.usuario.id = :id")
     public List<Eventos> buscaUsuarioPorEvento (@Param("id") final Long id);
+
+    @Query("SELECT usuario FROM Usuario usuario WHERE usuario.primeiroNome = :nome")
+    public List<Usuario> findByName(@Param("nome") String nome);
 }

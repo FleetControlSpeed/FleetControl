@@ -3,6 +3,7 @@ package br.com.fleetcontrol.fleetcontrol.entity;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.CPF;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.Telefone;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+
+import java.time.LocalDate;
 
 /*
     @Author: Cristovão Martins
@@ -71,16 +74,14 @@ public class Usuario extends AbstractEntity {
 
     @Getter @Setter
     @NotNull(message = "Data de nascimento é um campo obrigatorio!")
-    @NotBlank(message = "Data de nascimento nula ou invalida!")
     @Column(name = "DataNascimento",nullable = false)
     @PastOrPresent(message = "Data de nascimento tem que ser passada ou futura!")
-    private String dataNascimento;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate dataNascimento;
 
     @Getter @Setter
     @NotNull(message = "Endereço é um campo obrigatorio!")
     @NotBlank(message = "Endereco nulo ou invalido!")
-    @Min(value = 10, message = "Digite um endereco Valido! ")
-    @Max(value = 250, message = "Digite um endereco menor!")
     @Column(name = "endereco",nullable = false)
     private String endereco;
 }

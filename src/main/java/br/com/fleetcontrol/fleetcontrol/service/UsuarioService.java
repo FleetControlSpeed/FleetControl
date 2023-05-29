@@ -4,6 +4,7 @@ import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
 import br.com.fleetcontrol.fleetcontrol.service.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,15 @@ public class UsuarioService {
 
         } else {
             return usuariorepository.usuariosAtivos();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Usuario> listaUsuariosPorNome(String name){
+        if(usuariorepository.findByName(name).size() == 0){
+            throw new EntityNotFoundException("Usuario com este nome nao encontrado!");
+        }else{
+            return usuariorepository.findByName(name);
         }
     }
 
