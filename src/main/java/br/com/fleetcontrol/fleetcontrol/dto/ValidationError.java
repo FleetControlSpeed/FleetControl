@@ -1,2 +1,3 @@
-package br.com.fleetcontrol.fleetcontrol.dto;public class ValidationError {
+package br.com.fleetcontrol.fleetcontrol.dto;
+public class ValidationError {
 }

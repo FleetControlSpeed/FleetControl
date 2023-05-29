@@ -1,2 +1,4 @@
-package br.com.fleetcontrol.fleetcontrol.dto;public class FieldMessage {
+package br.com.fleetcontrol.fleetcontrol.dto;
+
+public class FieldMessage {
 }
