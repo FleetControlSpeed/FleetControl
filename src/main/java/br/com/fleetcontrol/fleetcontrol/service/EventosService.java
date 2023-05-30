@@ -1,7 +1,9 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
+import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.EventosRepository;
+import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,9 @@ public class EventosService {
 
     @Autowired
     private EventosRepository repository;
+
+    @Autowired
+    private VeiculoService veiculoService;
 
     public Eventos buscarPorId(Long id) {
 
@@ -89,5 +94,16 @@ public class EventosService {
         } else {
             repository.ativar(id);
         }
+    }
+
+    @Transactional
+    public void finalizar(Long id){
+
+        Eventos evento = buscarPorId(id);
+
+        Veiculo veiculo = veiculoService.buscarPorId(evento.getVeiculo().getId());
+
+        evento.setKmTotal(veiculo.getKm() - evento.getKmFinal());
+        veiculo.setKm(evento.getKmFinal());
     }
 }

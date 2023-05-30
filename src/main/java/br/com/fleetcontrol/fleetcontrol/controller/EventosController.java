@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class EventosController {
 
     /*
-    {
+{
     "id": 1,
-    "cadastro": "2023-05-28T19:40:32.380161",
+    "cadastro": "2023-05-29T22:11:07.047194",
     "edicao": null,
     "ativo": true,
     "usuario": {
         "id": 1,
-        "cadastro": "2023-05-28T19:33:44.514023",
+        "cadastro": "2023-05-29T22:10:14.247152",
         "edicao": null,
         "ativo": true,
         "email": "pedrohenri1606@gmail.com",
@@ -41,12 +41,12 @@ public class EventosController {
     },
     "veiculo": {
         "id": 1,
-        "cadastro": "2023-05-27T22:46:03.14222",
+        "cadastro": "2023-05-29T22:09:41.805183",
         "edicao": null,
         "ativo": true,
         "modelo": {
             "id": 1,
-            "cadastro": "2023-05-28T19:34:12.724773",
+            "cadastro": "2023-05-29T22:09:35.50122",
             "edicao": null,
             "ativo": true,
             "nome": "HRV",
@@ -61,7 +61,7 @@ public class EventosController {
     "dataEvento": "2023-05-28T19:40:32.380161",
     "localPartida": {
         "id": 1,
-        "cadastro": "2023-05-28T19:39:43.137577",
+        "cadastro": "2023-05-29T22:09:24.438476",
         "edicao": null,
         "ativo": true,
         "nome": "Casa do Pedro",
@@ -70,7 +70,7 @@ public class EventosController {
     },
     "localDestino": {
         "id": 1,
-        "cadastro": "2023-05-28T19:39:43.137577",
+        "cadastro": "2023-05-29T22:09:24.438476",
         "edicao": null,
         "ativo": true,
         "nome": "Casa do Pedro",
@@ -78,6 +78,8 @@ public class EventosController {
         "cep": "85859-340"
     },
     "observacao": null,
+    "kmFinal": null,
+    "kmTotal": null,
     "retorno": null
 }
      */
