@@ -161,4 +161,26 @@ public class EventosController {
             return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
+
+    @PutMapping(value = "/fechar")
+    public ResponseEntity<?> fechar(@Valid @RequestParam("id") final Long id, @RequestBody final Eventos evento){
+        try {
+            service.fechar(id,evento);
+            return ResponseEntity.ok("Evento fechado com sucesso, por favor, finalize o evento para receber o comprovante!");
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/finalizar")
+    public ResponseEntity<?> finalizar(@Valid @RequestParam("id") final Long id){
+        try {
+            service.finalizar(id);
+            return ResponseEntity.ok(service.finalizar(id));
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
 }

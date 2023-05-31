@@ -3,11 +3,11 @@ package br.com.fleetcontrol.fleetcontrol.service;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.EventosRepository;
-import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /*
@@ -97,13 +97,127 @@ public class EventosService {
     }
 
     @Transactional
-    public void finalizar(Long id){
-
-        Eventos evento = buscarPorId(id);
+    public void fechar(Long id, Eventos evento){
 
         Veiculo veiculo = veiculoService.buscarPorId(evento.getVeiculo().getId());
 
-        evento.setKmTotal(veiculo.getKm() - evento.getKmFinal());
+        evento.setDataRetorno(LocalDateTime.now());
+        evento.setKmTotal(evento.getKmFinal() - veiculo.getKm());
+        salvar(evento);
+
         veiculo.setKm(evento.getKmFinal());
+
+    }
+
+    @Transactional
+    public String finalizar(Long id){
+
+        Eventos evento = buscarPorId(id);
+
+
+        int diaEntrada = evento.getDataInicio().getDayOfMonth();         int horaEntrada = evento.getDataInicio().getHour();
+        int mesEntrada = evento.getDataInicio().getMonthValue();         int minutoEntrada = evento.getDataInicio().getMinute();
+        int anoEntrada = evento.getDataInicio().getYear();               int segundoEntrada = evento.getDataInicio().getSecond();
+
+        int diaSaida = evento.getDataRetorno().getDayOfMonth();          int horaSaida = evento.getDataRetorno().getHour();
+        int mesSaida = evento.getDataRetorno().getMonthValue();          int minutoSaida = evento.getDataRetorno().getMinute();
+        int anoSaida = evento.getDataRetorno().getYear();                int segundoSaida = evento.getDataRetorno().getSecond();
+
+        int horasTotal = 0;
+        int minutosTotal = 0;
+        int segundosTotal = 0;
+
+        while (diaEntrada != diaSaida && mesEntrada != mesSaida && anoEntrada != anoSaida) {
+
+            segundoEntrada++;
+            segundosTotal++;
+            if(segundoEntrada >= 60){
+                minutoEntrada++;
+                minutosTotal++;
+                segundoEntrada = 0;
+            }
+
+            minutoEntrada++;
+            minutosTotal++;
+            if(minutoEntrada >= 60){
+                horaEntrada++;
+                horasTotal++;
+                minutoEntrada=0;
+            }
+
+            horaEntrada++;
+            horasTotal++;
+            if (horaEntrada >= 24) {
+                horaEntrada = 0;
+                diaEntrada++;
+
+                if (mesEntrada == 1 || mesEntrada == 3 || mesEntrada == 5 || mesEntrada == 7 || mesEntrada == 8 || mesEntrada == 10 || mesEntrada == 12) {
+                    if (diaEntrada > 31) {      // --> Verifica se o mês possui 31 dias
+                        diaEntrada = 1;
+                        mesEntrada++;
+                        if (mesEntrada >= 12) {
+                            anoEntrada++;
+                            mesEntrada = 1;
+                        }
+                    }
+                } else if (mesEntrada == 2){    // --> Verifica se o mês é fevereiro
+                    if(anoEntrada % 4 == 0) {   // --> Verifica se ano é bissexto
+                        if (diaEntrada > 29) {
+                            diaEntrada = 1;
+                            mesEntrada++;
+                        }
+                    } else {
+                        if (diaEntrada > 28) {
+                            diaEntrada = 1;
+                            mesEntrada++;
+                        }
+                    }
+                } else {
+                    if (diaEntrada > 30) {      // --> Verifica se o mês já atingiu a data limite
+                        diaEntrada = 1;
+                        mesEntrada++;
+                    }
+                }
+            }
+        }
+
+        while (segundoEntrada != segundoSaida) {
+            segundoEntrada++;
+            segundosTotal++;
+            if(segundoEntrada >= 60){
+                segundoEntrada =0;
+                minutoEntrada++;
+                minutosTotal++;
+            }
+        }
+
+        while (minutoEntrada != minutoSaida) {
+            minutoEntrada++;
+            minutosTotal++;
+            if(minutoEntrada >= 60){
+                minutoEntrada =0;
+                horaEntrada++;
+            }
+        }
+
+        while (horaEntrada != horaSaida) {
+            horaEntrada++;
+            horasTotal++;
+        }
+
+        if(segundosTotal >= 60){
+            minutosTotal++;
+            segundosTotal=0;
+        }
+
+        if(minutosTotal >= 60){
+            horasTotal++;
+            minutosTotal=0;
+        }
+
+        evento.setPeriodo((horasTotal*60L*60L) + (minutosTotal*60L) + segundosTotal);
+
+
+        return evento.toString();
     }
 }
