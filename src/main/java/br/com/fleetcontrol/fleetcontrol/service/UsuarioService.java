@@ -1,58 +1,101 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
-import lombok.NoArgsConstructor;
+import br.com.fleetcontrol.fleetcontrol.service.exceptions.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 /*
     @Author: Cristovão Martins
  */
-@NoArgsConstructor
 @Service
 public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuariorepository;
 
-    @Transactional
-    public Usuario cadastrar(Usuario usuario) {
-        if(usuario.getUsuario().trim().isEmpty()){
-            throw  new RuntimeException("Erro usuario Nulo!");
-        }else{
-            return this.usuariorepository.save(usuario);
-        }
-    }
-    public List<Usuario> listaCompleta() {
-        return this.usuariorepository.findAll();
+    @Transactional(readOnly = true)
+    public Usuario buscarPorId(Long id) {
+        Usuario usuario = usuariorepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Recurso não encontrado!"));
+        return usuario;
     }
 
-    public Usuario findById(Long id) {
-        return this.usuariorepository.findById(id).orElse(new Usuario());
+    @Transactional(readOnly = true)
+    public Page<Usuario> listaCompleta(Pageable pageable) {
+        Page<Usuario> resultado = usuariorepository.findAll(pageable);
+        return resultado.map(x -> new Usuario());
     }
+
+    public List<Usuario> listaUsuariosAtivos() {
+        if (usuariorepository.usuariosAtivos().isEmpty()) {
+            throw new RuntimeException(", não foi possivel localizar usuarios ativos!");
+
+        } else {
+            return usuariorepository.usuariosAtivos();
+        }
+    }
+
     @Transactional
-    public void atualizar(Long id, Usuario usuario) {
-        if(id == usuario.getId()) {
-            this.usuariorepository.save(usuario);
-        }else{
-            throw new RuntimeException("Erro id não existe para ser atualizado!");
+    public Usuario salvar(@Valid Usuario usuario) {
+            return usuariorepository.save(usuario);
+    }
+
+    @Transactional
+    public void atualizar(Long id, Usuario usuarioNovo) {
+        Usuario usuarioBanco = buscarPorId(id);
+
+        if(usuarioNovo == null || !usuarioNovo.getId().equals(usuarioBanco.getId())){
+            throw new RuntimeException(", não foi possivel identificar o usuario informado!");
+
+        } else {
+            salvar(usuarioNovo);
         }
     }
 
     @Transactional
     public void desativar(Long id){
-        var usuario = this.usuariorepository.findById(id);
-        if (id == usuario.get().getId()) {
-            this.usuariorepository.desativar(id);
-        }else{
-            throw new RuntimeException("Erro id não existe!");
+        Usuario usuarioBanco = buscarPorId(id);
+
+        if(!usuarioBanco.isAtivo()){
+            throw new RuntimeException(", usuario informado já esta desativado!");
+
+        } else {
+            usuariorepository.desativar(id);
         }
     }
 
-    public List<Usuario> listaUsuariosAtivos(){
-        return this.usuariorepository.UsuariosAtivos();
+    @Transactional
+    public void ativar(Long id){
+        Usuario usuarioBanco = buscarPorId(id);
+
+        if(usuarioBanco.isAtivo()){
+            throw new RuntimeException(", usuario informado já esta ativado!");
+
+        } else {
+            usuariorepository.ativar(id);
+        }
+    }
+
+    @Transactional
+    public void deletar(Long id){
+        Usuario usuario = buscarPorId(id);
+
+        List<Eventos> usuarios = usuariorepository.buscaUsuarioPorEvento(id);
+
+        if(usuarios.isEmpty()){
+            this.usuariorepository.deleteById(id);
+
+        } else {
+            usuariorepository.desativar(usuario.getId());
+            throw new RuntimeException(", usuario possui eventos cadastrados ativos, usuario desativado!");
+        }
     }
 }

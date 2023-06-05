@@ -1,9 +1,11 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class VeiculoService {
             throw new RuntimeException(", por favor, informe um valor valido!");
 
         } else if (repository.findById(id).isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar o condutor informado!");
+            throw new RuntimeException(", não foi possivel localizar o veiculo informado!");
 
         } else {
             return repository.findById(id).orElse(null);
@@ -26,7 +28,7 @@ public class VeiculoService {
 
     public List<Veiculo> listar() {
         if (repository.findAll().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui veiculos cadastrados!");
+            throw new RuntimeException(", não foi possivel localizar nenhum veiculo cadastrado!");
 
         } else {
             return repository.findAll();
@@ -35,46 +37,65 @@ public class VeiculoService {
 
     public List<Veiculo> listarPorAtivo() {
         if (repository.buscarPorAtivo().isEmpty()) {
-            throw new RuntimeException(", banco de dados não possui Veiculos ativos!");
+            throw new RuntimeException(", não foi possui localizar veiculos ativos cadastrados!");
 
         } else {
             return repository.buscarPorAtivo();
         }
     }
 
+    @Transactional
     public Veiculo salvar(Veiculo veiculo) {
         return this.repository.save(veiculo);
     }
 
+    @Transactional
     public void editar(Long id, Veiculo veiculoNovo){
         final Veiculo veiculoBanco= this.buscarPorId(id);
 
         if(veiculoBanco == null || !veiculoBanco.getId().equals(veiculoNovo.getId())){
-            throw new RuntimeException(", não foi possivel identificar o evento informado!");
+            throw new RuntimeException(", não foi possivel identificar o veiculo informado!");
 
         } else {
             this.salvar(veiculoNovo);
         }
     }
 
+    @Transactional
     public void desativar(Long id) {
         Veiculo veiculo = buscarPorId(id);
 
         if (!veiculo.isAtivo()) {
-            throw new RuntimeException(", evento informado já esta desativado!");
+            throw new RuntimeException(", veiculo informado já esta desativado!");
 
         } else {
             repository.desativar(id);
         }
     }
 
+    @Transactional
     public void ativar(Long id) {
         Veiculo veiculo = buscarPorId(id);
 
         if (veiculo.isAtivo()) {
-            throw new RuntimeException(", evento informado já esta ativado!");
+            throw new RuntimeException(", veiculo informado já esta ativado!");
+
         } else {
             repository.ativar(id);
+        }
+    }
+    @Transactional
+    public void deletar(Long id){
+        Veiculo veiculo = buscarPorId(id);
+
+        List<Eventos> veiculos = repository.buscaVeiculoPorEvento(id);
+
+        if(veiculos.isEmpty()){
+            this.repository.deleteById(id);
+
+        } else {
+            repository.desativar(veiculo.getId());
+            throw new RuntimeException(", veiculo possui eventos cadastrados ativos, veiculo desativado!");
         }
     }
 }

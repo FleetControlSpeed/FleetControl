@@ -2,60 +2,118 @@ package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(value = "api/condutores")
 public class UsuarioController {
+
+    /*
+    {
+    "id": 1,
+    "cadastro": "2023-05-27T22:37:03.119999",
+    "edicao": null,
+    "ativo": true,
+    "email": "pedrohenri1606@gmail.com",
+    "usuario": "pedro",
+    "senha": "123",
+    "cargo": "ADMINISTRADOR",
+    "primeiroNome": "Pedro",
+    "sobrenome": "Henrique",
+    "cpf": "10250870975",
+    "telefone": "45 998265476",
+    "dataNascimento": "29/07/2003",
+    "endereco": "Rua Belmiro numero 2",
+    "eventos": null
+    }
+     */
+
     @Autowired
     private UsuarioService usuarioservice;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") final Long id){
-        final Usuario usuario = this.usuarioservice.findById(id);
-        return usuario == null
-                ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
-                : ResponseEntity.ok(usuario);
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id){
+            return ResponseEntity.ok(usuarioservice.buscarPorId(id));
     }
 
-    @GetMapping("/lista")
-    public ResponseEntity<?> listaCompleta(){
-        return ResponseEntity.ok(this.usuarioservice.listaCompleta());
-    }
-
-    @GetMapping("/lista/ativos")
-    public ResponseEntity<?> listaAtivos(){
-        return ResponseEntity.ok(this.usuarioservice.listaUsuariosAtivos());
-    }
-
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Usuario usuario){
+    @GetMapping("/listar")
+    public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {
         try{
-            this.usuarioservice.cadastrar(usuario);
-            return ResponseEntity.ok().body("Sucesso!, Usuario Cadastrado!");
-        }catch(RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            Page<Usuario> usuarios =  usuarioservice.listaCompleta(pageable);
+            return ResponseEntity.ok(usuarios);
+        }catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
         }
     }
 
-    @PutMapping("/{idUsuario}")
-    public ResponseEntity<?> atualizar(
-            @PathVariable Long idUsuario,
-            @RequestBody Usuario usuario
-    ) {
-        this.usuarioservice.atualizar(idUsuario, usuario);
-        return ResponseEntity.ok().body("Usuario atualizado com sucesso!");
+    @GetMapping("/listar/ativos")
+    public ResponseEntity<?> listarPorAtivo() {
+        try {
+            return ResponseEntity.ok(this.usuarioservice.listaUsuariosAtivos());
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody Usuario usuario) {
+        usuario = usuarioservice.salvar(usuario);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId()).toUri();
+        return ResponseEntity.created(uri).body(usuario);
+    }
+
+    @PutMapping("/editar")
+    public ResponseEntity<?> atualizar(@Valid @RequestParam("id") Long idUsuario, @RequestBody Usuario usuarioNovo) {
+        try{
+            usuarioservice.atualizar(idUsuario,usuarioNovo);
+            return ResponseEntity.ok("Usuario alterado com sucesso!");
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
     }
 
 
-    @PutMapping("/desativar/{idUsuario}")
-    public ResponseEntity<?> desativar(
-            @PathVariable Long idUsuario
-    ){
-        this.usuarioservice.desativar(idUsuario);
-        return ResponseEntity.ok().body("Usuario desativado com sucesso!");
+    @PutMapping("/desativar")
+    public ResponseEntity<?> desativar(@Valid @RequestParam("id") Long idUsuario) {
+        try{
+            usuarioservice.desativar(idUsuario);
+            return ResponseEntity.ok("Usuario desativado com sucesso!");
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
     }
 
+    @PutMapping("/ativar")
+    public ResponseEntity<?> ativar(@Valid @RequestParam("id") Long idUsuario){
+        try{
+            usuarioservice.ativar(idUsuario);
+            return ResponseEntity.ok("Usuario ativado com sucesso!");
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = "/deletar")
+    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
+        try {
+            usuarioservice.deletar(id);
+            return ResponseEntity.ok("Registro deletado com sucesso!");
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        }
+    }
 }
