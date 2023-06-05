@@ -12,7 +12,7 @@ import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.validator.constraints.br.CPF;
 
-/*
+/**
     @Author: Cristovão Martins
     Date: 06/05/2023
  */
