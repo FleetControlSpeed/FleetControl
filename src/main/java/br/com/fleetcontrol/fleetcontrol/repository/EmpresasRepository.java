@@ -21,12 +21,10 @@ public interface EmpresasRepository extends JpaRepository <Empresas, Long> {
     @Query("SELECT empresas FROM Empresas empresas WHERE empresas.ativo = true")
     public List<Empresas> empresasAtivas();
 
-    @Transactional
     @Modifying
     @Query("UPDATE Empresas empresas SET empresas.ativo = false WHERE empresas.id = :id")
     public void desativar(@Param("id")Long id);
 
-    @Transactional
     @Modifying
     @Query("UPDATE Empresas empresas SET empresas.ativo = true WHERE empresas.id = :id")
     public void ativar(@Param("id")Long id);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,16 +25,17 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public Usuario buscarPorId(Long id) {
-        Usuario usuario = usuariorepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Recurso não encontrado!"));
+        Usuario usuario = usuariorepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Usuario não encontrado!"));
         return usuario;
     }
 
     @Transactional(readOnly = true)
     public Page<Usuario> listaCompleta(Pageable pageable) {
         Page<Usuario> resultado = usuariorepository.findAll(pageable);
-        return resultado.map(x -> new Usuario());
+        return resultado;
     }
 
+    @Transactional(readOnly = true)
     public List<Usuario> listaUsuariosAtivos() {
         if (usuariorepository.usuariosAtivos().isEmpty()) {
             throw new RuntimeException(", não foi possivel localizar usuarios ativos!");
@@ -44,7 +46,7 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario salvar(@Valid Usuario usuario) {
+    public Usuario salvar(Usuario usuario) {
             return usuariorepository.save(usuario);
     }
 
@@ -84,7 +86,7 @@ public class UsuarioService {
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void deletar(Long id){
         Usuario usuario = buscarPorId(id);
 
@@ -93,6 +95,8 @@ public class UsuarioService {
         if(usuarios.isEmpty()){
             this.usuariorepository.deleteById(id);
 
+        }else if(!usuariorepository.existsById(id)){
+            throw new ResourceNotFoundException("Usuario não encontrado!");
         } else {
             usuariorepository.desativar(usuario.getId());
             throw new RuntimeException(", usuario possui eventos cadastrados ativos, usuario desativado!");
