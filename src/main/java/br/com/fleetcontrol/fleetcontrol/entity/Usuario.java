@@ -12,6 +12,9 @@ import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
     @Author: Cristovão Martins
     Date: 06/05/2023
@@ -82,5 +85,8 @@ public class Usuario extends AbstractEntity {
     @NotBlank(message = "Endereco nulo ou invalido!")
     @Column(name = "endereco",nullable = false)
     private String endereco;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Multa> listaMultas = new ArrayList<>();
 
 }
