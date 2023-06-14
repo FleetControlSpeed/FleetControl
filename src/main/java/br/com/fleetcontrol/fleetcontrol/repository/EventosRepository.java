@@ -12,16 +12,12 @@ import java.util.List;
 
 @Repository
 public interface EventosRepository extends JpaRepository<Eventos,Long> {
-
     @Query("SELECT eventos FROM Eventos eventos WHERE eventos.ativo = true")
     public List<Eventos> buscarPorAtivo();
-
-    @Transactional
     @Modifying
     @Query("UPDATE Eventos eventos SET eventos.ativo = false WHERE eventos.id = :id")
     public void desativar(@Param("id")Long id);
 
-    @Transactional
     @Modifying
     @Query("UPDATE Eventos eventos SET eventos.ativo = true WHERE eventos.id = :id")
     public void ativar(@Param("id")Long id);

@@ -10,12 +10,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MultaRepository extends JpaRepository<Multa,Long> {
-    @Transactional
     @Modifying
     @Query("UPDATE Empresas empresas SET empresas.ativo = false WHERE empresas.id = :id")
     public void desativar(@Param("id")Long id);
 
-    @Transactional
     @Modifying
     @Query("UPDATE Empresas empresas SET empresas.ativo = true WHERE empresas.id = :id")
     public void ativar(@Param("id")Long id);
