@@ -68,7 +68,7 @@ public class MultaService {
         Multa multaBanco = buscarPorId(id);
 
         if(multaBanco.isAtivo()){
-            throw new RuntimeException(", usuario informado já esta ativado!");
+            throw new RuntimeException(", Multa informada já esta ativado!");
 
         } else {
             multaRepository.ativar(id);

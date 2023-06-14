@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MultaRepository extends JpaRepository<Multa,Long> {
     @Modifying
-    @Query("UPDATE Empresas empresas SET empresas.ativo = false WHERE empresas.id = :id")
+    @Query("UPDATE Multa multa SET multa.ativo = false WHERE multa.id = :id")
     public void desativar(@Param("id")Long id);
 
     @Modifying
-    @Query("UPDATE Empresas empresas SET empresas.ativo = true WHERE empresas.id = :id")
+    @Query("UPDATE Multa multa SET multa.ativo = true WHERE multa.id = :id")
     public void ativar(@Param("id")Long id);
 }

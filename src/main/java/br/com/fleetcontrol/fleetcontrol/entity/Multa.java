@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @AuditTable(value = "tb_multa_audit",schema = "audit")
 @Table(name = "tb_multa", schema = "public")
 public class Multa extends AbstractEntity{
-    @Getter
-    @Setter
-    @Column(name = "nome",nullable = false)
-    private String nome;
+
     @Getter
     @Setter
     @Column(name = "valor",nullable = false)
@@ -31,6 +28,6 @@ public class Multa extends AbstractEntity{
     private String tipoMulta;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 }
