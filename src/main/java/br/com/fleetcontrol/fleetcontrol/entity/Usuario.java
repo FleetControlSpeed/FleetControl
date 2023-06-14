@@ -1,6 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.entity;
 
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
+import br.com.fleetcontrol.fleetcontrol.validation.constraints.CEP;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.CPF;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.Telefone;
 import jakarta.persistence.*;
@@ -28,6 +29,8 @@ public class Usuario extends AbstractEntity {
     private String email;
 
     @Getter @Setter
+    @NotEmpty(message = "Usuario não pode ter campos em brancos ou espaços")
+    @Pattern(regexp = "^[a-zA-Z0-9-/-]{2,50}$",message = "Usuario não pode caracteres especiais! alem de / e ou -")
     @NotNull(message = "Usuario é um campo obrigatorio!")
     @Column(name = "usuario",nullable = false,unique = true)
     private String usuario;
