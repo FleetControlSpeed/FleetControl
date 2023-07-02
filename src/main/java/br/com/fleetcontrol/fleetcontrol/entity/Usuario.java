@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-
 import java.util.ArrayList;
 import java.util.List;
-
 /*
     @Author: Cristovão Martins
     Date: 06/05/2023

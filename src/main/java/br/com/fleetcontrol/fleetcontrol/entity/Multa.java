@@ -34,7 +34,9 @@ public class Multa extends AbstractEntity{
     @Getter
     @Column(name = "dataMulta",nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
+
     private LocalDate dataMulta;
+
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
