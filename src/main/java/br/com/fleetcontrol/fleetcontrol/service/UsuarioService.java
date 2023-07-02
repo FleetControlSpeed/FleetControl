@@ -1,5 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
@@ -30,9 +31,13 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Usuario> listaCompleta(Pageable pageable) {
-        Page<Usuario> resultado = usuariorepository.findAll(pageable);
-        return resultado;
+    public List<Usuario> listar(){
+        if(usuariorepository.findAll().isEmpty()){
+            throw new RuntimeException(", não foi possivel localizar nenhum usuario cadastrado!");
+
+        } else {
+            return usuariorepository.findAll();
+        }
     }
 
     @Transactional(readOnly = true)

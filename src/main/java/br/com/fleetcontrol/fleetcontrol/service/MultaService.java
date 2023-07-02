@@ -1,5 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.entity.Multa;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
@@ -29,9 +30,13 @@ public class MultaService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Multa> listaCompleta(Pageable pageable) {
-        Page<Multa> resultado = multaRepository.findAll(pageable);
-        return resultado;
+    public List<Multa> listar(){
+        if(multaRepository.findAll().isEmpty()){
+            throw new RuntimeException(", não foi possivel localizar nenhuma multa cadastrada!");
+
+        } else {
+            return multaRepository.findAll();
+        }
     }
 
     @Transactional

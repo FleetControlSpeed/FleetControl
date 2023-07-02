@@ -26,10 +26,10 @@ public class MultaController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<Page<Multa>> listar(Pageable pageable) {
+    public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {
         try{
-            Page<Multa> multas =  multaService.listaCompleta(pageable);
-            return ResponseEntity.ok(multas);
+            Page<Usuario> usuarios =  usuarioservice.listaCompleta(pageable);
+            return ResponseEntity.ok(usuarios);
         }catch (RuntimeException e){
             return ResponseEntity.notFound().build();
         }
