@@ -1,14 +1,26 @@
 package br.com.fleetcontrol.fleetcontrol.entity.enums;
 
 public enum Cor {
-    AMARELO,
-    BEGE,
-    BRANCA,
-    CINZA,
-    MARROM,
-    AZUL,
-    PRATA,
-    PRETA,
-    VERDE,
-    VERMELHO;
+    AMARELO("AMARELO"),
+    AZUL("AZUL"),
+    BEGE("BEGE"),
+    BRANCA("BRANCA"),
+    CINZA("CINZA"),
+    DOURADA("DOURADA"),
+    GRENÁ("GRENÁ"),
+    LARANJA("LARANJA"),
+    MARROM("MARROM"),
+    PRATA("PRATA"),
+    PRETA("PRETA"),
+    ROSA("ROSA"),
+    ROXA("ROXA"),
+    VERDE("VERDE"),
+    VERMELHA("VERMELHA"),
+    FANTASIA("FANTASIA");
+
+    private final String value;
+
+    private Cor(String value){
+        this.value=value;
+    }
 }

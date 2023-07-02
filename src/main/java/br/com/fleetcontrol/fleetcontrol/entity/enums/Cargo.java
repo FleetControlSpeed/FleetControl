@@ -2,6 +2,12 @@ package br.com.fleetcontrol.fleetcontrol.entity.enums;
 
 
 public enum Cargo {
-    ADMINISTRADOR,
-    MOTORISTA;
+    ADMINISTRADOR("ADMINISTRADOR"),
+    MOTORISTA ("MOTORISTA");
+
+    private final String value;
+
+    private Cargo(String value){
+        this.value=value;
+    }
 }

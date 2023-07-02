@@ -31,12 +31,10 @@ public class MultaService {
 
     @Transactional(readOnly = true)
     public List<Multa> listar(){
-        if(multaRepository.findAll().isEmpty()){
-            throw new RuntimeException(", não foi possivel localizar nenhuma multa cadastrada!");
 
-        } else {
+
             return multaRepository.findAll();
-        }
+
     }
 
     @Transactional

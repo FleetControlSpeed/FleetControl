@@ -46,12 +46,12 @@ public class UsuarioController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {
-        try{
-            Page<Usuario> usuarios =  usuarioservice.listaCompleta(pageable);
-            return ResponseEntity.ok(usuarios);
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> listar(){
+        try {
+            return ResponseEntity.ok(usuarioservice.listar());
+
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
