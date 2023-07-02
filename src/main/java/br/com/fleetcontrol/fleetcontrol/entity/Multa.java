@@ -11,6 +11,7 @@ import org.hibernate.envers.Audited;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -33,7 +34,9 @@ public class Multa extends AbstractEntity{
     @Getter
     @Column(name = "dataMulta",nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date dataMulta;
+
+    private LocalDate dataMulta;
+
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
