@@ -78,8 +78,8 @@ public class UsuarioController {
 
     }
 
-    @PutMapping("/editar")
-    public ResponseEntity<?> atualizar(@Valid @RequestParam("id") Long idUsuario, @RequestBody Usuario usuarioNovo) {
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<?> atualizar(@Valid @PathVariable("id") Long idUsuario, @RequestBody Usuario usuarioNovo) {
         try{
             usuarioservice.atualizar(idUsuario,usuarioNovo);
             return ResponseEntity.ok("Usuario alterado com sucesso!");
