@@ -68,8 +68,8 @@ public class ModeloController {
         }
     }
 
-    @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Modelo modelonovo) {
+    @PutMapping(value = "/editar/{id}")
+    public ResponseEntity<?> editar(@Valid @PathVariable("id") final Long id, @RequestBody final Modelo modelonovo) {
         try {
             modeloservice.editar(id, modelonovo);
             return ResponseEntity.ok("Modelo atualizado com sucesso!");
@@ -79,8 +79,8 @@ public class ModeloController {
         }
     }
 
-    @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id){
+    @PutMapping(value = "/desativar/{id}")
+    public ResponseEntity<?> desativar(@Valid @PathVariable("id") final Long id){
         try {
             modeloservice.desativar(id);
             return ResponseEntity.ok("Modelo desativado com sucesso!");

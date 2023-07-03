@@ -26,7 +26,6 @@ public class Veiculo extends AbstractEntity {
 
     @Getter @Setter
     @NotNull(message = "Placa é um campo obrigatorio!")
-    @Placa(message = "Placa nula ou invalida!")
     @Column(name = "placa",nullable = false,unique = true)
     private String placa;
 

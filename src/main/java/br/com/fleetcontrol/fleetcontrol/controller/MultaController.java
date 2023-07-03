@@ -41,8 +41,8 @@ public class MultaController {
         return ResponseEntity.created(uri).body(multa);
     }
 
-    @PutMapping("/editar")
-    public ResponseEntity<?> atualizar(@Valid @RequestParam("id") Long idMulta, @RequestBody Multa multaNovo) {
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<?> atualizar(@Valid @PathVariable("id") Long idMulta, @RequestBody Multa multaNovo) {
         try{
             multaService.atualizar(idMulta,multaNovo);
             return ResponseEntity.ok("Multa alterada com sucesso!");
@@ -53,8 +53,8 @@ public class MultaController {
     }
 
 
-    @PutMapping("/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") Long idMulta) {
+    @PutMapping("/desativar/{id}")
+    public ResponseEntity<?> desativar(@Valid @PathVariable("id") Long idMulta) {
         try{
             multaService.desativar(idMulta);
             return ResponseEntity.ok("Multa desativada com sucesso!");

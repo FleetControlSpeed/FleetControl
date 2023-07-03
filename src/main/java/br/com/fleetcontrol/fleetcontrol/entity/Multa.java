@@ -2,17 +2,13 @@ package br.com.fleetcontrol.fleetcontrol.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @NoArgsConstructor
 @Entity
@@ -36,7 +32,14 @@ public class Multa extends AbstractEntity{
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataMulta;
 
+    @Getter
+    @Setter
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+//
+//    public void dataMulta(){
+//        this.dataMulta = LocalDate.now();
+//    }
 }

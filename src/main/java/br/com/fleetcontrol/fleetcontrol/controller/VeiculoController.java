@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @ResponseBody
-@RequestMapping(value = "/api/veiculo")
+@RequestMapping(value = "/api/veiculos")
 public class VeiculoController {
 
     /*
@@ -67,8 +67,8 @@ public class VeiculoController {
         }
     }
 
-    @PutMapping("/editar")
-    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Veiculo veiculoNovo) {
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<?> editar(@Valid @PathVariable("id") final Long id, @RequestBody final Veiculo veiculoNovo) {
         try{
             veiculoService.editar(id,veiculoNovo);
             return ResponseEntity.ok("Veiculo alterado com sucesso!");
@@ -90,8 +90,8 @@ public class VeiculoController {
         }
     }
 
-    @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id) {
+    @PutMapping(value = "/desativar/{id}")
+    public ResponseEntity<?> desativar(@Valid @PathVariable("id") final Long id) {
         try {
             veiculoService.desativar(id);
             return ResponseEntity.ok("Evento desativado com sucesso!");

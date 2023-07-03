@@ -4,18 +4,18 @@ public enum Cor {
     AMARELO("AMARELO"),
     AZUL("AZUL"),
     BEGE("BEGE"),
-    BRANCA("BRANCA"),
+    BRANCO("BRANCO"),
     CINZA("CINZA"),
     DOURADA("DOURADA"),
     GRENÁ("GRENÁ"),
     LARANJA("LARANJA"),
     MARROM("MARROM"),
     PRATA("PRATA"),
-    PRETA("PRETA"),
+    PRETO("PRETO"),
     ROSA("ROSA"),
-    ROXA("ROXA"),
+    ROXO("ROXO"),
     VERDE("VERDE"),
-    VERMELHA("VERMELHA"),
+    VERMELHO("VERMELHO"),
     FANTASIA("FANTASIA");
 
     private final String value;

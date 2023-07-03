@@ -10,6 +10,9 @@ import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tb_Modelo", schema = "public")
 @Audited
@@ -26,5 +29,9 @@ public class Modelo extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Marca é um campo obrigatorio!")
     private Marca marca;
+
+
+    @OneToMany(mappedBy = "modelo")
+    private List<Veiculo> list = new ArrayList<>();
 
 }

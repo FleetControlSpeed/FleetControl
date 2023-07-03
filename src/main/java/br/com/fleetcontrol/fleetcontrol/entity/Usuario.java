@@ -4,6 +4,7 @@ import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.CEP;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.CPF;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.Telefone;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,13 +55,7 @@ public class Usuario extends AbstractEntity {
     @NotBlank(message = "Primeiro nome é um campo obrigatorio!")
     @Size(min = 2, max = 50, message = "Primeiro nome deve conter de 2 a 50 caracteres!")
     @Column(name = "primeiroNome",nullable = false,length = 50)
-    private String primeiroNome;
-
-    @Getter @Setter
-    @NotBlank(message = "Sobrenome é um campo obrigatorio!")
-    @Size(min = 2, max = 50, message = "Sobrenome deve conter de 2 a 50 caracteres!")
-    @Column(name = "Sobrenome",nullable = false,length = 50)
-    private String sobrenome;
+    private String nome;
 
     @Getter @Setter
     @NotBlank(message = "CPF é um campo obrigatorio!")
@@ -76,14 +72,12 @@ public class Usuario extends AbstractEntity {
 
     @Getter @Setter
     @NotNull(message = "Data de nascimento é um campo obrigatorio!")
-    @NotBlank(message = "Data de nascimento nula ou invalida!")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "DataNascimento",nullable = false)
-    private String dataNascimento;
+    private LocalDate dataNascimento;
 
     @Getter @Setter
-    @NotNull(message = "Endereço é um campo obrigatorio!")
-    @NotBlank(message = "Endereco nulo ou invalido!")
-    @Column(name = "endereco",nullable = false)
+    @Column(name = "endereco",nullable = true)
     private String endereco;
 
     @OneToMany(mappedBy = "usuario")

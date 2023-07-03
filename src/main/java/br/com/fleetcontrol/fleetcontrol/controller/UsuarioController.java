@@ -8,6 +8,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -66,10 +67,15 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody Usuario usuario) {
-        usuario = usuarioservice.salvar(usuario);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId()).toUri();
-        return ResponseEntity.created(uri).body(usuario);
+    public ResponseEntity<?> cadastrar(@Validated @RequestBody Usuario usuario) {
+        try{
+            usuario = usuarioservice.salvar(usuario);
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId()).toUri();
+            return ResponseEntity.created(uri).body(usuario);
+        }catch(RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @PutMapping("/editar")
@@ -84,8 +90,8 @@ public class UsuarioController {
     }
 
 
-    @PutMapping("/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") Long idUsuario) {
+    @PutMapping("/desativar/{id}")
+    public ResponseEntity<?> desativar(@Valid @PathVariable("id") Long idUsuario) {
         try{
             usuarioservice.desativar(idUsuario);
             return ResponseEntity.ok("Usuario desativado com sucesso!");
