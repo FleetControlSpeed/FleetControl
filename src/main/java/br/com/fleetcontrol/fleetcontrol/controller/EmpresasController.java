@@ -1,9 +1,12 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
+import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
+import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,31 +31,29 @@ public class EmpresasController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
-        try{
-            return ResponseEntity.ok(empresasService.buscarPorId(id));
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        try {
+            EmpresasDTO empresasDTO = EmpresaConverter.toDTO(empresasService.buscarPorId(id));
+            return ResponseEntity.ok(empresasDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
     @GetMapping(value = "/listar")
-    public ResponseEntity<?> listar(){
+    public ResponseEntity<?> listar() {
         try {
             return ResponseEntity.ok(empresasService.listar());
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 
     @GetMapping(value = "/listarPorAtivo")
-    public ResponseEntity<?> listarPorAtivo(){
+    public ResponseEntity<?> listarPorAtivo() {
         try {
             return ResponseEntity.ok(empresasService.listarPorAtivo());
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 
@@ -60,52 +61,50 @@ public class EmpresasController {
     public ResponseEntity<?> cadastrar(@Valid @RequestBody final Empresas empresas) {
         try {
             empresasService.cadastrar(empresas);
-            return ResponseEntity.ok("Empresa cadastrado com sucesso!");
-
+            return ResponseEntity.ok("Empresa cadastrada com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
+
     @PutMapping(value = "/editar")
     public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Empresas empresasNovo) {
         try {
             empresasService.editar(id, empresasNovo);
-            return ResponseEntity.ok("Evento atualizado com sucesso!");
-
+            return ResponseEntity.ok("Empresa atualizada com sucesso!");
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
+
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id){
+    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id) {
         try {
             empresasService.desativar(id);
             return ResponseEntity.ok("Empresa desativada com sucesso!");
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 
     @PutMapping(value = "/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id){
+    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id) {
         try {
             empresasService.ativar(id);
             return ResponseEntity.ok("Empresa ativada com sucesso!");
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
+    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id) {
         try {
             empresasService.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");
-
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 }
+

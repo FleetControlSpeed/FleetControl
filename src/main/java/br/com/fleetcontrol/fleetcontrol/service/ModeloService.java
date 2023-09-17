@@ -1,5 +1,8 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+
+import br.com.fleetcontrol.fleetcontrol.dto.ModeloConverter;
+import br.com.fleetcontrol.fleetcontrol.dto.ModeloDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
@@ -13,90 +16,87 @@ import java.util.List;
 public class ModeloService {
 
     @Autowired
-    public ModeloRepository modelorepository;
+    private ModeloRepository repository;
 
     public Modelo buscarPorId(Long id) {
+
         if (id == 0) {
-            throw new RuntimeException(", por favor, informe um valor valido!");
-
-        } else if (modelorepository.findById(id).isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar o modelo informado");
-
+            throw new RuntimeException("Por favor, informe um valor válido!");
+        } else if (repository.findById(id).isEmpty()) {
+            throw new RuntimeException("Não foi possível localizar o modelo informado!");
         } else {
-            return modelorepository.findById(id).orElse(null);
+            return repository.findById(id).orElse(null);
         }
     }
 
     public List<Modelo> listar() {
-        if (modelorepository.findAll().isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar nenhum modelo cadastrado!");
-
+        if (repository.findAll().isEmpty()) {
+            throw new RuntimeException("Não foi possível localizar nenhum modelo cadastrado!");
         } else {
-            return modelorepository.findAll();
+            return repository.findAll();
         }
     }
 
-    public List<Modelo> listarPorAtivo(){
-        if(modelorepository.modelosAtivos().isEmpty()){
-            throw new RuntimeException(", não foi possivel localizar nenhum modelo ativo cadastrado!");
-
+    public List<Modelo> listarPorAtivo() {
+        if (repository.modelosAtivos().isEmpty()) {
+            throw new RuntimeException("Não foi possível localizar nenhum modelo ativo cadastrado!");
         } else {
-            return modelorepository.modelosAtivos();
+            return repository.modelosAtivos();
         }
     }
 
     @Transactional
-    public Modelo salvar(Modelo modelo) {
-        return modelorepository.save(modelo);
+    public Modelo salvar(Modelo modelos) {
+        return repository.save(modelos);
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void cadastrar(final ModeloDTO DTO) {
+        Modelo modelo = ModeloConverter.toEntity(DTO);
+        repository.save(modelo);
     }
 
+
     @Transactional
-    public void editar(Long id, Modelo modeloNovo){
-        final Modelo modeloBanco = this.buscarPorId(id);
+    public void editar(Long id, Modelo Novo) {
+        final Modelo Banco = this.buscarPorId(id);
 
-        if(modeloBanco == null || !modeloBanco.getId().equals(modeloBanco.getId())){
-            throw new RuntimeException(", não foi possivel identificar o modelo informado!");
-
+        if (Banco == null || !Banco.getId().equals(Banco.getId())) {
+            throw new RuntimeException("Não foi possível identificar o modelo informado!");
         } else {
-            salvar(modeloNovo);
+            salvar(Novo);
         }
     }
 
     @Transactional
     public void desativar(Long id) {
-        Modelo modelo  = buscarPorId(id);
+        Modelo modelos = buscarPorId(id);
 
-        if (!modelo.isAtivo()) {
-            throw new RuntimeException(", modelo informado já esta desativado!");
-
+        if (!modelos.isAtivo()) {
+            throw new RuntimeException("Modelo informado já está desativado!");
         } else {
-            modelorepository.desativar(id);
+            repository.desativar(id);
         }
     }
 
     @Transactional
     public void ativar(Long id) {
-        Modelo modelo  = buscarPorId(id);
+        Modelo modelos = buscarPorId(id);
 
-        if (modelo.isAtivo()) {
-            throw new RuntimeException(", modelo informado já esta ativado!");
-
+        if (modelos.isAtivo()) {
+            throw new RuntimeException("modelo informado já está ativado!");
         } else {
-            modelorepository.ativar(id);
+            repository.ativar(id);
         }
     }
 
     @Transactional
     public void deletar(Long id){
         Modelo modelo = buscarPorId(id);
-
-        List<Veiculo> veiculos = modelorepository.buscaModeloPorVeiculo(id);
-
+        List<Veiculo> veiculos = repository.buscaModeloPorVeiculo(id);
         if(veiculos.isEmpty()){
-            modelorepository.deleteById(id);
-
+            repository.deleteById(id);
         } else {
-            modelorepository.desativar(modelo.getId());
+            repository.desativar(modelo.getId());
             throw new RuntimeException(", modelo possui veiculos cadastrados ativos, modelo desativado!");
         }
     }
