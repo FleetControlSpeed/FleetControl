@@ -1,5 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
@@ -15,52 +16,44 @@ public class EmpresasService {
     @Autowired
     private EmpresasRepository empresasRepository;
 
-
     public Empresas buscarPorId(Long id) {
         if (id == 0) {
-            throw new RuntimeException(", por favor, informe um valor valido!");
-
-        } else if (empresasRepository.findById(id).isEmpty()) {
-            throw new RuntimeException(", não foi possivel localizar a empresa informada!");
-
-        } else {
-            return empresasRepository.findById(id).orElse(null);
+            throw new RuntimeException("Por favor, informe um valor válido!");
         }
+        Empresas empresa = empresasRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Não foi possível localizar a empresa informada!"));
+        return empresa;
     }
 
-    public List<Empresas> listar(){
-        if(empresasRepository.findAll().isEmpty()){
-            throw new RuntimeException(", não foi possivel localizar nenhuma empresa cadastrada!");
-
+    public List<Empresas> listar() {
+        if (empresasRepository.findAll().isEmpty()) {
+            throw new RuntimeException("Não foi possível localizar nenhuma empresa cadastrada!");
         } else {
             return empresasRepository.findAll();
         }
     }
 
-    public List<Empresas> listarPorAtivo(){
-        if(empresasRepository.empresasAtivas().isEmpty()){
-            throw new RuntimeException(", não foi possivel localizar nenhuma empresa ativa cadastrada!");
-
+    public List<Empresas> listarPorAtivo() {
+        if (empresasRepository.empresasAtivas().isEmpty()) {
+            throw new RuntimeException("Não foi possível localizar nenhuma empresa ativa cadastrada!");
         } else {
             return empresasRepository.empresasAtivas();
         }
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrar(final Empresas empresas){
+    public void cadastrar(final Empresas empresas) {
         empresasRepository.save(empresas);
     }
 
-
     @Transactional(rollbackFor = Exception.class)
-    public void editar(Long id, Empresas empresasNovo){
+    public void editar(Long id, Empresas empresasNovo) {
         final Empresas empresasBanco = buscarPorId(id);
 
-        if(empresasBanco == null || !empresasBanco.getId().equals(empresasNovo.getId())){
-            throw new RuntimeException(", não foi possivel localizar a empresa informada!");
-
+        if (empresasBanco == null || !empresasBanco.getId().equals(empresasNovo.getId())) {
+            throw new RuntimeException("Não foi possível localizar a empresa informada!");
         } else {
-            cadastrar(empresasNovo);
+            empresasRepository.save(empresasNovo);
         }
     }
 
@@ -69,10 +62,10 @@ public class EmpresasService {
         Empresas empresa = buscarPorId(id);
 
         if (!empresa.isAtivo()) {
-            throw new RuntimeException(", empresa informada já esta desativada!");
-
+            throw new RuntimeException("Empresa informada já está desativada!");
         } else {
-            empresasRepository.desativar(id);
+            empresa.setAtivo(false);
+            empresasRepository.save(empresa);
         }
     }
 
@@ -81,25 +74,25 @@ public class EmpresasService {
         Empresas empresa = buscarPorId(id);
 
         if (empresa.isAtivo()) {
-            throw new RuntimeException(", empresa informada já esta ativada!");
-
+            throw new RuntimeException("Empresa informada já está ativada!");
         } else {
-            empresasRepository.ativar(id);
+            empresa.setAtivo(true);
+            empresasRepository.save(empresa);
         }
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deletar(Long id){
+    public void deletar(Long id) {
         Empresas empresa = buscarPorId(id);
 
-        List<Eventos> empresas = empresasRepository.buscaEmpresaPorEvento(id);
+        List<Eventos> eventos = empresasRepository.buscaEmpresaPorEvento(id);
 
-        if(empresas.isEmpty()){
+        if (eventos.isEmpty()) {
             empresasRepository.deleteById(id);
-
         } else {
-            empresasRepository.desativar(empresa.getId());
-            throw new RuntimeException(", empresa possui eventos cadastrados ativos, empresa desativada!");
+            empresa.setAtivo(false);
+            empresasRepository.save(empresa);
+            throw new RuntimeException("Empresa possui eventos cadastrados ativos, empresa desativada!");
         }
     }
 }
