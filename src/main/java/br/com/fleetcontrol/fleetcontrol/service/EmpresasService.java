@@ -42,8 +42,8 @@ public class EmpresasService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrar(final Empresas empresas) {
-        empresasRepository.save(empresas);
+    public Empresas cadastrar(Empresas cadastrar) {
+        return this.empresasRepository.save(cadastrar);
     }
 
     @Transactional(rollbackFor = Exception.class)

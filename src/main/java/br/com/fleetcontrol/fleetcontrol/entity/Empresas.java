@@ -43,4 +43,9 @@ public class Empresas extends AbstractEntity {
     private String endereco;
 
 
+
+    public Empresas(String nome, String CEP, String endereco) {
+        //Somente para os testes
+    }
+
 }

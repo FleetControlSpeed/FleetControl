@@ -3,9 +3,11 @@ package br.com.fleetcontrol.fleetcontrol.controller;
 import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
+import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
 import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,16 +30,20 @@ public class EmpresasController {
 
     @Autowired
     private EmpresasService empresasService;
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
-        try {
-            EmpresasDTO empresasDTO = EmpresaConverter.toDTO(empresasService.buscarPorId(id));
-            return ResponseEntity.ok(empresasDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+    @Autowired
+    private EmpresasRepository empresasRepository;
+    @GetMapping("/{id}")
+    public ResponseEntity<EmpresasDTO> listaId(@PathVariable(value = "id") Long id) {
+        Empresas empresas = empresasRepository.findById(id).orElse(null);
+        if (empresas == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+        EmpresasDTO empresasDTO = EmpresaConverter.toDTO(empresas);
+        return ResponseEntity.ok(empresasDTO);
     }
+
+
+
 
     @GetMapping(value = "/listar")
     public ResponseEntity<?> listar() {
@@ -57,15 +63,24 @@ public class EmpresasController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Empresas empresas) {
+    @PostMapping("/cadastrar")
+    public ResponseEntity<String> cadastrar(@RequestBody EmpresasDTO empresasDTO) {
         try {
-            empresasService.cadastrar(empresas);
-            return ResponseEntity.ok("Empresa cadastrada com sucesso!");
+            Empresas empresas = EmpresaConverter.toEntity(empresasDTO);
+            this.empresasService.cadastrar(empresas);
+            return ResponseEntity.ok("Cadastro feito com sucesso");
+        } catch (DataIntegrityViolationException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
+
+
+
+
 
     @PutMapping(value = "/editar")
     public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Empresas empresasNovo) {
