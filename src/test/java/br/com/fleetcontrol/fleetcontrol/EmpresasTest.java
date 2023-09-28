@@ -14,18 +14,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,7 +48,33 @@ public class EmpresasTest {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(empresasController).build();
     }
-
+    @Test
+    void testListaIdSucesso() throws Exception {
+        Long id = 1L;
+        Empresas empresas = new Empresas("Empresa", "85857485", "Rua Empresaria");
+        empresas.setNome("Empresa");
+        empresas.setCEP("85857485");
+        empresas.setEndereco("Rua Empresaria");
+        when(empresasRepository.findById(id))
+                .thenReturn(Optional.of(empresas));
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/empresas/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Empresa"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.cep").value("85857485"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.endereco").value("Rua Empresaria"));
+    }
+    @Test
+    void testListaIdNaoEncontrado() throws Exception {
+        Long id = 1L;
+        when(empresasRepository.findById(id))
+                .thenReturn(Optional.empty());
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/empresas/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
     @Test
     void testLista() throws Exception {
         when(empresasService.listar()).thenReturn(Collections.emptyList());
@@ -53,7 +83,15 @@ public class EmpresasTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
-
+    @Test
+    public void testListarPorAtivo() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/empresas/listarPorAtivo")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
     @Test
     void testCadastrarSuccess() throws Exception {
         EmpresasDTO empresasDTO = new EmpresasDTO();
@@ -90,31 +128,73 @@ public class EmpresasTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("ERRO: Argumento inválido"));
     }
-
     @Test
-    void testListaIdSucesso() throws Exception {
+    void testAtualizarComSucesso() {
+
         Long id = 1L;
-        Empresas empresas = new Empresas("Empresa", "85857485", "Rua Empresaria");
-        empresas.setNome("Empresa");
-        empresas.setCEP("85857485");
-        empresas.setEndereco("Rua Empresaria");
-        when(empresasRepository.findById(id))
-                .thenReturn(Optional.of(empresas));
+
+        when(empresasService.atualizar(eq(id), any())).thenReturn(new Empresas());
+        EmpresasDTO empresasDTO = new EmpresasDTO();
+        ResponseEntity<?> response = empresasController.atualizar(id, empresasDTO);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Atualizado com sucesso!", response.getBody());
+    }
+    @Test
+    void testAtualizarComExcecao() {
+        Long id = 1L;
+        EmpresasDTO empresasDTO = new EmpresasDTO("Empresa", "85857485", "Rua Empresaria");
+
+        when(empresasService.atualizar(eq(id), any()))
+                .thenThrow(new RuntimeException("Erro na atualização"));
+
+        ResponseEntity<?> response = empresasController.atualizar(id, empresasDTO);
+
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("Erro na atualização", response.getBody());
+    }
+    @Test
+    void testDesativarSucesso() throws Exception {
+        Long id = 1L;
+        doNothing().when(empresasService).desativar(id);
+        mockMvc.perform(put("/api/empresas/desativar")
+                        .param("id", String.valueOf(id))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Empresa desativada com sucesso!"));
+    }
+    @Test
+    void testDesativarFalha() throws Exception {
+        Long id = 1L;
+        doThrow(new RuntimeException("Erro ao desativar a empresa")).when(empresasService).desativar(id);
+        mockMvc.perform(put("/api/empresas/desativar")
+                        .param("id", String.valueOf(id))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Error: Erro ao desativar a empresa"));
+    }
+    @Test
+    void testDeletarSucesso() throws Exception {
+        long id = 1L;
+        doNothing().when(empresasService).deletar(id);
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/empresas/" + id)
+                        .delete("/api/empresas/deletar")
+                        .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Empresa"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.cep").value("85857485"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.endereco").value("Rua Empresaria"));
+                .andExpect(MockMvcResultMatchers.content().string("Registro deletado com sucesso!"));
     }
-
-
-
-
-
-
-
+    @Test
+    void testDeletarFalha() throws Exception {
+        long id = 1L;
+        doThrow(new RuntimeException("Erro de deleção")).when(empresasService).deletar(id);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/api/empresas/deletar")
+                        .param("id", String.valueOf(id))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string("Error: Erro de deleção"));
+    }
     private String asJsonString(Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
@@ -122,5 +202,4 @@ public class EmpresasTest {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -41,10 +41,6 @@ public class EmpresasController {
         EmpresasDTO empresasDTO = EmpresaConverter.toDTO(empresas);
         return ResponseEntity.ok(empresasDTO);
     }
-
-
-
-
     @GetMapping(value = "/listar")
     public ResponseEntity<?> listar() {
         try {
@@ -76,19 +72,14 @@ public class EmpresasController {
         }
     }
 
-
-
-
-
-
-
-    @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Empresas empresasNovo) {
+    @PutMapping("/put/id/{id}")
+    public ResponseEntity<String> atualizar(@PathVariable Long id, @RequestBody EmpresasDTO dto) {
         try {
-            empresasService.editar(id, empresasNovo);
-            return ResponseEntity.ok("Empresa atualizada com sucesso!");
+            Empresas empresaAtualizada = EmpresaConverter.toEntity(dto);
+            this.empresasService.atualizar(id, empresaAtualizada);
+            return ResponseEntity.ok().body("Atualizado com sucesso!");
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -113,7 +104,7 @@ public class EmpresasController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id) {
+    public ResponseEntity<String> deletar(@Valid @RequestParam("id") final long id) {
         try {
             empresasService.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");
