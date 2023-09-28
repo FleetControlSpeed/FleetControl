@@ -1,10 +1,17 @@
 package br.com.fleetcontrol.fleetcontrol;
 
 import br.com.fleetcontrol.fleetcontrol.controller.EmpresasController;
+import br.com.fleetcontrol.fleetcontrol.controller.ModeloController;
 import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
+import br.com.fleetcontrol.fleetcontrol.dto.ModeloDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
+import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Marca;
 import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
+import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
 import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
+import br.com.fleetcontrol.fleetcontrol.service.ModeloService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,51 +37,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class EmpresasTest {
+public class ModeloTest {
     private MockMvc mockMvc;
     @InjectMocks
-    private EmpresasController empresasController;
+    private ModeloController modeloController;
     @MockBean
-    private EmpresasService empresasService;
+    private ModeloService modeloService;
     @MockBean
-    private EmpresasRepository empresasRepository;
+    private ModeloRepository modeloRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(empresasController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(modeloController).build();
     }
-    @Test
+   @Test
     void testListaIdSucesso() throws Exception {
         Long id = 1L;
-        Empresas empresas = new Empresas("Empresa", "85857485", "Rua Empresaria");
-        empresas.setNome("Empresa");
-        empresas.setCEP("85857485");
-        empresas.setEndereco("Rua Empresaria");
-        when(empresasRepository.findById(id))
-                .thenReturn(Optional.of(empresas));
+        Modelo modelo = new Modelo("Onix", Marca.CHEVROLET);
+        modelo.setNome("Onix");
+        modelo.setMarca(Marca.CHEVROLET);
+        when(modeloRepository.findById(id))
+                .thenReturn(Optional.of(modelo));
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/empresas/" + id)
+                        .get("/api/modelo/" + id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Empresa"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.cep").value("85857485"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.endereco").value("Rua Empresaria"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("Onix"));
     }
     @Test
     void testListaIdNaoEncontrado() throws Exception {
         Long id = 1L;
-        when(empresasRepository.findById(id))
+        when(modeloRepository.findById(id))
                 .thenReturn(Optional.empty());
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/empresas/" + id)
+                        .get("/api/modelo/" + id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
     @Test
     void testLista() throws Exception {
-        when(empresasService.listar()).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/api/empresas/listar")
+        when(modeloService.listar()).thenReturn(Collections.emptyList());
+        mockMvc.perform(get("/api/modelo/listar")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -82,7 +86,7 @@ public class EmpresasTest {
     @Test
     public void testListarPorAtivo() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/empresas/listarPorAtivo")
+                        .get("/api/modelo/listarPorAtivo")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -90,37 +94,37 @@ public class EmpresasTest {
     }
     @Test
     void testCadastrarSuccess() throws Exception {
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        when(empresasService.cadastrar(any(Empresas.class)))
-                .thenReturn(new Empresas("Empresa", "85857485", "Rua Empresaria"));
+        ModeloDTO modeloDTO = new ModeloDTO();
+        when(modeloService.cadastrar(any(Modelo.class)))
+                .thenReturn(new Modelo("Onix", Marca.CHEVROLET));
 
-        mockMvc.perform(post("/api/empresas/cadastrar")
+        mockMvc.perform(post("/api/modelo/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(empresasDTO)))
+                        .content(asJsonString(modeloDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Cadastro feito com sucesso"));
     }
     @Test
     void testCadastrarDataIntegrityViolationException() throws Exception {
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        when(empresasService.cadastrar(any(Empresas.class)))
+        ModeloDTO modeloDTO = new ModeloDTO();
+        when(modeloService.cadastrar(any(Modelo.class)))
                 .thenThrow(new DataIntegrityViolationException("Erro de violação de integridade"));
 
-        mockMvc.perform(post("/api/empresas/cadastrar")
+        mockMvc.perform(post("/api/modelo/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(empresasDTO)))
+                        .content(asJsonString(modeloDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("ERRO: Erro de violação de integridade"));
     }
     @Test
     void testCadastrarIllegalArgumentException() throws Exception {
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        when(empresasService.cadastrar(any(Empresas.class)))
+        ModeloDTO modeloDTO = new ModeloDTO();
+        when(modeloService.cadastrar(any(Modelo.class)))
                 .thenThrow(new IllegalArgumentException("Argumento inválido"));
 
-        mockMvc.perform(post("/api/empresas/cadastrar")
+        mockMvc.perform(post("/api/modelo/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(empresasDTO)))
+                        .content(asJsonString(modeloDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("ERRO: Argumento inválido"));
     }
@@ -129,9 +133,9 @@ public class EmpresasTest {
 
         Long id = 1L;
 
-        when(empresasService.atualizar(eq(id), any())).thenReturn(new Empresas());
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        ResponseEntity<?> response = empresasController.atualizar(id, empresasDTO);
+        when(modeloService.atualizar(eq(id), any())).thenReturn(new Modelo());
+        ModeloDTO modeloDTO = new ModeloDTO();
+        ResponseEntity<?> response = modeloController.atualizar(id, modeloDTO);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("Atualizado com sucesso!", response.getBody());
@@ -139,12 +143,12 @@ public class EmpresasTest {
     @Test
     void testAtualizarComExcecao() {
         Long id = 1L;
-        EmpresasDTO empresasDTO = new EmpresasDTO("Empresa", "85857485", "Rua Empresaria");
+        ModeloDTO modeloDTO = new ModeloDTO("Onix", Marca.CHEVROLET);
 
-        when(empresasService.atualizar(eq(id), any()))
+        when(modeloService.atualizar(eq(id), any()))
                 .thenThrow(new RuntimeException("Erro na atualização"));
 
-        ResponseEntity<?> response = empresasController.atualizar(id, empresasDTO);
+        ResponseEntity<?> response = modeloController.atualizar(id, modeloDTO);
 
         assertEquals(400, response.getStatusCodeValue());
         assertEquals("Erro na atualização", response.getBody());
@@ -152,18 +156,18 @@ public class EmpresasTest {
     @Test
     void testDesativarSucesso() throws Exception {
         Long id = 1L;
-        doNothing().when(empresasService).desativar(id);
-        mockMvc.perform(put("/api/empresas/desativar")
+        doNothing().when(modeloService).desativar(id);
+        mockMvc.perform(put("/api/modelo/desativar")
                         .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Empresa desativada com sucesso!"));
+                .andExpect(content().string("Modelos desativada com sucesso!"));
     }
     @Test
     void testDesativarFalha() throws Exception {
         Long id = 1L;
-        doThrow(new RuntimeException("Erro ao desativar a empresa")).when(empresasService).desativar(id);
-        mockMvc.perform(put("/api/empresas/desativar")
+        doThrow(new RuntimeException("Erro ao desativar a empresa")).when(modeloService).desativar(id);
+        mockMvc.perform(put("/api/modelo/desativar")
                         .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -172,9 +176,9 @@ public class EmpresasTest {
     @Test
     void testDeletarSucesso() throws Exception {
         long id = 1L;
-        doNothing().when(empresasService).deletar(id);
+        doNothing().when(modeloService).deletar(id);
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/empresas/deletar")
+                        .delete("/api/modelo/deletar")
                         .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -183,9 +187,9 @@ public class EmpresasTest {
     @Test
     void testDeletarFalha() throws Exception {
         long id = 1L;
-        doThrow(new RuntimeException("Erro de deleção")).when(empresasService).deletar(id);
+        doThrow(new RuntimeException("Erro de deleção")).when(modeloService).deletar(id);
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/empresas/deletar")
+                        .delete("/api/modelo/deletar")
                         .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())

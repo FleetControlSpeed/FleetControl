@@ -45,6 +45,7 @@ public class EmpresasService {
     public Empresas cadastrar(Empresas cadastrar) {
         return this.empresasRepository.save(cadastrar);
     }
+
     public Empresas atualizar(Long id, Empresas empresaAtualizada) {
         Empresas empresaExistente = empresasRepository.findById(id).orElse(null);
         if (empresaExistente == null) {

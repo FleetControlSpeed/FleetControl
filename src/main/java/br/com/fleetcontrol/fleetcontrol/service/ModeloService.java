@@ -1,8 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
 
-import br.com.fleetcontrol.fleetcontrol.dto.ModeloConverter;
-import br.com.fleetcontrol.fleetcontrol.dto.ModeloDTO;
+import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
@@ -19,14 +18,12 @@ public class ModeloService {
     private ModeloRepository repository;
 
     public Modelo buscarPorId(Long id) {
-
         if (id == 0) {
             throw new RuntimeException("Por favor, informe um valor válido!");
-        } else if (repository.findById(id).isEmpty()) {
-            throw new RuntimeException("Não foi possível localizar o modelo informado!");
-        } else {
-            return repository.findById(id).orElse(null);
         }
+        Modelo modelo = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Não foi possível localizar a empresa informada!"));
+        return modelo;
     }
 
     public List<Modelo> listar() {
@@ -49,21 +46,22 @@ public class ModeloService {
     public Modelo salvar(Modelo modelos) {
         return repository.save(modelos);
     }
+
+
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrar(final ModeloDTO DTO) {
-        Modelo modelo = ModeloConverter.toEntity(DTO);
-        repository.save(modelo);
+    public Modelo cadastrar(Modelo cadastrar) {
+        return this.repository.save(cadastrar);
     }
 
 
-    @Transactional
-    public void editar(Long id, Modelo Novo) {
-        final Modelo Banco = this.buscarPorId(id);
-
-        if (Banco == null || !Banco.getId().equals(Banco.getId())) {
-            throw new RuntimeException("Não foi possível identificar o modelo informado!");
+    public Modelo atualizar(Long id, Modelo modeloAtualizado) {
+        Modelo modeloExistente = repository.findById(id).orElse(null);
+        if (modeloExistente == null) {
+            return null;
         } else {
-            salvar(Novo);
+            modeloExistente.setNome(modeloAtualizado.getNome());
+            modeloExistente.setMarca(modeloAtualizado.getMarca());
+            return repository.save(modeloExistente);
         }
     }
 
