@@ -3,6 +3,7 @@ package br.com.fleetcontrol.fleetcontrol;
 import br.com.fleetcontrol.fleetcontrol.controller.EmpresasController;
 import br.com.fleetcontrol.fleetcontrol.controller.UsuarioController;
 import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
+import br.com.fleetcontrol.fleetcontrol.dto.UsuarioDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
@@ -74,28 +75,27 @@ public class UsuarioTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("junin@hotmail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.usuario").value("Junin"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.senha").value("123456"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.cargo").value(Cargo.MOTORISTA))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.primeironome").value("Junin"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.primeiroNome").value("Junin"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.sobrenome").value("Almeida"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.cpf").value("12345678900"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.telefone").value("45999559955"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.datanascimento").value("24/12/2001"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.dataNascimento").value("24/12/2001"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.endereco").value("Rua do diabo"));
                 }
-    /*@Test
+    @Test
     void testListaIdNaoEncontrado() throws Exception {
         Long id = 1L;
-        when(empresasRepository.findById(id))
+        when(usuarioRepository.findById(id))
                 .thenReturn(Optional.empty());
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/empresas/" + id)
+                        .get("/api/condutores/" + id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
     @Test
     void testLista() throws Exception {
-        when(empresasService.listar()).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/api/empresas/listar")
+        when(usuarioService.listar()).thenReturn(Collections.emptyList());
+        mockMvc.perform(get("/api/condutores/listar")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -103,7 +103,7 @@ public class UsuarioTest {
     @Test
     public void testListarPorAtivo() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/empresas/listarPorAtivo")
+                        .get("/api/condutores/listar/ativos")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
@@ -111,37 +111,37 @@ public class UsuarioTest {
     }
     @Test
     void testCadastrarSuccess() throws Exception {
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        when(empresasService.cadastrar(any(Empresas.class)))
-                .thenReturn(new Empresas("Empresa", "85857485", "Rua Empresaria"));
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        when(usuarioService.cadastrar(any(Usuario.class)))
+                .thenReturn(new Usuario("junin@hotmail.com","Junin","123456", Cargo.MOTORISTA,"Junin","Almeida","12345678900","45999559955","24/12/2001", "Rua do diabo", new ArrayList<>()));
 
-        mockMvc.perform(post("/api/empresas/cadastrar")
+        mockMvc.perform(post("/api/condutores/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(empresasDTO)))
+                        .content(asJsonString(usuarioDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Cadastro feito com sucesso"));
     }
     @Test
     void testCadastrarDataIntegrityViolationException() throws Exception {
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        when(empresasService.cadastrar(any(Empresas.class)))
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        when(usuarioService.cadastrar(any(Usuario.class)))
                 .thenThrow(new DataIntegrityViolationException("Erro de violação de integridade"));
 
-        mockMvc.perform(post("/api/empresas/cadastrar")
+        mockMvc.perform(post("/api/condutores/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(empresasDTO)))
+                        .content(asJsonString(usuarioDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("ERRO: Erro de violação de integridade"));
     }
     @Test
     void testCadastrarIllegalArgumentException() throws Exception {
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        when(empresasService.cadastrar(any(Empresas.class)))
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        when(usuarioService.cadastrar(any(Usuario.class)))
                 .thenThrow(new IllegalArgumentException("Argumento inválido"));
 
-        mockMvc.perform(post("/api/empresas/cadastrar")
+        mockMvc.perform(post("/api/condutores/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(empresasDTO)))
+                        .content(asJsonString(usuarioDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("ERRO: Argumento inválido"));
     }
@@ -150,9 +150,9 @@ public class UsuarioTest {
 
         Long id = 1L;
 
-        when(empresasService.atualizar(eq(id), any())).thenReturn(new Empresas());
-        EmpresasDTO empresasDTO = new EmpresasDTO();
-        ResponseEntity<?> response = empresasController.atualizar(id, empresasDTO);
+        when(usuarioService.atualizar(eq(id), any())).thenReturn(new Usuario());
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        ResponseEntity<?> response = usuarioController.atualizar(id, usuarioDTO);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("Atualizado com sucesso!", response.getBody());
@@ -160,12 +160,12 @@ public class UsuarioTest {
     @Test
     void testAtualizarComExcecao() {
         Long id = 1L;
-        EmpresasDTO empresasDTO = new EmpresasDTO("Empresa", "85857485", "Rua Empresaria");
+       UsuarioDTO usuarioDTO = new UsuarioDTO("junin@hotmail.com","Junin","123456", Cargo.MOTORISTA,"Junin","Almeida","12345678900","45999559955","24/12/2001", "Rua do diabo");
 
-        when(empresasService.atualizar(eq(id), any()))
+        when(usuarioService.atualizar(eq(id), any()))
                 .thenThrow(new RuntimeException("Erro na atualização"));
 
-        ResponseEntity<?> response = empresasController.atualizar(id, empresasDTO);
+        ResponseEntity<?> response = usuarioController.atualizar(id, usuarioDTO);
 
         assertEquals(400, response.getStatusCodeValue());
         assertEquals("Erro na atualização", response.getBody());
@@ -173,18 +173,18 @@ public class UsuarioTest {
     @Test
     void testDesativarSucesso() throws Exception {
         Long id = 1L;
-        doNothing().when(empresasService).desativar(id);
-        mockMvc.perform(put("/api/empresas/desativar")
+        doNothing().when(usuarioService).desativar(id);
+        mockMvc.perform(put("/api/condutores/desativar")
                         .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Empresa desativada com sucesso!"));
+                .andExpect(content().string("Usuario desativado com sucesso!"));
     }
     @Test
     void testDesativarFalha() throws Exception {
         Long id = 1L;
-        doThrow(new RuntimeException("Erro ao desativar a empresa")).when(empresasService).desativar(id);
-        mockMvc.perform(put("/api/empresas/desativar")
+        doThrow(new RuntimeException("Erro ao desativar a empresa")).when(usuarioService).desativar(id);
+        mockMvc.perform(put("/api/condutores/desativar")
                         .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -193,25 +193,25 @@ public class UsuarioTest {
     @Test
     void testDeletarSucesso() throws Exception {
         long id = 1L;
-        doNothing().when(empresasService).deletar(id);
+        doNothing().when(usuarioService).deletar(id);
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/empresas/deletar")
+                        .delete("/api/condutores/deletar")
                         .param("id", String.valueOf(id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("Registro deletado com sucesso!"));
     }
     @Test
-    void testDeletarFalha() throws Exception {
-        long id = 1L;
-        doThrow(new RuntimeException("Erro de deleção")).when(empresasService).deletar(id);
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/empresas/deletar")
-                        .param("id", String.valueOf(id))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string("Error: Erro de deleção"));
-    }*/
+     void testDeletarFalha() throws Exception {
+         long id = 1L;
+         doThrow(new RuntimeException("Erro de deleção")).when(usuarioService).deletar(id);
+         mockMvc.perform(MockMvcRequestBuilders
+                         .delete("/api/condutores/deletar")
+                         .param("id", String.valueOf(id))
+                         .contentType(MediaType.APPLICATION_JSON))
+                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                 .andExpect(MockMvcResultMatchers.content().string("Error: Erro de deleção"));
+     }
     private String asJsonString(Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
