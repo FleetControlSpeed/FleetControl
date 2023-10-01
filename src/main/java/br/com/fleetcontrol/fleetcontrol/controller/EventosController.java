@@ -164,7 +164,7 @@ public class EventosController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id) {
+    public ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id) {
         try {
             service.desativar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");
