@@ -17,6 +17,7 @@ public class ModeloService {
     @Autowired
     private ModeloRepository repository;
 
+
     public Modelo buscarPorId(Long id) {
         if (id == 0) {
             throw new RuntimeException("Por favor, informe um valor válido!");
