@@ -1,9 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol;
 
 import br.com.fleetcontrol.fleetcontrol.controller.ModeloController;
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
 import br.com.fleetcontrol.fleetcontrol.dto.ModeloDTO;
-import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Marca;
 import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;

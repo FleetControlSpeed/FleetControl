@@ -1,18 +1,13 @@
 package br.com.fleetcontrol.fleetcontrol;
 
-import br.com.fleetcontrol.fleetcontrol.controller.EmpresasController;
 import br.com.fleetcontrol.fleetcontrol.controller.VeiculoController;
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
 import br.com.fleetcontrol.fleetcontrol.dto.VeiculoDTO;
-import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Cor;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Marca;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Tipo;
-import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
 import br.com.fleetcontrol.fleetcontrol.repository.VeiculoRepository;
-import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import br.com.fleetcontrol.fleetcontrol.service.VeiculoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

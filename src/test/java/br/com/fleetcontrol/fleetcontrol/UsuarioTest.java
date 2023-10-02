@@ -1,15 +1,10 @@
 package br.com.fleetcontrol.fleetcontrol;
 
-import br.com.fleetcontrol.fleetcontrol.controller.EmpresasController;
 import br.com.fleetcontrol.fleetcontrol.controller.UsuarioController;
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
 import br.com.fleetcontrol.fleetcontrol.dto.UsuarioDTO;
-import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
-import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
-import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
