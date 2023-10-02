@@ -1,102 +1,90 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
-
+import br.com.fleetcontrol.fleetcontrol.dto.UsuarioDTO;
+import br.com.fleetcontrol.fleetcontrol.dto.UsuarioConverter;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
+import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/condutores")
 public class UsuarioController {
-
-    /*
-    {
-    "id": 1,
-    "cadastro": "2023-05-27T22:37:03.119999",
-    "edicao": null,
-    "ativo": true,
-    "email": "pedrohenri1606@gmail.com",
-    "usuario": "pedro",
-    "senha": "123",
-    "cargo": "ADMINISTRADOR",
-    "primeiroNome": "Pedro",
-    "sobrenome": "Henrique",
-    "cpf": "10250870975",
-    "telefone": "45 998265476",
-    "dataNascimento": "29/07/2003",
-    "endereco": "Rua Belmiro numero 2",
-    "eventos": null
-    }
-     */
-
     @Autowired
     private UsuarioService usuarioservice;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    private static final String ERROR_MESSAGE_PREFIX = "Error: ";
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id){
-            return ResponseEntity.ok(usuarioservice.buscarPorId(id));
+    public ResponseEntity<UsuarioDTO> listaId(@PathVariable(value = "id") Long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        UsuarioDTO usuarioDTO = UsuarioConverter.toDTO(usuario);
+        return ResponseEntity.ok(usuarioDTO);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<Page<Usuario>> listar(Pageable pageable) {
-        try{
-            Page<Usuario> usuarios =  usuarioservice.listaCompleta(pageable);
-            return ResponseEntity.ok(usuarios);
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<List<UsuarioDTO>> listar() {
+        List<Usuario> listaUsuarios = usuarioservice.listar();
+        List<UsuarioDTO> listaUsuariosDTO = UsuarioConverter.toDTOList(listaUsuarios);
+        return ResponseEntity.ok(listaUsuariosDTO);
     }
 
-    @GetMapping("/listar/ativos")
-    public ResponseEntity<?> listarPorAtivo() {
+    @GetMapping("/listarPorAtivo")
+    public ResponseEntity<List<UsuarioDTO>> listarPorAtivo(@PathVariable boolean ativo) {
+        List<Usuario> listaAtivo = usuarioRepository.findByAtivo(ativo);
+        List<UsuarioDTO> listaAtivoDTO = UsuarioConverter.toDTOList(listaAtivo);
+
+        return ResponseEntity.ok(listaAtivoDTO);
+    }
+
+    @PostMapping("/cadastrar")
+    public ResponseEntity<String> cadastrar(@RequestBody UsuarioDTO usuarioDTO) {
         try {
-            return ResponseEntity.ok(this.usuarioservice.listaUsuariosAtivos());
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+            Usuario usuario = UsuarioConverter.toEntity(usuarioDTO);
+            this.usuarioservice.cadastrar(usuario);
+            return ResponseEntity.ok("Cadastro feito com sucesso");
+        } catch (DataIntegrityViolationException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody Usuario usuario) {
-        usuario = usuarioservice.salvar(usuario);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuario.getId()).toUri();
-        return ResponseEntity.created(uri).body(usuario);
-    }
-
-    @PutMapping("/editar")
-    public ResponseEntity<?> atualizar(@Valid @RequestParam("id") Long idUsuario, @RequestBody Usuario usuarioNovo) {
-        try{
-            usuarioservice.atualizar(idUsuario,usuarioNovo);
-            return ResponseEntity.ok("Usuario alterado com sucesso!");
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+    @PutMapping("/put/id/{id}")
+    public ResponseEntity<String> atualizar(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
+        try {
+            Usuario usuarioAtualizado = UsuarioConverter.toEntity(dto);
+            this.usuarioservice.atualizar(id, usuarioAtualizado);
+            return ResponseEntity.ok().body("Atualizado com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
 
     @PutMapping("/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") Long idUsuario) {
+    public ResponseEntity<String> desativar(@Valid @RequestParam("id") Long idUsuario) {
         try{
             usuarioservice.desativar(idUsuario);
             return ResponseEntity.ok("Usuario desativado com sucesso!");
 
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+            return ResponseEntity.badRequest().body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 
     @PutMapping("/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestParam("id") Long idUsuario){
+    public ResponseEntity<String> ativar(@Valid @RequestParam("id") Long idUsuario){
         try{
             usuarioservice.ativar(idUsuario);
             return ResponseEntity.ok("Usuario ativado com sucesso!");
@@ -107,8 +95,12 @@ public class UsuarioController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
-        usuarioservice.deletar(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deletar(@Valid @RequestParam("id") final long id) {
+        try {
+            usuarioservice.deletar(id);
+            return ResponseEntity.ok("Registro deletado com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
+        }
     }
 }

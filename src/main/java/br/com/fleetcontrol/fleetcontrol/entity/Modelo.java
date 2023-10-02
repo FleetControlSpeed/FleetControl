@@ -27,4 +27,8 @@ public class Modelo extends AbstractEntity {
     @NotNull(message = "Marca é um campo obrigatorio!")
     private Marca marca;
 
+    public Modelo(String nome, Marca marca) {
+        //Somente para os testes
+    }
+
 }

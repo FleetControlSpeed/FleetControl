@@ -7,14 +7,14 @@ public class EmpresasDTO {
     private String nome;
 
     @Getter @Setter
-    private String CEP;
+    private String cep;
 
     @Getter @Setter
     private String endereco;
 
-    public EmpresasDTO(String nome, String CEP, String endereco) {
+    public EmpresasDTO(String nome, String cep, String endereco) {
         this.nome = nome;
-        this.CEP = CEP;
+        this.cep = cep;
         this.endereco = endereco;
     }
 

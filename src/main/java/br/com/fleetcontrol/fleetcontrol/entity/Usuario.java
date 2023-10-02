@@ -1,7 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.entity;
 
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
-import br.com.fleetcontrol.fleetcontrol.validation.constraints.CEP;
+
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.CPF;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.Telefone;
 import jakarta.persistence.*;
@@ -86,5 +86,10 @@ public class Usuario extends AbstractEntity {
 
     @OneToMany(mappedBy = "usuario")
     private List<Multa> listaMultas = new ArrayList<>();
+    public Usuario(String email, String usuario, String senha, Cargo cargo, String primeiroNome, String sobrenome, String cpf, String telefone, String dataNascimento, String endereco, List<Multa> listaMultas) {
+        //Somente para os testes
+    }
+
+
 
 }

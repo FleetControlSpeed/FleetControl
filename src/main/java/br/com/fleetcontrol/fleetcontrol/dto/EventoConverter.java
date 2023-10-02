@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 
 public class EventoConverter {
 
+    private EventoConverter() {
+        // Este construtor está vazio; a classe não pode ser instanciada
+    }
+
     public static EventoDTO toDTO(Eventos evento) {
         EventoDTO eventoDTO = new EventoDTO();
         eventoDTO.setUsuario(evento.getUsuario());
@@ -34,6 +38,6 @@ public class EventoConverter {
     public static List<EventoDTO> toDTOList(List<Eventos> eventos) {
         return eventos.stream()
                 .map(EventoConverter::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

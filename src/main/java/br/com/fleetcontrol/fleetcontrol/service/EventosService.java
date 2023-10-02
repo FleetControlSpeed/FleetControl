@@ -2,7 +2,6 @@ package br.com.fleetcontrol.fleetcontrol.service;
 
 import br.com.fleetcontrol.fleetcontrol.dto.EventoConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.EventoDTO;
-import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.repository.EventosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import java.util.List;
 
 @Service
 public class EventosService {
-
-
 
     @Autowired
     private EventosRepository repository;
@@ -30,12 +27,12 @@ public class EventosService {
         }
     }
 
-    public List<Eventos> listar() {
-        if (repository.findAll().isEmpty()) {
-            throw new RuntimeException("Não foi possível localizar nenhum evento cadastrado!");
-        } else {
-            return repository.findAll();
-        }
+    public List<Eventos> listartudo(){
+        return repository.findAll();
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public Eventos cadastrar(Eventos cadastrar) {
+        return this.repository.save(cadastrar);
     }
 
     public List<Eventos> listarPorAtivo() {
@@ -48,7 +45,6 @@ public class EventosService {
 
     @Transactional
     public Eventos salvar(Eventos eventos) {
-
         return repository.save(eventos);
     }
     @Transactional(rollbackFor = Exception.class)

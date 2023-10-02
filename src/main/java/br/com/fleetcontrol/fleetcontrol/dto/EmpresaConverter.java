@@ -7,11 +7,13 @@ import java.util.stream.Collectors;
 
 public class EmpresaConverter {
 
-
+    private EmpresaConverter() {
+        // Este construtor está vazio; a classe não pode ser instanciada
+    }
     public static EmpresasDTO toDTO(Empresas empresa) {
         EmpresasDTO empresasDTO = new EmpresasDTO();
         empresasDTO.setNome(empresa.getNome());
-        empresasDTO.setCEP(empresa.getCEP());
+        empresasDTO.setCep(empresa.getCep());
         empresasDTO.setEndereco(empresa.getEndereco());
         return empresasDTO;
     }
@@ -19,7 +21,7 @@ public class EmpresaConverter {
     public static Empresas toEntity(EmpresasDTO empresasDTO) {
         Empresas empresa = new Empresas();
         empresa.setNome(empresasDTO.getNome());
-        empresa.setCEP(empresasDTO.getCEP());
+        empresa.setCep(empresasDTO.getCep());
         empresa.setEndereco(empresasDTO.getEndereco());
         return empresa;
     }
@@ -27,6 +29,6 @@ public class EmpresaConverter {
     public static List<EmpresasDTO> toDTOList(List<Empresas> empresas) {
         return empresas.stream()
                 .map(EmpresaConverter::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -43,8 +43,5 @@ public abstract class AbstractEntity {
      * Método automatico, executado no pré-edição dos dadosd
      */
 
-    private void preUpdate() {
-        this.edicao = LocalDateTime.now();
-    }
 
 }
