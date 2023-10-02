@@ -100,12 +100,12 @@ public class EventosTest {
 
         Empresas empresas = new Empresas("Empresa", "85857485", "Rua Empresaria");
         empresas.setNome("Empresa");
-        empresas.setCEP("85857485");
+        empresas.setCep("85857485");
         empresas.setEndereco("Rua Empresaria");
 
         Empresas empresaChegada = new Empresas("Empresa Chegada", "85857488", "Rua Empresaria 2");
         empresaChegada.setNome("Empresa Chegada");
-        empresaChegada.setCEP("85857488");
+        empresaChegada.setCep("85857488");
         empresaChegada.setEndereco("Rua Empresaria 2");
 
         Eventos eventos = new Eventos();

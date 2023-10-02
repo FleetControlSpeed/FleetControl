@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -101,13 +102,13 @@ public class UsuarioTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
     @Test
-    public void testListarPorAtivo() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/condutores/listar/ativos")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
+    void testListaAtivo() {
+        boolean ativo = true;
+        List<Usuario> usuariosAtivos = new ArrayList<>();
+        when(usuarioRepository.findByAtivo(ativo)).thenReturn(usuariosAtivos);
+        ResponseEntity<List<UsuarioDTO>> response = usuarioController.listarPorAtivo(ativo);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(usuariosAtivos.size(), response.getBody().size());
     }
     @Test
     void testCadastrarSuccess() throws Exception {

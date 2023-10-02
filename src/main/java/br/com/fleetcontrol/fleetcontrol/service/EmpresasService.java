@@ -52,7 +52,7 @@ public class EmpresasService {
             return null;
         } else {
             empresaExistente.setEndereco(empresaAtualizada.getEndereco());
-            empresaExistente.setCEP(empresaAtualizada.getCEP());
+            empresaExistente.setCep(empresaAtualizada.getCep());
             empresaExistente.setNome(empresaAtualizada.getNome());
             return empresasRepository.save(empresaExistente);
         }

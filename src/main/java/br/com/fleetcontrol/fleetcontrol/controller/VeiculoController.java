@@ -1,10 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
-
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
-import br.com.fleetcontrol.fleetcontrol.dto.VeiculoConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.VeiculoDTO;
-import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
+import br.com.fleetcontrol.fleetcontrol.dto.VeiculoConverter;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 import br.com.fleetcontrol.fleetcontrol.repository.VeiculoRepository;
 import br.com.fleetcontrol.fleetcontrol.service.VeiculoService;
@@ -15,34 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @ResponseBody
 @RequestMapping(value = "/api/veiculo")
 public class VeiculoController {
-
-    /*
-    {
-    "id": 1,
-    "cadastro": "2023-05-27T22:46:03.14222",
-    "edicao": null,
-    "ativo": true,
-    "modelo": {
-        "id": 1,
-        "cadastro": "2023-05-27T22:44:35.287413",
-        "edicao": null,
-        "ativo": true,
-        "nome": "HRV",
-        "marca": "HONDA"
-    },
-    "placa": "RHT-5F18",
-    "ano": 2022,
-    "cor": "VERMELHO",
-    "km": 10000,
-    "tipo": "CARRO"
-    }
-     */
-
-    @Autowired
+  @Autowired
     private VeiculoService veiculoService;
     @Autowired
     private VeiculoRepository veiculoRepository;
@@ -59,23 +34,18 @@ public class VeiculoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<?> listar(){
-        try {
-            return ResponseEntity.ok(veiculoService.listar());
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-        }
+    public ResponseEntity<List<VeiculoDTO>> listar() {
+        List<Veiculo> listaVeiculos = veiculoService.listar();
+        List<VeiculoDTO> listaVeiculosDTO = VeiculoConverter.toDTOList(listaVeiculos);
+        return ResponseEntity.ok(listaVeiculosDTO);
     }
 
     @GetMapping("/listarPorAtivo")
-    public ResponseEntity<?> listarPorAtivo(){
-        try {
-            return ResponseEntity.ok(veiculoService.listarPorAtivo());
+    public ResponseEntity<List<VeiculoDTO>> listarPorAtivo(@PathVariable boolean ativo) {
+        List<Veiculo> listaAtivo = veiculoRepository.findByAtivo(ativo);
+        List<VeiculoDTO> listaAtivoDTO = VeiculoConverter.toDTOList(listaAtivo);
 
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-        }
+        return ResponseEntity.ok(listaAtivoDTO);
     }
 
     @PutMapping("/put/id/{id}")
@@ -103,7 +73,7 @@ public class VeiculoController {
     }
 
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id) {
+    public ResponseEntity<String> desativar(@Valid @RequestParam("id") final Long id) {
         try {
             veiculoService.desativar(id);
             return ResponseEntity.ok("Evento desativado com sucesso!");
@@ -114,7 +84,7 @@ public class VeiculoController {
     }
 
     @PutMapping(value = "/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id){
+    public ResponseEntity<String> ativar(@Valid @RequestParam("id") final Long id){
         try {
             veiculoService.ativar(id);
             return ResponseEntity.ok("Veiculo ativado com sucesso!");
@@ -125,7 +95,7 @@ public class VeiculoController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id){
+    private ResponseEntity<String> deletar(@Valid @RequestParam("id") final long id){
         try {
             veiculoService.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");

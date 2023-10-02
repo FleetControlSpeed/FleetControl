@@ -1,6 +1,6 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
-import br.com.fleetcontrol.fleetcontrol.dto.UsuarioConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.UsuarioDTO;
+import br.com.fleetcontrol.fleetcontrol.dto.UsuarioConverter;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
@@ -10,6 +10,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/condutores")
 public class UsuarioController {
@@ -29,23 +32,19 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioDTO);
     }
 
-    @GetMapping(value = "/listar")
-    public ResponseEntity<?> listar() {
-        try {
-            return ResponseEntity.ok(usuarioservice.listar());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
-        }
+    @GetMapping("/listar")
+    public ResponseEntity<List<UsuarioDTO>> listar() {
+        List<Usuario> listaUsuarios = usuarioservice.listar();
+        List<UsuarioDTO> listaUsuariosDTO = UsuarioConverter.toDTOList(listaUsuarios);
+        return ResponseEntity.ok(listaUsuariosDTO);
     }
 
-    @GetMapping("/listar/ativos")
-    public ResponseEntity<?> listarPorAtivo() {
-        try {
-            return ResponseEntity.ok(this.usuarioservice.listaUsuariosAtivos());
+    @GetMapping("/listarPorAtivo")
+    public ResponseEntity<List<UsuarioDTO>> listarPorAtivo(@PathVariable boolean ativo) {
+        List<Usuario> listaAtivo = usuarioRepository.findByAtivo(ativo);
+        List<UsuarioDTO> listaAtivoDTO = UsuarioConverter.toDTOList(listaAtivo);
 
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-        }
+        return ResponseEntity.ok(listaAtivoDTO);
     }
 
     @PostMapping("/cadastrar")
@@ -74,7 +73,7 @@ public class UsuarioController {
 
 
     @PutMapping("/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") Long idUsuario) {
+    public ResponseEntity<String> desativar(@Valid @RequestParam("id") Long idUsuario) {
         try{
             usuarioservice.desativar(idUsuario);
             return ResponseEntity.ok("Usuario desativado com sucesso!");
@@ -85,7 +84,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestParam("id") Long idUsuario){
+    public ResponseEntity<String> ativar(@Valid @RequestParam("id") Long idUsuario){
         try{
             usuarioservice.ativar(idUsuario);
             return ResponseEntity.ok("Usuario ativado com sucesso!");

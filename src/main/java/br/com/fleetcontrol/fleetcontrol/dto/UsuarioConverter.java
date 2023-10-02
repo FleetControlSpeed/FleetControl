@@ -3,11 +3,11 @@ package br.com.fleetcontrol.fleetcontrol.dto;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UsuarioConverter {
-
-
+    private UsuarioConverter() {
+        // Este construtor está vazio; a classe não pode ser instanciada
+    }
     public static UsuarioDTO toDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setEmail(usuario.getEmail());
@@ -42,6 +42,6 @@ public class UsuarioConverter {
     public static List<UsuarioDTO> toDTOList(List<Usuario> usuarios) {
         return usuarios.stream()
                 .map(UsuarioConverter::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

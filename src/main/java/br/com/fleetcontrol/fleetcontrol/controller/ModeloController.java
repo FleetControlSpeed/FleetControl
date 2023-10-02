@@ -97,7 +97,7 @@ public class ModeloController {
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<String> deletar(@Valid @RequestParam("id") final long id) {
+    public ResponseEntity<String> deletar(@Valid @RequestParam("id") final long id) {
         try {
             service.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");

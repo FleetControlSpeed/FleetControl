@@ -52,7 +52,7 @@ public class EmpresasTest {
         Long id = 1L;
         Empresas empresas = new Empresas("Empresa", "85857485", "Rua Empresaria");
         empresas.setNome("Empresa");
-        empresas.setCEP("85857485");
+        empresas.setCep("85857485");
         empresas.setEndereco("Rua Empresaria");
         when(empresasRepository.findById(id))
                 .thenReturn(Optional.of(empresas));

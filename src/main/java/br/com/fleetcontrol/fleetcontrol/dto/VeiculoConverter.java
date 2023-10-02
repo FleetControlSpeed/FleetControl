@@ -2,11 +2,10 @@ package br.com.fleetcontrol.fleetcontrol.dto;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 public class VeiculoConverter {
-
-
+    private VeiculoConverter() {
+        // Este construtor está vazio; a classe não pode ser instanciada
+    }
     public static VeiculoDTO toDTO(Veiculo veiculo) {
         VeiculoDTO veiculoDTO = new VeiculoDTO();
         veiculoDTO.setModelo(veiculo.getModelo());
@@ -31,6 +30,6 @@ public class VeiculoConverter {
     public static List<VeiculoDTO> toDTOList(List<Veiculo> veiculos) {
         return veiculos.stream()
                 .map(VeiculoConverter::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

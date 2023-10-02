@@ -1,6 +1,5 @@
 package br.com.fleetcontrol.fleetcontrol.Enum;
 
-import br.com.fleetcontrol.fleetcontrol.entity.enums.Cor;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Tipo;
 import org.junit.jupiter.api.Test;
 
@@ -30,12 +29,12 @@ public class TipoTest {
 
     @Test
     void testCaminhao() {
-        assertEquals("CAMINHÃO", Tipo.CAMINHÃO.name());
+        assertEquals("CAMINHAO", Tipo.CAMINHAO.name());
     }
 
     @Test
     void testToStringCaminhao() {
-        assertEquals("CAMINHÃO", Tipo.CAMINHÃO.toString());
+        assertEquals("CAMINHAO", Tipo.CAMINHAO.toString());
     }
 
 }
