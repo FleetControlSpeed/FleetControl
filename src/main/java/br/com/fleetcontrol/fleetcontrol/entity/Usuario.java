@@ -1,7 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.entity;
 
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Cargo;
-import br.com.fleetcontrol.fleetcontrol.validation.constraints.CEP;
+
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.CPF;
 import br.com.fleetcontrol.fleetcontrol.validation.constraints.Telefone;
 import jakarta.persistence.*;
