@@ -13,9 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-/*
-    @Author: Cristovão Martins
- */
+
 @Service
 public class MultaService {
 
