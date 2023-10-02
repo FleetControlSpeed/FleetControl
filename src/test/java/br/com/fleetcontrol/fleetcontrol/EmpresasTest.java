@@ -83,16 +83,6 @@ public class EmpresasTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
     @Test
-    void testListaAtivo() {
-        boolean ativo = true;
-        List<Empresas> empresasAtivas = new ArrayList<>();
-        when(empresasRepository.findByAtivo(ativo)).thenReturn(empresasAtivas);
-        ResponseEntity<List<EmpresasDTO>> response = empresasController.listarPorAtivo(ativo);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(empresasAtivas.size(), response.getBody().size());
-    }
-
-    @Test
     void testCadastrarSuccess() throws Exception {
         EmpresasDTO empresasDTO = new EmpresasDTO();
         when(empresasService.cadastrar(any(Empresas.class)))
@@ -103,6 +93,16 @@ public class EmpresasTest {
                         .content(asJsonString(empresasDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Cadastro feito com sucesso"));
+    }
+
+    @Test
+    void testListaAtivo() {
+        boolean ativo = true;
+        List<Empresas> empresasAtivas = new ArrayList<>();
+        when(empresasRepository.findByAtivo(ativo)).thenReturn(empresasAtivas);
+        ResponseEntity<List<EmpresasDTO>> response = empresasController.listarPorAtivo(ativo);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(empresasAtivas.size(), response.getBody().size());
     }
     @Test
     void testCadastrarDataIntegrityViolationException() throws Exception {

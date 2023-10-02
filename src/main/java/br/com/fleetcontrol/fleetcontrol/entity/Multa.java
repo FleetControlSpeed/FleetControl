@@ -38,4 +38,8 @@ public class Multa extends AbstractEntity{
     @Setter
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    public Multa(Double valor, String tipoMulta, LocalDate dataMulta, Usuario usuario) {
+        //para os testes
+    }
 }

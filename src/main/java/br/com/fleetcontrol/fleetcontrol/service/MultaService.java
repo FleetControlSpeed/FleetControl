@@ -1,4 +1,5 @@
 package br.com.fleetcontrol.fleetcontrol.service;
+import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Multa;
 import br.com.fleetcontrol.fleetcontrol.repository.MultaRepository;
 import br.com.fleetcontrol.fleetcontrol.service.exceptions.ResourceNotFoundException;
@@ -7,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class MultaService {
@@ -20,15 +23,17 @@ public class MultaService {
         return multa;
     }
 
-    @Transactional(readOnly = true)
-    public Page<Multa> listaCompleta(Pageable pageable) {
-        Page<Multa> resultado = multaRepository.findAll(pageable);
-        return resultado;
+    public List<Multa> listar() {
+        if (multaRepository.findAll().isEmpty()) {
+            throw new RuntimeException("Não foi possível localizar nenhuma empresa cadastrada!");
+        } else {
+            return multaRepository.findAll();
+        }
     }
 
-    @Transactional
-    public Multa salvar(Multa multa) {
-        return multaRepository.save(multa);
+    @Transactional(rollbackFor = Exception.class)
+    public Multa cadastrar(Multa cadastrar) {
+        return this.multaRepository.save(cadastrar);
     }
 
     @Transactional
@@ -39,7 +44,7 @@ public class MultaService {
             throw new RuntimeException(", não foi possivel identificar a multa informada!");
 
         } else {
-            salvar(multaNovo);
+            cadastrar(multaNovo);
         }
     }
 
