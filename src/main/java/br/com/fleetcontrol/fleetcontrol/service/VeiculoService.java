@@ -1,7 +1,11 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
+import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
+import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Cor;
+import br.com.fleetcontrol.fleetcontrol.entity.enums.Tipo;
 import br.com.fleetcontrol.fleetcontrol.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,23 +48,25 @@ public class VeiculoService {
         }
     }
 
-    @Transactional
-    public Veiculo salvar(Veiculo veiculo) {
-        return this.repository.save(veiculo);
+    @Transactional(rollbackFor = Exception.class)
+    public Veiculo cadastrar(Veiculo cadastrar) {
+        return this.repository.save(cadastrar);
     }
 
-    @Transactional
-    public void editar(Long id, Veiculo veiculoNovo){
-        final Veiculo veiculoBanco= this.buscarPorId(id);
-
-        if(veiculoBanco == null || !veiculoBanco.getId().equals(veiculoNovo.getId())){
-            throw new RuntimeException(", não foi possivel identificar o veiculo informado!");
-
+    public Veiculo atualizar(Long id, Veiculo veiculoAtualizado) {
+        Veiculo veiculoExistente = repository.findById(id).orElse(null);
+        if (veiculoExistente == null) {
+            return null;
         } else {
-            this.salvar(veiculoNovo);
+            veiculoExistente.setModelo(veiculoAtualizado.getModelo());
+            veiculoExistente.setPlaca(veiculoAtualizado.getPlaca());
+            veiculoExistente.setAno(veiculoAtualizado.getAno());
+            veiculoExistente.setCor(veiculoAtualizado.getCor());
+            veiculoExistente.setKm(veiculoAtualizado.getKm());
+            veiculoExistente.setTipo(veiculoAtualizado.getTipo());
+            return repository.save(veiculoExistente);
         }
     }
-
     @Transactional
     public void desativar(Long id) {
         Veiculo veiculo = buscarPorId(id);

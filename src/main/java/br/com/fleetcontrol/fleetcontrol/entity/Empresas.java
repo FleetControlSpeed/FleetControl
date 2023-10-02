@@ -33,7 +33,7 @@ public class Empresas extends AbstractEntity {
     @CEP(message = "CEP nulo ou invalido!")
     @Size(min = 5, max = 15)
     @Column(name = "CEP", unique = true)
-    private String CEP;
+    private String cep;
 
     @Getter @Setter
     @NotNull(message = "Endereço é um campo obrigatorio!")
@@ -42,5 +42,10 @@ public class Empresas extends AbstractEntity {
     @Column(name = "endereco",unique = true)
     private String endereco;
 
+
+
+    public Empresas(String nome, String CEP, String endereco) {
+        //Somente para os testes
+    }
 
 }

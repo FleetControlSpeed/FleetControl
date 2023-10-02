@@ -42,18 +42,19 @@ public class EmpresasService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void cadastrar(final Empresas empresas) {
-        empresasRepository.save(empresas);
+    public Empresas cadastrar(Empresas cadastrar) {
+        return this.empresasRepository.save(cadastrar);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void editar(Long id, Empresas empresasNovo) {
-        final Empresas empresasBanco = buscarPorId(id);
-
-        if (empresasBanco == null || !empresasBanco.getId().equals(empresasNovo.getId())) {
-            throw new RuntimeException("Não foi possível localizar a empresa informada!");
+    public Empresas atualizar(Long id, Empresas empresaAtualizada) {
+        Empresas empresaExistente = empresasRepository.findById(id).orElse(null);
+        if (empresaExistente == null) {
+            return null;
         } else {
-            empresasRepository.save(empresasNovo);
+            empresaExistente.setEndereco(empresaAtualizada.getEndereco());
+            empresaExistente.setCep(empresaAtualizada.getCep());
+            empresaExistente.setNome(empresaAtualizada.getNome());
+            return empresasRepository.save(empresaExistente);
         }
     }
 

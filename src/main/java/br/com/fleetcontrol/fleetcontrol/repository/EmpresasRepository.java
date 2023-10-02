@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public interface EmpresasRepository extends JpaRepository <Empresas, Long> {
+    List<Empresas> findByAtivo(boolean ativo);
 
     @Query("SELECT eventos FROM Eventos eventos WHERE eventos.localDestino.id = :id")
     public List<Eventos> buscaEmpresaPorEvento (@Param("id") final Long id);

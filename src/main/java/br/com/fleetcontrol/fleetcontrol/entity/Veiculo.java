@@ -52,4 +52,8 @@ public class Veiculo extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo",nullable = false)
     private Tipo tipo;
+
+    public Veiculo(Modelo modelo, String placa, int ano, Cor cor, Long km, Tipo tipo) {
+        //Somente para os testes
+    }
 }

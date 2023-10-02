@@ -3,11 +3,13 @@ package br.com.fleetcontrol.fleetcontrol.dto;
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModeloConverter {
 
 
+    private ModeloConverter() {
+        // Este construtor está vazio; a classe não pode ser instanciada
+    }
     public static ModeloDTO toDTO(Modelo modelo) {
         ModeloDTO modeloDTO = new ModeloDTO();
         modeloDTO.setNome(modelo.getNome());
@@ -25,6 +27,6 @@ public class ModeloConverter {
     public static List<ModeloDTO> toDTOList(List<Modelo> modelos) {
         return modelos.stream()
                 .map(ModeloConverter::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

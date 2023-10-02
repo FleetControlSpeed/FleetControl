@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface EventosRepository extends JpaRepository<Eventos,Long> {
+    List<Eventos> findByAtivo(boolean ativo);
     @Query("SELECT eventos FROM Eventos eventos WHERE eventos.ativo = true")
     public List<Eventos> buscarPorAtivo();
     @Modifying

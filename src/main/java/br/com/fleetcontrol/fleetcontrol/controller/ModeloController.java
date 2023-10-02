@@ -1,116 +1,109 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
-
 import br.com.fleetcontrol.fleetcontrol.dto.ModeloConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.ModeloDTO;
-
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
-
+import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
 import br.com.fleetcontrol.fleetcontrol.service.ModeloService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@ResponseBody
 @RequestMapping(value = "/api/modelo")
 public class ModeloController {
-
-    /*
-    {
-    "id": 1,
-    "cadastro": "2023-05-27T22:44:35.287413",
-    "edicao": null,
-    "ativo": true,
-    "nome": "HRV",
-    "marca": "HONDA"
-    }
-     */
-
     @Autowired
     private ModeloService service;
+    @Autowired
+    private ModeloRepository modeloRepository;
+    private static final String ERROR_MESSAGE_PREFIX = "Error: ";
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ModeloDTO> listaId(@PathVariable(value = "id") Long id) {
+        Modelo modelo = modeloRepository.findById(id).orElse(null);
+        if (modelo == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        ModeloDTO modeloDTO = ModeloConverter.toDTO(modelo);
+        return ResponseEntity.ok(modeloDTO);
+    }
+
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<ModeloDTO>> listar() {
+        List<Modelo> listaModelos = service.listar();
+        List<ModeloDTO> listaModelosDTO = ModeloConverter.toDTOList(listaModelos);
+        return ResponseEntity.ok(listaModelosDTO);
+    }
+
+    @GetMapping("/listarPorAtivo")
+    public ResponseEntity<List<ModeloDTO>> listarPorAtivo(@PathVariable boolean ativo) {
+        List<Modelo> listaAtivo = modeloRepository.findByAtivo(ativo);
+        List<ModeloDTO> listaAtivoDTO = ModeloConverter.toDTOList(listaAtivo);
+
+        return ResponseEntity.ok(listaAtivoDTO);
+    }
+
+    @PostMapping("/cadastrar")
+    public ResponseEntity<String> cadastrar(@RequestBody ModeloDTO modeloDTO) {
         try {
-            Modelo modelo = service.buscarPorId(id);
-            ModeloDTO DTO = ModeloConverter.toDTO(modelo);
-            return ResponseEntity.ok(DTO);
+            Modelo modelo = ModeloConverter.toEntity(modeloDTO);
+            this.service.cadastrar(modelo);
+            return ResponseEntity.ok("Cadastro feito com sucesso");
+        } catch (DataIntegrityViolationException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
 
-    @GetMapping(value = "/listar")
-    public ResponseEntity<?> listar() {
+
+    @PutMapping("/put/id/{id}")
+    public ResponseEntity<String> atualizar(@PathVariable Long id, @RequestBody ModeloDTO dto) {
         try {
-            return ResponseEntity.ok(service.listar());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
-    }
-
-    @GetMapping(value = "/listarPorAtivo")
-    public ResponseEntity<?> listarPorAtivo() {
-        try {
-            return ResponseEntity.ok(service.listarPorAtivo());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
-    }
-
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody final ModeloDTO cadastro) {
-        try {
-            service.cadastrar(cadastro);
-            return ResponseEntity.ok("modelo cadastrado com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
-    }
-
-
-
-    @PutMapping(value = "/editar")
-    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Modelo editor) {
-        try {
-            service.editar(id, editor);
-            return ResponseEntity.ok("Modelos atualizada com sucesso!");
+            Modelo modeloAtualizado = ModeloConverter.toEntity(dto);
+            this.service.atualizar(id, modeloAtualizado);
+            return ResponseEntity.ok().body("Atualizado com sucesso!");
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id) {
+    public ResponseEntity<String> desativar(@Valid @RequestParam("id") final Long id) {
         try {
             service.desativar(id);
             return ResponseEntity.ok("Modelos desativada com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 
     @PutMapping(value = "/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id) {
+    public ResponseEntity<String> ativar(@Valid @RequestParam("id") final Long id) {
         try {
             service.ativar(id);
             return ResponseEntity.ok("Modelos ativada com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 
     @DeleteMapping(value = "/deletar")
-    private ResponseEntity<?> deletar(@Valid @RequestParam("id") final long id) {
+    public ResponseEntity<String> deletar(@Valid @RequestParam("id") final long id) {
         try {
-            service.desativar(id);
+            service.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 }
+

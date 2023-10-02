@@ -17,6 +17,7 @@ import java.util.List;
  */
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
+    List<Usuario> findByAtivo(boolean ativo);
 
     @Modifying
     @Query("UPDATE Usuario usuario SET usuario.ativo = false WHERE usuario.id = :id")

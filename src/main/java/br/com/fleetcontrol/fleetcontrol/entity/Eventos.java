@@ -62,4 +62,13 @@ public class Eventos extends AbstractEntity {
     @Getter @Setter
     @Column(name = "retorno")
     private LocalDateTime retorno;
+
+
+
+    public Eventos(Usuario usuario, Veiculo veiculo, LocalDateTime dataEvento, Empresas localPartida, Empresas localDestino, String observacao, LocalDateTime retorno) {
+        //Somente para os testes
+    }
+
+
+
 }
