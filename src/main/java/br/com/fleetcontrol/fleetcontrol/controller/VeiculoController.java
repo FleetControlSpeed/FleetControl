@@ -1,9 +1,17 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
+import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
+import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
+import br.com.fleetcontrol.fleetcontrol.dto.VeiculoConverter;
+import br.com.fleetcontrol.fleetcontrol.dto.VeiculoDTO;
+import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
+import br.com.fleetcontrol.fleetcontrol.repository.VeiculoRepository;
 import br.com.fleetcontrol.fleetcontrol.service.VeiculoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,15 +44,18 @@ public class VeiculoController {
 
     @Autowired
     private VeiculoService veiculoService;
+    @Autowired
+    private VeiculoRepository veiculoRepository;
+
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable("id") final Long id) {
-        try{
-            return ResponseEntity.ok(veiculoService.buscarPorId(id));
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+    public ResponseEntity<VeiculoDTO> listaId(@PathVariable(value = "id") Long id) {
+        Veiculo veiculo = veiculoRepository.findById(id).orElse(null);
+        if (veiculo == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+        VeiculoDTO veiculoDTO = VeiculoConverter.toDTO(veiculo);
+        return ResponseEntity.ok(veiculoDTO);
     }
 
     @GetMapping("/listar")
@@ -67,26 +78,27 @@ public class VeiculoController {
         }
     }
 
-    @PutMapping("/editar")
-    public ResponseEntity<?> editar(@Valid @RequestParam("id") final Long id, @RequestBody final Veiculo veiculoNovo) {
-        try{
-            veiculoService.editar(id,veiculoNovo);
-            return ResponseEntity.ok("Veiculo alterado com sucesso!");
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+    @PutMapping("/put/id/{id}")
+    public ResponseEntity<String> atualizar(@PathVariable Long id, @RequestBody VeiculoDTO dto) {
+        try {
+            Veiculo veiculoAtualizado = VeiculoConverter.toEntity(dto);
+            this.veiculoService.atualizar(id, veiculoAtualizado);
+            return ResponseEntity.ok().body("Atualizado com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@Valid @RequestBody final Veiculo veiculo) {
+    @PostMapping("/cadastrar")
+    public ResponseEntity<String> cadastrar(@RequestBody VeiculoDTO veiculoDTO) {
         try {
-            veiculoService.salvar(veiculo);
-            return ResponseEntity.ok("Veiculo cadastrado com sucesso!");
-
+            Veiculo veiculo = VeiculoConverter.toEntity(veiculoDTO);
+            this.veiculoService.cadastrar(veiculo);
+            return ResponseEntity.ok("Cadastro feito com sucesso");
+        } catch (DataIntegrityViolationException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
-
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -97,7 +109,7 @@ public class VeiculoController {
             return ResponseEntity.ok("Evento desativado com sucesso!");
 
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
@@ -119,7 +131,7 @@ public class VeiculoController {
             return ResponseEntity.ok("Registro deletado com sucesso!");
 
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("Error" + e.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 }
