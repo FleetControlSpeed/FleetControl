@@ -1,54 +1,23 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
-
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
 import br.com.fleetcontrol.fleetcontrol.dto.UsuarioConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.UsuarioDTO;
-import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.repository.UsuarioRepository;
 import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-
 @RestController
 @RequestMapping(value = "api/condutores")
 public class UsuarioController {
-
-    /*
-    {
-    "id": 1,
-    "cadastro": "2023-05-27T22:37:03.119999",
-    "edicao": null,
-    "ativo": true,
-    "email": "pedrohenri1606@gmail.com",
-    "usuario": "pedro",
-    "senha": "123",
-    "cargo": "ADMINISTRADOR",
-    "primeiroNome": "Pedro",
-    "sobrenome": "Henrique",
-    "cpf": "10250870975",
-    "telefone": "45 998265476",
-    "dataNascimento": "29/07/2003",
-    "endereco": "Rua Belmiro numero 2",
-    "eventos": null
-    }
-     */
-
     @Autowired
     private UsuarioService usuarioservice;
     @Autowired
     private UsuarioRepository usuarioRepository;
+    private static final String ERROR_MESSAGE_PREFIX = "Error: ";
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> listaId(@PathVariable(value = "id") Long id) {
@@ -65,7 +34,7 @@ public class UsuarioController {
         try {
             return ResponseEntity.ok(usuarioservice.listar());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 
@@ -111,7 +80,7 @@ public class UsuarioController {
             return ResponseEntity.ok("Usuario desativado com sucesso!");
 
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 
@@ -132,7 +101,7 @@ public class UsuarioController {
             usuarioservice.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 }

@@ -19,7 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -80,14 +83,15 @@ public class EmpresasTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
     @Test
-    public void testListarPorAtivo() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/empresas/listarPorAtivo")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
+    void testListaAtivo() {
+        boolean ativo = true;
+        List<Empresas> empresasAtivas = new ArrayList<>();
+        when(empresasRepository.findByAtivo(ativo)).thenReturn(empresasAtivas);
+        ResponseEntity<List<EmpresasDTO>> response = empresasController.listarPorAtivo(ativo);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(empresasAtivas.size(), response.getBody().size());
     }
+
     @Test
     void testCadastrarSuccess() throws Exception {
         EmpresasDTO empresasDTO = new EmpresasDTO();

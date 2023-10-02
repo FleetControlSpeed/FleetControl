@@ -1,7 +1,9 @@
 package br.com.fleetcontrol.fleetcontrol;
 
 import br.com.fleetcontrol.fleetcontrol.controller.ModeloController;
+import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
 import br.com.fleetcontrol.fleetcontrol.dto.ModeloDTO;
+import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
 import br.com.fleetcontrol.fleetcontrol.entity.enums.Marca;
 import br.com.fleetcontrol.fleetcontrol.repository.ModeloRepository;
@@ -20,7 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,13 +83,13 @@ public class ModeloTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
     @Test
-    public void testListarPorAtivo() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/modelo/listarPorAtivo")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
+    void testListaAtivo() {
+        boolean ativo = true;
+        List<Modelo> modelosAtivos = new ArrayList<>();
+        when(modeloRepository.findByAtivo(ativo)).thenReturn(modelosAtivos);
+        ResponseEntity<List<ModeloDTO>> response = modeloController.listarPorAtivo(ativo);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(modelosAtivos.size(), response.getBody().size());
     }
     @Test
     void testCadastrarSuccess() throws Exception {

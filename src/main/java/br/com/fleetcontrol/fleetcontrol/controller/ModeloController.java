@@ -1,6 +1,5 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
-
 import br.com.fleetcontrol.fleetcontrol.dto.ModeloConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.ModeloDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.Modelo;
@@ -13,25 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/modelo")
 public class ModeloController {
-
-    /*
-    {
-    "id": 1,
-    "cadastro": "2023-05-27T22:44:35.287413",
-    "edicao": null,
-    "ativo": true,
-    "nome": "HRV",
-    "marca": "HONDA"
-    }
-     */
-
     @Autowired
     private ModeloService service;
     @Autowired
     private ModeloRepository modeloRepository;
+    private static final String ERROR_MESSAGE_PREFIX = "Error: ";
 
 
     @GetMapping("/{id}")
@@ -45,22 +35,19 @@ public class ModeloController {
     }
 
 
-    @GetMapping(value = "/listar")
-    public ResponseEntity<?> listar() {
-        try {
-            return ResponseEntity.ok(service.listar());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
+    @GetMapping("/listar")
+    public ResponseEntity<List<ModeloDTO>> listar() {
+        List<Modelo> listaModelos = service.listar();
+        List<ModeloDTO> listaModelosDTO = ModeloConverter.toDTOList(listaModelos);
+        return ResponseEntity.ok(listaModelosDTO);
     }
 
-    @GetMapping(value = "/listarPorAtivo")
-    public ResponseEntity<?> listarPorAtivo() {
-        try {
-            return ResponseEntity.ok(service.listarPorAtivo());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
+    @GetMapping("/listarPorAtivo")
+    public ResponseEntity<List<ModeloDTO>> listarPorAtivo(@PathVariable boolean ativo) {
+        List<Modelo> listaAtivo = modeloRepository.findByAtivo(ativo);
+        List<ModeloDTO> listaAtivoDTO = ModeloConverter.toDTOList(listaAtivo);
+
+        return ResponseEntity.ok(listaAtivoDTO);
     }
 
     @PostMapping("/cadastrar")
@@ -90,22 +77,22 @@ public class ModeloController {
     }
 
     @PutMapping(value = "/desativar")
-    public ResponseEntity<?> desativar(@Valid @RequestParam("id") final Long id) {
+    public ResponseEntity<String> desativar(@Valid @RequestParam("id") final Long id) {
         try {
             service.desativar(id);
             return ResponseEntity.ok("Modelos desativada com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 
     @PutMapping(value = "/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestParam("id") final Long id) {
+    public ResponseEntity<String> ativar(@Valid @RequestParam("id") final Long id) {
         try {
             service.ativar(id);
             return ResponseEntity.ok("Modelos ativada com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 
@@ -115,7 +102,7 @@ public class ModeloController {
             service.deletar(id);
             return ResponseEntity.ok("Registro deletado com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ERROR_MESSAGE_PREFIX + e.getMessage());
         }
     }
 }

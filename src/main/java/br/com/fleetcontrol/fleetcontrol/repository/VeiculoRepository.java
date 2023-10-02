@@ -14,6 +14,7 @@ import java.util.List;
 
 @Repository
 public interface VeiculoRepository extends JpaRepository<Veiculo,Long> {
+    List<Veiculo> findByAtivo(boolean ativo);
 
     @Query("SELECT veiculo FROM Veiculo veiculo WHERE veiculo.ativo = true")
     public List<Veiculo> buscarPorAtivo();
