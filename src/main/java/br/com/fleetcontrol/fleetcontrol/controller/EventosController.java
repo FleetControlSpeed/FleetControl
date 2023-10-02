@@ -1,10 +1,9 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
-import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
+
 import br.com.fleetcontrol.fleetcontrol.dto.EventoConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.EventoDTO;
-import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
+
 import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
 import br.com.fleetcontrol.fleetcontrol.service.EventosService;
 import jakarta.validation.Valid;
@@ -13,10 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/*
-    @Author: Pedro Henrique Vieira
-    Date: 07/05/2023
- */
 
 @RestController
 @ResponseBody

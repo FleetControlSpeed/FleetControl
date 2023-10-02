@@ -1,18 +1,18 @@
 package br.com.fleetcontrol.fleetcontrol.service;
 
-import br.com.fleetcontrol.fleetcontrol.entity.Eventos;
+
 import br.com.fleetcontrol.fleetcontrol.entity.Multa;
-import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
+
 import br.com.fleetcontrol.fleetcontrol.repository.MultaRepository;
 import br.com.fleetcontrol.fleetcontrol.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
+
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+
 
 @Service
 public class MultaService {

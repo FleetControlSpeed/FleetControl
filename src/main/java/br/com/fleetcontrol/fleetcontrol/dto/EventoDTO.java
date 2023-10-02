@@ -3,11 +3,15 @@ package br.com.fleetcontrol.fleetcontrol.dto;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
 import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.entity.Veiculo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventoDTO {
 
 
@@ -25,16 +29,4 @@ public class EventoDTO {
     private String observacao;
     @Getter @Setter
     private LocalDateTime retorno;
-    public EventoDTO() {
-    }
-
-    public EventoDTO(Usuario usuario, Veiculo veiculo, LocalDateTime dataEvento, Empresas localPartida, Empresas localDestino, String observacao, LocalDateTime retorno) {
-        this.usuario = usuario;
-        this.veiculo = veiculo;
-        this.dataEvento = dataEvento;
-        this.localPartida = localPartida;
-        this.localDestino = localDestino;
-        this.observacao = observacao;
-        this.retorno = retorno;
-    }
 }

@@ -1,9 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.entity.Multa;
-import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.service.MultaService;
-import br.com.fleetcontrol.fleetcontrol.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

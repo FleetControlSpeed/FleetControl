@@ -1,7 +1,11 @@
 package br.com.fleetcontrol.fleetcontrol.dto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmpresasDTO {
     @Getter @Setter
     private String nome;
@@ -12,13 +16,4 @@ public class EmpresasDTO {
     @Getter @Setter
     private String endereco;
 
-    public EmpresasDTO(String nome, String CEP, String endereco) {
-        this.nome = nome;
-        this.CEP = CEP;
-        this.endereco = endereco;
-    }
-
-    public EmpresasDTO() {
-
-    }
 }
