@@ -1,6 +1,7 @@
 package br.com.fleetcontrol.fleetcontrol;
 
 import br.com.fleetcontrol.fleetcontrol.controller.MultaController;
+import br.com.fleetcontrol.fleetcontrol.dto.MultaDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.*;
 
 
@@ -32,7 +33,7 @@ import java.util.List;
 
 public class MultaTest {
 
-    /*@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @InjectMocks
@@ -111,5 +112,5 @@ public class MultaTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 }

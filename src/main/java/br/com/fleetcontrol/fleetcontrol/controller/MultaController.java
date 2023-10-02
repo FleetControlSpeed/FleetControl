@@ -17,7 +17,6 @@ import java.net.URI;
 public class MultaController {
     @Autowired
     private MultaService multaService;
-    private static final String ERROR_MESSAGE_PREFIX = "Error: ";
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id){
@@ -47,7 +46,7 @@ public class MultaController {
             return ResponseEntity.ok("Multa alterada com sucesso!");
 
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(ERROR_MESSAGE_PREFIX + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
@@ -59,7 +58,7 @@ public class MultaController {
             return ResponseEntity.ok("Multa desativada com sucesso!");
 
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(ERROR_MESSAGE_PREFIX + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
@@ -69,7 +68,7 @@ public class MultaController {
             multaService.ativar(idMulta);
             return ResponseEntity.ok("Multa ativada com sucesso!");
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(ERROR_MESSAGE_PREFIX + e.getMessage());
+            return ResponseEntity.badRequest().body("Error" + e.getMessage());
         }
     }
 
