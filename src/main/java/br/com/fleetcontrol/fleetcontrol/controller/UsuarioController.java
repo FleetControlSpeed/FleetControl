@@ -48,15 +48,15 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrar(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<?> cadastrar(@RequestBody UsuarioDTO usuarioDTO) {
         try {
             Usuario usuario = UsuarioConverter.toEntity(usuarioDTO);
-            this.usuarioservice.cadastrar(usuario);
-            return ResponseEntity.ok("Cadastro feito com sucesso");
+            var variavelServiceCadastarr = this.usuarioservice.cadastrar(usuario);
+            return ResponseEntity.ok(variavelServiceCadastarr);
         } catch (DataIntegrityViolationException | IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("ERRO: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage() + "AF");
         }
     }
 

@@ -48,9 +48,10 @@ public class UsuarioService {
         }
     }
 
+
     @Transactional
     public Usuario cadastrar(Usuario usuario) {
-            return usuariorepository.save(usuario);
+            return this.usuariorepository.save(usuario);
     }
 
     public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
