@@ -37,7 +37,7 @@ public class SecutiryConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/bebida").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(secutiryFilter, UsernamePasswordAuthenticationFilter.class)
