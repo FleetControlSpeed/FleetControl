@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @ResponseBody
 @RequestMapping(value = "/api/eventos")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EventosController {
     @Autowired
     private EventosService service;

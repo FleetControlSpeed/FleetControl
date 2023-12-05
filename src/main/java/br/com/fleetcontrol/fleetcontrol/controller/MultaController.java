@@ -23,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/multa")
+@CrossOrigin(origins = "http://localhost:4200")
 public class MultaController {
     @Autowired
     private MultaService multaService;

@@ -37,6 +37,16 @@ public class SecutiryConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers( "/api/empresas").hasRole("ADMIN")
+                        .requestMatchers( "/api/eventos").hasRole("ADMIN")
+                        .requestMatchers( "/api/modelo").hasRole("ADMIN")
+                        .requestMatchers( "/api/multa").hasRole("ADMIN")
+                        .requestMatchers( "/api/condutores").hasRole("ADMIN")
+                        .requestMatchers( "/api/veiculo").hasRole("ADMIN")
+                        .requestMatchers( "/api/veiculo/listar").hasRole("USER")
+
+
+
 
                         .anyRequest().authenticated()
                 )

@@ -2,7 +2,10 @@ package br.com.fleetcontrol.fleetcontrol.controller;
 
 import br.com.fleetcontrol.fleetcontrol.dto.EmpresaConverter;
 import br.com.fleetcontrol.fleetcontrol.dto.EmpresasDTO;
+import br.com.fleetcontrol.fleetcontrol.dto.UsuarioConverter;
+import br.com.fleetcontrol.fleetcontrol.dto.UsuarioDTO;
 import br.com.fleetcontrol.fleetcontrol.entity.Empresas;
+import br.com.fleetcontrol.fleetcontrol.entity.Usuario;
 import br.com.fleetcontrol.fleetcontrol.repository.EmpresasRepository;
 import br.com.fleetcontrol.fleetcontrol.service.EmpresasService;
 import jakarta.validation.Valid;
@@ -16,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/empresas")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmpresasController {
     @Autowired
     private EmpresasService empresasService;
@@ -38,6 +42,9 @@ public class EmpresasController {
         List<EmpresasDTO> listaEmpresasDTO = EmpresaConverter.toDTOList(listaEmpresas);
         return ResponseEntity.ok(listaEmpresasDTO);
     }
+
+
+
     @GetMapping("/listarPorAtivo")
     public ResponseEntity<List<EmpresasDTO>> listarPorAtivo(@PathVariable boolean ativo) {
         List<Empresas> listaAtivo = empresasRepository.findByAtivo(ativo);
